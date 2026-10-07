@@ -1,0 +1,76 @@
+# chequp-creator runtime config. Same shape as shorts-factory's config.yaml where the
+# concepts overlap (farm.machines, models.wan22, qa.*, publish.mode).
+
+preset: presets/chequp_meta.yaml
+data_dir: data
+out_dir: out
+
+# --- mama: Linux box, 7x RTX 3090 (24 GB). Reached over Tailscale. --------------------------
+# Two jobs compete for the same 7 cards, so production runs in two phases
+# (see mama/cq_phase.sh):  plan  = Qwen3-235B in LM Studio across all 7 cards
+#                          render = ComfyUI, one server per card, Wan 2.2 b-roll
+mama:
+  host: 100.75.169.5          # Tailscale; LAN is 192.168.0.193
+
+llm:
+  backend: lmstudio           # lmstudio (Qwen on mama) | claude_cli | anthropic_api
+  base_url: http://100.75.169.5:1234/v1
+  model: qwen/qwen3-235b-a22b-2507
+  temperature: 0.7
+  max_tokens: 6000
+  fallback: claude_cli        # used when mama is in render phase / unreachable
+  timeout_s: 600
+
+farm:
+  machines:
+    - name: mama
+      host: 100.75.169.5
+      first_port: 8189        # GPU0/8188 is Dan's own ComfyUI; the farm is GPUs 1-6 (8189-8194)
+      gpus: 6
+      role: broll
+    - name: pc-5090
+      host: 127.0.0.1
+      first_port: 8188
+      gpus: 1
+      role: hero              # shared with shorts-factory's daemon; only used with --use-5090
+      enabled: false
+  probe_timeout_s: 5
+  job_timeout_s: 1800
+
+models:
+  wan22:                      # identical files to shorts-factory (Comfy-Org fp8 + lightx2v 4-step)
+    t2v_high: wan2.2_t2v_high_noise_14B_fp8_scaled.safetensors
+    t2v_low: wan2.2_t2v_low_noise_14B_fp8_scaled.safetensors
+    t2v_lora_high: wan2.2_t2v_lightx2v_4steps_lora_v1.1_high_noise.safetensors
+    t2v_lora_low: wan2.2_t2v_lightx2v_4steps_lora_v1.1_low_noise.safetensors
+    i2v_high: wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors
+    i2v_low: wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors
+    i2v_lora_high: wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors
+    i2v_lora_low: wan2.2_i2v_lightx2v_4steps_lora_v1_low_noise.safetensors
+    text_encoder: umt5_xxl_fp8_e4m3fn_scaled.safetensors
+    vae: wan_2.1_vae.safetensors
+    width: 720
+    height: 1280
+    frames: 81                # ~5 s at 16 fps
+    fps: 16
+    steps: 4
+    shift: 8.0
+
+broll:
+  candidates: 2               # stills per shot; best one goes to i2v
+  qa: claude_vision           # claude_vision | none — checks stills for banned imagery/people-as-members
+  max_rerolls: 2
+
+render:
+  formats: ["9x16", "4x5", "1x1"]
+  fps: 30
+  jobs: 4                     # parallel Chromium pages
+  node: node
+
+voice:
+  backend: kokoro             # kokoro | none
+  lang_code: b                # British English
+  sample_rate: 24000
+
+publish:
+  mode: outbox                # outbox only — nothing is pushed to Meta automatically

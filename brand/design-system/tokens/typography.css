@@ -1,0 +1,39 @@
+/* The 14 type roles the file defines, bound to the responsive size variables so the
+   whole ramp moves with the breakpoint. Weight never exceeds 600 — 700 is out of the
+   system. Every role is also available as a --type-*-size float from fig-tokens.css. */
+
+:root {
+  --leading-tight: calc(var(--type-leading-tight) / 100);
+  --leading-snug: calc(var(--type-leading-snug) / 100);
+  --leading-compact: calc(var(--type-leading-compact) / 100);
+  --leading-normal: calc(var(--type-leading-normal) / 100);
+  --leading-body: calc(var(--type-leading-body) / 100);
+  --leading-relaxed: calc(var(--type-leading-relaxed) / 100);
+  --tracking-tight: calc(var(--type-tracking-tight) / 100 * 1em);
+  --tracking-label: calc(var(--type-tracking-label) / 100 * 1em);
+}
+
+.cq-display-1,.cq-heading-1,.cq-heading-2,.cq-heading-3,.cq-heading-4,.cq-body-lg,.cq-body,.cq-body-emphasis,.cq-body-sm,.cq-caption,.cq-quote,.cq-label,.cq-label-lg,.cq-label-sm{font-family:var(--font-core);color:var(--color-primary-dark);margin:0;text-wrap:pretty}
+
+.cq-display-1{font-size:calc(var(--type-display-1-size) * 1px);font-weight:600;line-height:var(--leading-snug);letter-spacing:var(--tracking-tight)}
+.cq-heading-1{font-size:calc(var(--type-heading-1-size) * 1px);font-weight:600;line-height:var(--leading-snug);letter-spacing:var(--tracking-tight)}
+.cq-heading-2{font-size:calc(var(--type-heading-2-size) * 1px);font-weight:600;line-height:var(--leading-compact);letter-spacing:var(--tracking-tight)}
+.cq-heading-3{font-size:calc(var(--type-heading-3-size) * 1px);font-weight:600;line-height:var(--leading-compact);letter-spacing:var(--tracking-tight)}
+.cq-heading-4{font-size:calc(var(--type-heading-4-size) * 1px);font-weight:600;line-height:var(--leading-normal)}
+.cq-quote{font-size:calc(var(--type-quote-size) * 1px);font-weight:400;line-height:var(--leading-normal);letter-spacing:var(--tracking-tight)}
+.cq-body-lg{font-size:calc(var(--type-body-lg-size) * 1px);font-weight:400;line-height:var(--leading-body)}
+.cq-body{font-size:calc(var(--type-body-size) * 1px);font-weight:400;line-height:var(--leading-body)}
+.cq-body-emphasis{font-size:calc(var(--type-body-emphasis-size) * 1px);font-weight:500;line-height:var(--leading-body)}
+.cq-body-sm{font-size:calc(var(--type-body-sm-size) * 1px);font-weight:400;line-height:var(--leading-body)}
+.cq-caption{font-size:calc(var(--type-caption-size) * 1px);font-weight:400;line-height:var(--leading-body);color:var(--color-primary-dark-64)}
+.cq-label{font-size:calc(var(--type-label-size) * 1px);font-weight:600;line-height:var(--leading-tight)}
+.cq-label-lg{font-size:calc(var(--type-label-lg-size) * 1px);font-weight:600;line-height:var(--leading-tight)}
+.cq-label-sm{font-size:calc(var(--type-label-sm-size) * 1px);font-weight:600;line-height:var(--leading-tight);text-transform:uppercase;letter-spacing:var(--tracking-label)}
+
+/* Board roles — used by the toolkit's own specimen chrome, not by product UI. */
+.cq-board-title{font-family:var(--font-core);font-size:calc(var(--type-board-title-size) * 1px);font-weight:600;line-height:var(--leading-snug);letter-spacing:var(--tracking-tight);margin:0}
+.cq-board-intro{font-family:var(--font-core);font-size:calc(var(--type-board-intro-size) * 1px);font-weight:400;line-height:var(--leading-normal);margin:0}
+.cq-board-section{font-family:var(--font-core);font-size:calc(var(--type-board-section-size) * 1px);font-weight:600;line-height:var(--leading-normal);margin:0}
+
+.cq-mono{font-family:var(--font-mono);font-size:12.5px;font-weight:400;line-height:var(--leading-body)}
+.cq-eyebrow{font-family:var(--font-core);font-size:calc(var(--type-label-size) * 1px);font-weight:600;line-height:var(--leading-tight);text-transform:uppercase;letter-spacing:var(--tracking-label);color:var(--color-primary-dark-64)}

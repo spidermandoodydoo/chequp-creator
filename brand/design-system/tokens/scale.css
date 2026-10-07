@@ -1,0 +1,87 @@
+/* Responsive resolution of the Figma float collections + px-derived aliases.
+   fig-tokens.css declares Mobile as the :root default and each other mode under
+   :root[data-mode="…"]. These media queries resolve the breakpoint automatically for
+   pages that do NOT pin a mode; add data-mode="desktop" to <html> to force one. */
+
+@media (min-width: 768px) {
+  :root {
+    --layout-columns: 8; /* @kind other */
+    --spacing-gutter: 24;
+    --spacing-page-margin: 48;
+    --spacing-section: 80;
+    --type-display-1-size: 60;
+    --type-heading-1-size: 48;
+    --type-heading-2-size: 38;
+    --type-heading-3-size: 32;
+    --type-heading-4-size: 22;
+    --type-body-lg-size: 20;
+    --type-quote-size: 28;
+  }
+}
+@media (min-width: 1024px) {
+  :root {
+    --layout-columns: 12; /* @kind other */
+    --spacing-page-margin: 64;
+    --spacing-section: 120;
+    --spacing-control-height: 40;
+    --type-display-1-size: 80;
+    --type-heading-1-size: 64;
+    --type-heading-2-size: 48;
+    --type-heading-3-size: 40;
+    --type-heading-4-size: 24;
+    --type-body-lg-size: 24;
+    --type-quote-size: 32;
+  }
+}
+@media (min-width: 1440px) {
+  :root { --spacing-gutter: 32; }
+}
+
+/* Length aliases — the float tokens carried into usable CSS lengths. */
+:root {
+  --space-3xs: calc(var(--spacing-3xs) * 1px);
+  --space-2xs: calc(var(--spacing-2xs) * 1px);
+  --space-xs: calc(var(--spacing-xs) * 1px);
+  --space-sm: calc(var(--spacing-sm) * 1px);
+  --space-md: calc(var(--spacing-md) * 1px);
+  --space-lg: calc(var(--spacing-lg) * 1px);
+  --space-xl: calc(var(--spacing-xl) * 1px);
+  --space-2xl: calc(var(--spacing-2xl) * 1px);
+  --space-3xl: calc(var(--spacing-3xl) * 1px);
+  --space-4xl: calc(var(--spacing-4xl) * 1px);
+  --space-5xl: calc(var(--spacing-5xl) * 1px);
+  --space-gutter: calc(var(--spacing-gutter) * 1px);
+  --space-page-margin: calc(var(--spacing-page-margin) * 1px);
+  --space-section: calc(var(--spacing-section) * 1px);
+  --control-height: calc(var(--spacing-control-height) * 1px);
+  --control-height-icon: calc(var(--spacing-control-height-icon) * 1px);
+  --control-padding-x: calc(var(--spacing-control-padding-x) * 1px);
+
+  --r-xxs: calc(var(--radius-xxs) * 1px);
+  --r-xs: calc(var(--radius-xs) * 1px);
+  --r-sm: calc(var(--radius-sm) * 1px);
+  --r-md: calc(var(--radius-md) * 1px);
+  --r-panel: calc(var(--radius-panel) * 1px);
+  --r-lg: calc(var(--radius-lg) * 1px);
+  --r-xl: calc(var(--radius-xl) * 1px);
+  --r-chip: calc(var(--radius-chip) * 1px);
+  --r-indicator: calc(var(--radius-indicator) * 1px);
+  --r-bar: calc(var(--radius-bar) * 1px);
+  --r-full: calc(var(--radius-full) * 1px);
+
+  /* Motion. --motion-ease-relief arrives from Figma as a quoted string, so the usable
+     curve is restated here; duration floats become ms. */
+  --ease-relief: cubic-bezier(0.2, 0.8, 0.2, 1); /* @kind other */
+  --duration-quick: calc(var(--motion-duration-quick) * 1ms); /* @kind other */
+  --duration-settle: calc(var(--motion-duration-settle) * 1ms); /* @kind other */
+
+  /* Hairlines and elevation. The file draws every border as an inset ring, never an
+     outer shadow, except the one focus glow on Primary. */
+  --hairline-card: inset 0 0 0 1px var(--color-primary-dark-08);
+  --hairline-table: inset 0 0 0 1px var(--color-primary-dark-10);
+  --hairline-quiet: inset 0 0 0 1px var(--color-primary-dark-12);
+  --hairline-field: inset 0 0 0 1px var(--field-border);
+  --hairline-strong: inset 0 0 0 1px var(--color-primary-dark-24);
+  --ring-accent: inset 0 0 0 2px var(--color-primary-base);
+  --focus-glow: 0 0 0 4px var(--color-primary-alpha-28);
+}

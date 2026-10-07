@@ -1,0 +1,74 @@
+{
+  "id": "ww-included",
+  "concept": "ww-included",
+  "variant": "a",
+  "version": 1,
+  "audience": "Women 45–65+",
+  "formats": [
+    "9x16",
+    "4x5"
+  ],
+  "meta": {
+    "primary_text": "Every CheqUp membership includes the WeightWatchers app: recipes, meal plans and nutrition targets, plus your own Clinician and Health Coach.",
+    "headline": "WeightWatchers, included",
+    "description": "One membership, everything included",
+    "cta_button": "LEARN_MORE"
+  },
+  "approvals": {},
+  "scenes": [
+    {
+      "type": "hook",
+      "dur": 2.4,
+      "ground": "sand",
+      "eyebrow": "Included with your membership",
+      "headline": "WeightWatchers, included.",
+      "vo": "The WeightWatchers app comes included with CheqUp.",
+      "exit_to": "midnight"
+    },
+    {
+      "type": "stat",
+      "dur": 3.2,
+      "ground": "midnight",
+      "value": "4,500",
+      "unit": "+",
+      "label": "recipes, with meal plans and nutrition targets",
+      "source": "WeightWatchers app, included with CheqUp membership",
+      "vo": "Over four and a half thousand recipes, with meal plans and nutrition targets."
+    },
+    {
+      "type": "media",
+      "dur": 3.0,
+      "broll": "close shot of hands chopping fresh asparagus, herbs and lemon on a wooden board in a bright kitchen, morning window light",
+      "motion": "slow push in as the knife moves, steam from a pan in the background",
+      "caption": "Plans that fit around your week",
+      "fallback_src": "brand/design-system/assets/img/f02b703f91f681a7.jpg",
+      "vo": "Plans that fit around your week."
+    },
+    {
+      "type": "checklist",
+      "dur": 3.4,
+      "ground": "sand",
+      "title": "Plus the people behind it",
+      "items": [
+        {
+          "text": "Your own Clinician",
+          "icon": "UserCheck"
+        },
+        {
+          "text": "A free 1:1 Health Coach",
+          "icon": "MessageCircle"
+        }
+      ],
+      "vo": "Plus your own Clinician and Health Coach."
+    },
+    {
+      "type": "endcard",
+      "dur": 3.4,
+      "ground": "midnight",
+      "headline": "Everything in one membership.",
+      "cta": "Check my eligibility",
+      "legal": "CheqUp Health Ltd · Regulated by the CQC and GPhC · LegitScript certified · Eligibility criteria apply.",
+      "vo": "Check if you’re eligible today."
+    }
+  ]
+}

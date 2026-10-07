@@ -1,0 +1,25 @@
+<!-- @dsCard group="Brand" viewport="700x300" name="CheqUp Loop" subtitle="The one illustrative asset. Background only, brand level only — never in campaign work" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>CheqUp Loop</title><link rel="stylesheet" href="../styles.css">
+<style>body{margin:0;padding:16px;background:var(--color-surface-primary);font-family:var(--font-core);display:grid;grid-template-columns:1fr 268px;gap:16px}
+.stage{position:relative;border-radius:var(--r-sm);background:var(--color-primary-dark);overflow:hidden;display:grid;place-items:center;min-height:268px}
+/* Painted with a mask rather than an image element: an SVG loaded that way is an isolated
+   document, so its fill="currentColor" resolves against the SVG's own black, not the page. */
+.stage .loop{width:100%;aspect-ratio:1461.6/806.4;background:var(--color-on-primary-base);opacity:.72;-webkit-mask:url(../assets/chequp-loop.svg) center/contain no-repeat;mask:url(../assets/chequp-loop.svg) center/contain no-repeat}
+.rules{display:flex;flex-direction:column;gap:10px}
+.rule{border-radius:var(--r-xs);padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.yes{box-shadow:inset 0 0 0 1px var(--color-system-success-32)}
+.no{box-shadow:inset 0 0 0 1px var(--color-system-warning-32)}
+.h{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em}
+.yes .h{color:var(--color-system-success-deep)}.no .h{color:var(--color-system-warning-deep)}
+ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px}
+li{font-size:11px;line-height:1.45;color:var(--color-primary-dark-72)}
+.name{font-family:var(--font-mono);font-size:10px;color:var(--color-primary-dark-48)}</style>
+</head><body>
+<div class="stage"><div class="loop" role="img" aria-label="CheqUp Loop"></div></div>
+<div class="rules">
+<div class="rule yes"><span class="h">May be used</span><ul><li>Website, as a background graphic behind a panel</li><li>Branded collateral</li><li>Event signage</li><li>End frames on brand video, connected to the logo</li></ul></div>
+<div class="rule no"><span class="h">Must not</span><ul><li>Digital advertising</li><li>Social posts</li><li>Campaign work of any kind</li><li>In front of content, or carrying meaning alone</li></ul></div>
+<span class="name">assets/chequp-loop.svg · inline or mask, never &lt;img&gt;</span>
+</div>
+</body></html>

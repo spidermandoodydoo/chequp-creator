@@ -1,0 +1,76 @@
+{
+  "id": "six-months",
+  "concept": "six-months",
+  "variant": "a",
+  "version": 1,
+  "audience": "Warm audiences and retargeting",
+  "formats": [
+    "9x16",
+    "4x5"
+  ],
+  "meta": {
+    "primary_text": "Six months of Clinician-led support, a free Health Coach and the WeightWatchers app. Commit to six months and save £120 on your membership.",
+    "headline": "Save £120 over 6 months",
+    "description": "Membership from £109 a month",
+    "cta_button": "GET_OFFER"
+  },
+  "approvals": {},
+  "scenes": [
+    {
+      "type": "hook",
+      "dur": 2.4,
+      "ground": "purple",
+      "eyebrow": "Six months",
+      "headline": "Six months, properly supported.",
+      "vo": "Six months, properly supported.",
+      "exit_to": "sand"
+    },
+    {
+      "type": "steps",
+      "dur": 5.6,
+      "ground": "sand",
+      "title": "How the months build",
+      "steps": [
+        {
+          "label": "Month 1",
+          "sub": "Get set up with your Clinician and Coach"
+        },
+        {
+          "label": "Months 2 to 3",
+          "sub": "Build habits that fit your life"
+        },
+        {
+          "label": "Months 4 to 6",
+          "sub": "Keep going, with support to maintain"
+        }
+      ],
+      "vo": "Get set up with your Clinician and Coach. Build habits that fit your life. Then keep going, with support to maintain."
+    },
+    {
+      "type": "media",
+      "dur": 2.8,
+      "broll": "two friends in their fifties laughing together on a sofa in a sunlit living room with cups of tea",
+      "motion": "natural laughter, slow drift of camera",
+      "fallback_src": "brand/design-system/assets/img/af529b1f7714e006.jpg",
+      "caption": "Progress is personal"
+    },
+    {
+      "type": "hook",
+      "dur": 3.0,
+      "ground": "midnight",
+      "size": "h1",
+      "eyebrow": "Six-month plan",
+      "headline": "Commit to six months and save £120 on your membership.",
+      "vo": "Commit to six months and save one hundred and twenty pounds on your membership."
+    },
+    {
+      "type": "endcard",
+      "dur": 3.4,
+      "ground": "midnight",
+      "headline": "Membership from £109 a month.",
+      "cta": "Choose 6 months",
+      "legal": "CheqUp Health Ltd · Regulated by the CQC and GPhC · LegitScript certified · Eligibility criteria apply.",
+      "vo": "Choose six months today."
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+<!-- @dsCard group="Spacing" viewport="700x150" name="Rings, not shadows" subtitle="Every border is an inset ring; the only glow is focus" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Rings, not shadows</title><link rel="stylesheet" href="../styles.css">
+<style>body{margin:0;padding:16px;background:var(--color-surface-primary);font-family:var(--font-core);color:var(--color-primary-dark)}
+.sw{display:flex;flex-direction:column;gap:6px}.chip{height:56px;border-radius:var(--r-xs)}
+.n{font-size:11px;font-weight:600;line-height:1.2}.v{font-size:10px;font-weight:400;color:var(--color-primary-dark-60);font-family:var(--font-mono)}
+.grid{display:grid;gap:10px}.row{display:flex;gap:10px;align-items:flex-end}</style>
+</head><body><div class="row" style="align-items:flex-start;gap:14px">
+<div class="sw"><div style="width:120px;height:64px;border-radius:var(--r-md);background:var(--color-surface-tertiary);box-shadow:var(--hairline-card)"></div><span class="n">card</span><span class="v">inset 1px ink-08</span></div>
+<div class="sw"><div style="width:120px;height:64px;border-radius:var(--r-md);background:var(--color-surface-tertiary);box-shadow:var(--hairline-table)"></div><span class="n">table</span><span class="v">inset 1px ink-10</span></div>
+<div class="sw"><div style="width:120px;height:64px;border-radius:var(--r-sm);background:var(--color-surface-tertiary);box-shadow:var(--hairline-field)"></div><span class="n">field</span><span class="v">inset 1px ink-48</span></div>
+<div class="sw"><div style="width:120px;height:64px;border-radius:var(--r-md);background:var(--color-surface-tertiary);box-shadow:var(--ring-accent)"></div><span class="n">accent</span><span class="v">inset 2px purple</span></div>
+<div class="sw"><div style="width:120px;height:64px;border-radius:var(--r-full);background:var(--color-primary-base);box-shadow:var(--focus-glow)"></div><span class="n">focus</span><span class="v">0 0 0 4px purple-28</span></div>
+</div></body></html>

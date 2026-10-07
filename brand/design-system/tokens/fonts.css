@@ -1,0 +1,15 @@
+/* CheqUp webfonts. Instrument Sans (400/500/600) and DM Mono (400/500), served from
+   Google Fonts — confirmed by the design owner as the real source, not a substitution:
+   https://fonts.google.com/specimen/Instrument+Sans
+   The @import resolves to Google's own @font-face rules at load time. To self-host,
+   download the families from that page into assets/fonts/ and replace the @import with
+   local @font-face rules. */
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+:root {
+  --font-core: "Instrument Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-mono: "DM Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+}

@@ -1,0 +1,83 @@
+{
+  "id": "consult-flow",
+  "concept": "consult-flow",
+  "variant": "a",
+  "version": 1,
+  "audience": "Prospects, women 35–64",
+  "formats": [
+    "9x16",
+    "4x5"
+  ],
+  "meta": {
+    "primary_text": "Answer a few questions about you and your health. A Clinician reviews them and talks you through your options. No pressure, no judgement.",
+    "headline": "Here’s how it works",
+    "description": "Check if CheqUp is right for you",
+    "cta_button": "LEARN_MORE"
+  },
+  "approvals": {},
+  "scenes": [
+    {
+      "type": "hook",
+      "dur": 2.2,
+      "ground": "sand",
+      "eyebrow": "Getting started",
+      "headline": "Not sure where to start?",
+      "vo": "Not sure where to start? Here’s what happens."
+    },
+    {
+      "type": "ui",
+      "dur": 3.6,
+      "ground": "lavender",
+      "title": "A few questions about you and your health",
+      "question": "What would you most like support with?",
+      "options": [
+        "Building habits that last",
+        "Understanding my options",
+        "Feeling more in control"
+      ],
+      "select": 0,
+      "cta": "Continue",
+      "vo": "First, a few questions about you and your health."
+    },
+    {
+      "type": "steps",
+      "dur": 5.4,
+      "ground": "sand",
+      "eyebrow": "What happens next",
+      "title": "Then it’s over to us",
+      "steps": [
+        {
+          "label": "Answer a few questions",
+          "sub": "At a time that suits you"
+        },
+        {
+          "label": "A Clinician reviews your answers",
+          "sub": "And talks you through your options"
+        },
+        {
+          "label": "Choose the plan that’s right for you",
+          "sub": "With your Coach from day one"
+        }
+      ],
+      "vo": "A Clinician reviews your answers and talks you through your options. Then you choose the plan that’s right for you.",
+      "exit_to": "midnight"
+    },
+    {
+      "type": "hook",
+      "dur": 2.0,
+      "ground": "midnight",
+      "size": "h1",
+      "headline": "No pressure. No judgement.",
+      "vo": "No pressure, and no judgement."
+    },
+    {
+      "type": "endcard",
+      "dur": 3.4,
+      "ground": "midnight",
+      "headline": "See what we’d suggest for you.",
+      "cta": "Check my eligibility",
+      "legal": "CheqUp Health Ltd · Regulated by the CQC and GPhC · LegitScript certified · Eligibility criteria apply.",
+      "vo": "Check if CheqUp is right for you."
+    }
+  ]
+}

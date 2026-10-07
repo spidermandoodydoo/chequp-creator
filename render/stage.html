@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<!-- One scene of a CheqUp video, built from the design system's own tokens.
+     render.mjs loads this page once per scene, seeks the timeline frame by frame
+     and screenshots it. Viewport is the mobile spec width (Rule 1: mobile is the design),
+     scaled to 1080px wide with deviceScaleFactor. -->
+<link rel="stylesheet" href="../brand/design-system/tokens/fig-tokens.css">
+<link rel="stylesheet" href="../brand/design-system/tokens/scale.css">
+<link rel="stylesheet" href="../brand/design-system/tokens/typography.css">
+<link rel="stylesheet" href="../brand/fonts/fonts.css">
+<link rel="stylesheet" href="scenes.css">
+</head>
+<body>
+<div id="stage"></div>
+<script type="module" src="stage.js"></script>
+</body>
+</html>

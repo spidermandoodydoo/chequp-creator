@@ -1,0 +1,18 @@
+<!-- @dsCard group="Colors" viewport="700x200" name="Token tiers" subtitle="Primitive → semantic → theme → component: never reach past the tier you need" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Token tiers</title><link rel="stylesheet" href="../styles.css">
+<style>body{margin:0;padding:16px;background:var(--color-surface-primary);font-family:var(--font-core);color:var(--color-primary-dark)}
+table{border-collapse:collapse;width:100%}td{padding:4px 8px 4px 0;vertical-align:middle;white-space:nowrap}
+.chip{display:inline-block;width:22px;height:22px;border-radius:var(--r-xxs);box-shadow:var(--hairline-strong)}
+.n{font-size:11px;font-weight:600;font-family:var(--font-mono)}
+.a{font-size:10px;font-weight:400;color:var(--color-primary-dark-60);font-family:var(--font-mono)}
+.h{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--color-primary-dark-48);padding-top:8px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:0 24px;align-items:start}</style>
+</head><body><table>
+<tr><td colspan="4" class="h">Primary button background, resolved down the chain</td></tr>
+<tr><td><span class="chip" style="background:var(--brand-purple)"></span></td><td class="n">--brand-purple</td><td class="a">Primitives · the raw hex, #683CF5</td><td class="a">34 tokens</td></tr>
+<tr><td><span class="chip" style="background:var(--color-primary-base)"></span></td><td class="n">--color-primary-base</td><td class="a">Color · → brand/purple</td><td class="a">109 tokens</td></tr>
+<tr><td><span class="chip" style="background:var(--theme-accent)"></span></td><td class="n">--theme-accent</td><td class="a">Theme · → primary/base, reassigned per category</td><td class="a">4 tokens</td></tr>
+<tr><td><span class="chip" style="background:var(--button-primary-background)"></span></td><td class="n">--button-primary-background</td><td class="a">Component · → theme/accent</td><td class="a">34 tokens</td></tr>
+<tr><td colspan="4" class="a" style="white-space:normal;padding-top:10px">Build with the component tier where one exists, the semantic tier otherwise. Reach for a primitive only when defining a semantic token. Setting <span class="n">data-mode</span> on an ancestor reassigns the theme tier, so anything built on <span class="n">--button-primary-background</span> recolours with the category for free.</td></tr>
+</table></body></html>

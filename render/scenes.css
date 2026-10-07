@@ -1,0 +1,133 @@
+/* Scene styles for CheqUp video. Every value resolves to a design-system token;
+   the only literals are the video safe-area paddings, which have no web equivalent. */
+
+:root{
+  --font-core:"Instrument Sans",-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+  --font-mono:"DM Mono",ui-monospace,Menlo,monospace;
+  /* Meta Reels/Stories UI covers the top and bottom of a 9:16 frame. */
+  --safe-top:96px; --safe-bottom:208px; --safe-x:var(--space-page-margin);
+}
+html[data-format="4x5"]{--safe-top:40px;--safe-bottom:56px}
+html[data-format="1x1"]{--safe-top:32px;--safe-bottom:40px}
+
+html,body{margin:0;height:100%;overflow:hidden;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{font-family:var(--font-core);background:transparent}
+#stage{position:relative;width:100vw;height:100vh;overflow:hidden}
+
+/* Grounds: flat colour bands only. No gradients, no textures. */
+.scene{position:absolute;inset:0;display:flex;flex-direction:column;
+  padding:var(--safe-top) var(--safe-x) var(--safe-bottom);box-sizing:border-box}
+.g-sand{background:var(--color-surface-primary);--ink:var(--color-primary-dark);--ink-body:var(--color-primary-dark-72);--ink-muted:var(--color-primary-dark-64);--ink-legal:var(--color-primary-dark-62);--eyebrow:var(--color-primary-dark-64)}
+.g-dark-sand{background:var(--color-surface-secondary);--ink:var(--color-primary-dark);--ink-body:var(--color-primary-dark-72);--ink-muted:var(--color-primary-dark-64);--ink-legal:var(--color-primary-dark-62);--eyebrow:var(--color-primary-dark-64)}
+.g-yellow-wash{background:var(--color-yellow-wash);--ink:var(--color-primary-dark);--ink-body:var(--color-primary-dark-72);--ink-muted:var(--color-primary-dark-64);--ink-legal:var(--color-primary-dark-62);--eyebrow:var(--color-primary-dark-64)}
+.g-lavender{background:var(--color-primary-light);--ink:var(--color-primary-dark);--ink-body:var(--color-primary-dark-72);--ink-muted:var(--color-primary-dark-64);--ink-legal:var(--color-primary-dark-62);--eyebrow:var(--color-primary-dark-64)}
+.g-midnight{background:var(--color-primary-dark);--ink:var(--color-on-primary-base);--ink-body:var(--color-on-primary-88);--ink-muted:var(--color-on-primary-72);--ink-legal:var(--color-on-primary-62);--eyebrow:var(--color-accent-default)}
+.g-purple{background:var(--color-primary-base);--ink:var(--color-on-primary-base);--ink-body:var(--color-on-primary-88);--ink-muted:var(--color-on-primary-72);--ink-legal:var(--color-on-primary-62);--eyebrow:var(--color-on-primary-72)}
+.g-none{background:transparent;--ink:var(--color-on-primary-base);--ink-body:var(--color-on-primary-88);--ink-muted:var(--color-on-primary-72);--ink-legal:var(--color-on-primary-62);--eyebrow:var(--color-on-primary-72)}
+
+.eyebrow{font-size:calc(var(--type-label-size)*1px);font-weight:600;line-height:var(--leading-tight);
+  text-transform:uppercase;letter-spacing:var(--tracking-label);color:var(--eyebrow);margin:0 0 var(--space-md)}
+.display{font-size:calc(var(--type-display-1-size)*1px);font-weight:600;line-height:var(--leading-snug);
+  letter-spacing:var(--tracking-tight);color:var(--ink);margin:0;text-wrap:balance}
+.h1{font-size:calc(var(--type-heading-1-size)*1px);font-weight:600;line-height:var(--leading-snug);letter-spacing:var(--tracking-tight);color:var(--ink);margin:0;text-wrap:balance}
+.h3{font-size:calc(var(--type-heading-3-size)*1px);font-weight:600;line-height:var(--leading-compact);letter-spacing:var(--tracking-tight);color:var(--ink);margin:0;text-wrap:balance}
+.h4{font-size:calc(var(--type-heading-4-size)*1px);font-weight:600;line-height:var(--leading-normal);color:var(--ink);margin:0}
+.body-lg{font-size:calc(var(--type-body-lg-size)*1px);font-weight:400;line-height:var(--leading-body);color:var(--ink-body);margin:var(--space-md) 0 0;text-wrap:pretty}
+.body{font-size:calc(var(--type-body-size)*1px);font-weight:400;line-height:var(--leading-body);color:var(--ink-body);margin:0}
+.legal{font-size:calc(var(--type-caption-size)*1px);font-weight:400;line-height:var(--leading-body);color:var(--ink-legal);margin:0}
+.mono{font-family:var(--font-mono);font-size:12.5px;line-height:var(--leading-body);color:var(--ink-muted)}
+.w{display:inline-block;white-space:pre}
+.grow{flex:1}
+.center{justify-content:center}
+.end{justify-content:flex-end}
+
+/* Button — design-system spec: pill, 48px mobile control height, 14/600 label. */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:var(--control-height);
+  padding:0 32px;border-radius:var(--r-full);font-size:14px;font-weight:600;line-height:1;white-space:nowrap;
+  background:var(--button-primary-background);color:var(--button-primary-label);align-self:flex-start}
+.btn.full{align-self:stretch}
+.g-midnight .btn,.g-purple .btn,.g-none .btn{background:var(--button-secondary-background);color:var(--button-secondary-label)}
+
+/* Card: white lifts off the page; inset ring, never a drop shadow. */
+.card{background:var(--color-surface-tertiary);border-radius:var(--r-lg);box-shadow:var(--hairline-card);padding:var(--space-xl);color:var(--color-primary-dark)}
+.card .body{color:var(--color-primary-dark-72)}
+
+/* Steps — ProgressStep circles, stacked vertically for the 9:16 frame. */
+.steps{display:flex;flex-direction:column;gap:var(--space-lg);margin-top:var(--space-xl)}
+.step{display:flex;align-items:center;gap:var(--space-md)}
+.step .dot{flex:none;width:40px;height:40px;border-radius:var(--r-full);display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:600;background:var(--color-surface-tertiary);box-shadow:inset 0 0 0 1px var(--color-primary-dark-24);color:var(--color-primary-dark-48)}
+.step.current .dot{box-shadow:inset 0 0 0 2px var(--color-primary-base);color:var(--color-primary-base)}
+.step.complete .dot{background:var(--color-primary-base);box-shadow:none;color:var(--color-on-primary-base)}
+.step .lbl{font-size:calc(var(--type-heading-4-size)*1px);font-weight:500;line-height:1.25;color:var(--ink)}
+.step .sub{font-size:14px;color:var(--ink-muted);margin-top:2px}
+
+/* Checklist rows with a line icon. */
+.checks{display:flex;flex-direction:column;gap:var(--space-md);margin-top:var(--space-xl)}
+.check{display:flex;align-items:flex-start;gap:var(--space-sm);font-size:calc(var(--type-body-lg-size)*1px);line-height:var(--leading-body);color:var(--ink)}
+.check svg{flex:none;width:24px;height:24px;margin-top:1px;color:var(--theme-accent)}
+.g-midnight .check svg,.g-purple .check svg{color:var(--color-primary-light)}
+
+/* Stat — a proof module without a source is a claim. */
+.stat .num{font-size:96px;font-weight:600;line-height:1;letter-spacing:var(--tracking-tight);color:var(--ink)}
+.stat .unit{font-size:40px;font-weight:600;color:var(--ink-muted);margin-left:4px}
+.stat .label{font-size:calc(var(--type-heading-4-size)*1px);font-weight:500;color:var(--ink);margin-top:var(--space-sm)}
+.stat .src{margin-top:var(--space-lg)}
+
+/* Quote */
+.quote{font-size:calc(var(--type-quote-size)*1px);font-weight:400;line-height:var(--leading-normal);letter-spacing:var(--tracking-tight);color:var(--ink);margin:0;text-wrap:pretty}
+.stars{display:flex;gap:4px;margin-bottom:var(--space-md)}
+.stars svg{width:20px;height:20px}
+.who{font-size:14px;font-weight:600;color:var(--ink);margin-top:var(--space-lg)}
+.who span{font-weight:400;color:var(--ink-muted)}
+.rail{display:flex;gap:6px;margin-top:var(--space-lg)}
+.rail i{display:block;height:4px;width:16px;border-radius:40px;background:var(--color-on-primary-40)}
+.rail i.on{width:32px;background:var(--color-on-primary-base)}
+
+/* Media: full bleed, or cropped by the relief rectangle (the brand's one shape). */
+.media-full{position:absolute;inset:0;overflow:hidden}
+.media-full img{width:100%;height:100%;object-fit:cover;display:block;transform-origin:50% 40%}
+.relief{width:100%;display:block}
+.tag{display:inline-flex;align-items:center;height:24px;padding:0 12px;border-radius:var(--r-full);
+  font-size:12px;font-weight:600;letter-spacing:var(--tracking-label);text-transform:uppercase;
+  background:var(--color-primary-light);color:var(--color-primary-dark);align-self:flex-start}
+/* Functional caption over photography (Rule 2). Solid fill, no alpha on the component. */
+.media-caption{position:absolute;left:var(--safe-x);right:var(--safe-x);bottom:var(--safe-bottom);
+  background:var(--color-surface-tertiary);border-radius:var(--r-md);padding:var(--space-md) var(--space-lg);
+  font-size:calc(var(--type-body-lg-size)*1px);font-weight:500;line-height:1.3;color:var(--color-primary-dark)}
+
+/* Phone UI demo — the eligibility check, drawn from RadioRow/ProgressBar specs. */
+.phone{background:var(--color-surface-primary);border-radius:var(--r-xl);box-shadow:inset 0 0 0 1px var(--color-primary-dark-12);
+  padding:var(--space-lg);display:flex;flex-direction:column;gap:var(--space-sm)}
+.pbar{height:4px;border-radius:var(--r-full);background:var(--color-primary-dark-08);overflow:hidden;margin-bottom:var(--space-sm)}
+.pbar i{display:block;height:100%;background:var(--color-primary-base);border-radius:var(--r-full)}
+.q{font-size:20px;font-weight:600;line-height:1.25;letter-spacing:var(--tracking-tight);color:var(--color-primary-dark);margin-bottom:var(--space-xs)}
+.radio{display:flex;align-items:center;gap:12px;height:56px;padding:0 16px;border-radius:var(--r-md);background:var(--color-surface-tertiary);
+  box-shadow:inset 0 0 0 1px var(--color-primary-dark-12);font-size:16px;color:var(--color-primary-dark)}
+.radio .o{width:20px;height:20px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--color-primary-dark-48);flex:none;position:relative}
+.radio.sel{box-shadow:inset 0 0 0 2px var(--color-primary-base)}
+.radio.sel .o{box-shadow:inset 0 0 0 6px var(--color-primary-base)}
+
+/* Chat — Coach messages. Member bubbles on Purple, Coach bubbles lift off the page in white. */
+.chat{display:flex;flex-direction:column;gap:var(--space-xs)}
+.bubble{max-width:82%;padding:12px 16px;border-radius:var(--r-panel);font-size:17px;line-height:1.35}
+.bubble b{display:block;font-size:12px;font-weight:600;letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--color-primary-dark-64);margin-bottom:4px}
+.bubble.them{align-self:flex-start;background:var(--color-surface-tertiary);color:var(--color-primary-dark);box-shadow:var(--hairline-card);border-bottom-left-radius:var(--r-xxs)}
+.bubble.you{align-self:flex-end;background:var(--color-primary-base);color:var(--color-on-primary-base);border-bottom-right-radius:var(--r-xxs)}
+.bubble.typing{display:flex;gap:5px;padding:14px 16px}
+.bubble.typing i{width:7px;height:7px;border-radius:50%;background:var(--color-primary-dark-32)}
+
+/* Divider — ellipse of the next section's colour rising into the current one. */
+.divider{position:absolute;left:-8%;right:-8%;height:120vh;border-radius:50%;top:100%}
+
+/* Captions — functional UI, Midnight panel, Sand text, current word in Lavender. */
+.captions{position:absolute;left:var(--safe-x);right:var(--safe-x);bottom:calc(var(--safe-bottom) + 8px);display:flex;justify-content:center;pointer-events:none}
+.captions .box{background:var(--color-primary-dark);color:var(--color-on-primary-base);border-radius:var(--r-md);padding:10px 16px;
+  font-size:22px;font-weight:600;line-height:1.25;letter-spacing:-0.01em;text-align:center;max-width:100%}
+.captions .box:empty{display:none}
+.captions .cw{color:var(--color-on-primary-base)}
+.captions .cw.on{color:var(--color-primary-light)}
+.has-caption-top .captions{bottom:auto;top:calc(var(--safe-top) + 8px)}
+
+/* Logo lockup */
+.logo{color:var(--ink);display:block}

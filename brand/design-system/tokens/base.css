@@ -1,0 +1,24 @@
+/* Page defaults and the two shared behaviours (link colour, focus ring). */
+html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{margin:0;font-family:var(--font-core);font-size:calc(var(--type-body-size) * 1px);font-weight:400;line-height:var(--leading-body);color:var(--color-primary-dark);background:var(--color-surface-primary)}
+*,*::before,*::after{box-sizing:border-box}
+
+a{color:var(--color-primary-base);text-decoration:none;font-weight:600;transition:color var(--duration-quick) var(--ease-relief)}
+a:hover{color:var(--color-primary-hover);text-decoration:underline;text-underline-offset:3px}
+a:active{color:var(--color-primary-active)}
+
+:where(button,a,input,select,textarea,[tabindex]):focus-visible{outline:2px solid var(--color-focus-ring);outline-offset:2px}
+
+/* Surfaces, in the order the palette intends them: Surface Primary is the page,
+   Surface Tertiary lifts off it, Surface Secondary is the warm band. */
+.cq-surface-primary{background:var(--color-surface-primary)}
+.cq-surface-secondary{background:var(--color-surface-secondary)}
+.cq-surface-tertiary{background:var(--color-surface-tertiary)}
+.cq-surface-tint{background:var(--color-surface-tint)}
+.cq-surface-dark{background:var(--color-primary-dark);color:var(--color-on-primary-base)}
+.cq-surface-dark .cq-body,.cq-surface-dark .cq-body-sm,.cq-surface-dark .cq-body-lg{color:var(--color-on-primary-88)}
+.cq-surface-dark .cq-display-1,.cq-surface-dark .cq-heading-1,.cq-surface-dark .cq-heading-2,.cq-surface-dark .cq-heading-3,.cq-surface-dark .cq-heading-4{color:var(--color-on-primary-base)}
+/* Placeholders. Inline styles cannot reach ::placeholder, so the two field surfaces
+   declare theirs here; TextField sets .cq-field-on-purple for surface="on-purple". */
+input::placeholder,textarea::placeholder{color:var(--color-primary-dark-48)}
+.cq-field-on-purple input::placeholder,.cq-field-on-purple textarea::placeholder{color:var(--field-on-purple-placeholder)}

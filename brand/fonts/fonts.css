@@ -1,0 +1,7 @@
+/* Self-hosted copies of the Google Fonts the CheqUp design system specifies
+   (Instrument Sans 400/500/600, DM Mono 400/500 — see design-system/tokens/fonts.css).
+   Self-hosted so renders on mama are deterministic and work offline.
+   Instrument Sans ships as one variable file; 700 is deliberately not exposed (Rule 4). */
+@font-face{font-family:"Instrument Sans";font-style:normal;font-weight:400 600;font-display:block;src:url(InstrumentSans-Variable.woff2) format("woff2")}
+@font-face{font-family:"DM Mono";font-style:normal;font-weight:400;font-display:block;src:url(DMMono-400.woff2) format("woff2")}
+@font-face{font-family:"DM Mono";font-style:normal;font-weight:500;font-display:block;src:url(DMMono-500.woff2) format("woff2")}

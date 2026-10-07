@@ -1,0 +1,16 @@
+<!-- @dsCard group="Spacing" viewport="700x140" name="Motion" subtitle="Two durations, one curve — ease-relief" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Motion</title><link rel="stylesheet" href="../styles.css">
+<style>body{margin:0;padding:16px;background:var(--color-surface-primary);font-family:var(--font-core);color:var(--color-primary-dark)}
+.sw{display:flex;flex-direction:column;gap:6px}.chip{height:56px;border-radius:var(--r-xs)}
+.n{font-size:11px;font-weight:600;line-height:1.2}.v{font-size:10px;font-weight:400;color:var(--color-primary-dark-60);font-family:var(--font-mono)}
+.grid{display:grid;gap:10px}.row{display:flex;gap:10px;align-items:flex-end}</style>
+</head><body><div style="display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;gap:28px;align-items:flex-end">
+<div class="sw"><span style="font-size:34px;font-weight:600;letter-spacing:-.02em;line-height:1">160ms</span><span class="n">duration-quick</span><span class="v">hover, focus, colour</span></div>
+<div class="sw"><span style="font-size:34px;font-weight:600;letter-spacing:-.02em;line-height:1">320ms</span><span class="n">duration-settle</span><span class="v">reveal, sheet, progress</span></div>
+<div class="sw"><span class="cq-mono" style="font-size:14px">cubic-bezier(0.2, 0.8, 0.2, 1)</span><span class="n">ease-relief</span><span class="v">the only curve</span></div>
+</div>
+<div style="height:4px;border-radius:999px;background:var(--color-primary-dark-10);overflow:hidden"><div style="height:100%;width:40%;background:var(--color-primary-base);border-radius:999px;animation:go 1.8s var(--ease-relief) infinite alternate"></div></div>
+<style>@keyframes go{from{width:12%}to{width:88%}}</style>
+</div></body></html>

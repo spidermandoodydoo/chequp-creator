@@ -1,0 +1,38 @@
+{
+  "id": "bumper-c",
+  "concept": "bumpers-6s",
+  "variant": "c",
+  "version": 1,
+  "audience": "All women 35+",
+  "formats": [
+    "9x16",
+    "1x1"
+  ],
+  "meta": {
+    "primary_text": "Your own Clinician, a free Health Coach and the WeightWatchers app in one membership.",
+    "headline": "The CheqUp Method",
+    "description": "",
+    "cta_button": "LEARN_MORE"
+  },
+  "approvals": {},
+  "scenes": [
+    {
+      "type": "stat",
+      "ground": "sand",
+      "value": "4.4",
+      "unit": "/5",
+      "label": "Rated Excellent from 14k reviews",
+      "source": "Trustpilot, as displayed on chequp.com, 7 Oct 2026",
+      "dur": 3.0,
+      "exit_to": "midnight"
+    },
+    {
+      "type": "endcard",
+      "dur": 3.0,
+      "ground": "midnight",
+      "headline": "The CheqUp Method",
+      "cta": "See if it’s right for you",
+      "legal": "CheqUp Health Ltd · Regulated by the CQC and GPhC · LegitScript certified · Eligibility criteria apply."
+    }
+  ]
+}

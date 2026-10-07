@@ -1,0 +1,78 @@
+{
+  "id": "coach-pocket",
+  "concept": "coach-pocket",
+  "variant": "a",
+  "version": 1,
+  "audience": "Women 35–64",
+  "formats": [
+    "9x16",
+    "4x5"
+  ],
+  "meta": {
+    "primary_text": "A free 1:1 Health Coach comes with every CheqUp membership. Message or call for the everyday moments, not just check-ins.",
+    "headline": "Your Coach, whenever you need",
+    "description": "Free 1:1 coaching, included",
+    "cta_button": "LEARN_MORE"
+  },
+  "approvals": {},
+  "scenes": [
+    {
+      "type": "hook",
+      "dur": 2.4,
+      "ground": "purple",
+      "eyebrow": "Your Health Coach",
+      "headline": "Big dinner out tonight? Message your Coach.",
+      "vo": "Big dinner out tonight? Message your Coach.",
+      "exit_to": "sand"
+    },
+    {
+      "type": "chat",
+      "dur": 5.6,
+      "ground": "sand",
+      "messages": [
+        {
+          "from": "you",
+          "text": "Work dinner tonight. Any tips?"
+        },
+        {
+          "from": "coach",
+          "name": "Your Coach",
+          "text": "Have a look at the menu before you go and choose your main first. Want a lighter recipe for tomorrow’s lunch?"
+        },
+        {
+          "from": "you",
+          "text": "Yes please"
+        }
+      ],
+      "note": "Illustrative conversation",
+      "vo": "Your Health Coach is there by message or call, for the everyday moments."
+    },
+    {
+      "type": "stat",
+      "dur": 3.4,
+      "ground": "sand",
+      "value": "90",
+      "unit": "%",
+      "label": "of coached members said their coach kept them on track",
+      "source": "CheqUp member survey — ADD SAMPLE SIZE AND DATE",
+      "vo": "Nine in ten coached members say their coach kept them on track."
+    },
+    {
+      "type": "media",
+      "dur": 2.8,
+      "broll": "a woman in her fifties smiling at her phone while walking through a leafy London park in autumn",
+      "motion": "she walks towards camera, leaves moving in the breeze",
+      "caption": "Free 1:1 coaching, included",
+      "fallback_src": "brand/design-system/assets/img/8a5a6edf3ad2e4e1.jpg"
+    },
+    {
+      "type": "endcard",
+      "dur": 3.4,
+      "ground": "midnight",
+      "headline": "Someone in your corner.",
+      "cta": "See if it’s right for you",
+      "legal": "CheqUp Health Ltd · Regulated by the CQC and GPhC · LegitScript certified · Eligibility criteria apply.",
+      "vo": "See if CheqUp is right for you."
+    }
+  ]
+}

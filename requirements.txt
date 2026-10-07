@@ -1,0 +1,6 @@
+pyyaml>=6
+requests>=2.31
+numpy
+# voice (optional; renders are silent without it)
+# kokoro>=0.9
+# soundfile

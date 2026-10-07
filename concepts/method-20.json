@@ -1,0 +1,83 @@
+{
+  "id": "method-20",
+  "concept": "method-20",
+  "variant": "a",
+  "version": 1,
+  "audience": "Women 35–64",
+  "formats": [
+    "9x16",
+    "4x5",
+    "1x1"
+  ],
+  "meta": {
+    "primary_text": "Your own Clinician, a free 1:1 Health Coach and the WeightWatchers app, all in one membership. Care that’s about you, not just the scales.",
+    "headline": "The CheqUp Method",
+    "description": "See if it’s right for you",
+    "cta_button": "LEARN_MORE"
+  },
+  "approvals": {},
+  "scenes": [
+    {
+      "type": "hook",
+      "dur": 2.4,
+      "ground": "midnight",
+      "eyebrow": "The CheqUp Method",
+      "headline": "Weight health isn’t one thing.",
+      "vo": "Weight health isn’t one thing. So we don’t treat it like one.",
+      "exit_to": "lavender"
+    },
+    {
+      "type": "checklist",
+      "dur": 6.0,
+      "ground": "lavender",
+      "title": "One membership, four kinds of support",
+      "items": [
+        {
+          "text": "A Clinician who looks at your health first",
+          "icon": "UserCheck"
+        },
+        {
+          "text": "A free 1:1 Health Coach",
+          "icon": "MessageCircle"
+        },
+        {
+          "text": "The WeightWatchers app, included",
+          "icon": "Salad"
+        },
+        {
+          "text": "A plan built around your life",
+          "icon": "NotebookPen"
+        }
+      ],
+      "vo": "Your own Clinician. A free one-to-one Health Coach. The WeightWatchers app, included. And a plan built around your life."
+    },
+    {
+      "type": "media",
+      "dur": 3.0,
+      "broll": "a woman in her late forties laughing while cooking a colourful vegetable stir fry in a sunny home kitchen, phone propped on the worktop",
+      "motion": "she tosses the pan and glances at her phone, gentle handheld camera",
+      "caption": "Message or call your Coach whenever you need",
+      "fallback_src": "brand/design-system/assets/img/f02b703f91f681a7.jpg",
+      "vo": "Message or call your Coach whenever you need."
+    },
+    {
+      "type": "stat",
+      "ground": "sand",
+      "value": "4.4",
+      "unit": "/5",
+      "label": "Rated Excellent from 14k reviews",
+      "source": "Trustpilot, as displayed on chequp.com, 7 Oct 2026",
+      "dur": 3.0,
+      "vo": "Rated Excellent on Trustpilot."
+    },
+    {
+      "type": "endcard",
+      "dur": 3.4,
+      "ground": "midnight",
+      "headline": "Care about you, not just your weight.",
+      "cta": "See if it’s right for you",
+      "legal": "CheqUp Health Ltd · Regulated by the CQC and GPhC · LegitScript certified · Eligibility criteria apply.",
+      "vo": "See if CheqUp is right for you."
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+# CheqUp — Meta paid social video. Same preset shape as shorts-factory's
+# presets/*.yaml, plus the brand + compliance blocks a regulated advertiser needs.
+name: chequp_meta
+brand: CheqUp
+product: The CheqUp Method — weight-health membership (Clinician, Health Coach, WeightWatchers app, plan)
+landing_default: https://chequp.com/how-it-works   # use dedicated LPs, not the homepage (Jul data: purchase rate doubled off-homepage)
+
+audience:
+  primary: Women 35–64 in the UK (566 of 680 purchases; best CPA women 35–44 £196, volume women 55–64)
+  secondary: Women 65+ (highest CTR 1.05%, CPA £338 — needs clearer, slower cuts)
+  test_only: Men 45–64 (CPA ~£470)
+  age_min: 18          # Meta policy for weight-management ads
+
+formats:               # every concept renders all three unless it says otherwise
+  "9x16": {placements: [FB Reels, IG Reels, Stories, Reels overlay], hook_by_s: 1.5}
+  "4x5":  {placements: [FB Feed, IG Feed]}
+  "1x1":  {placements: [Audience Network, Marketplace]}
+exclude_placements: [Facebook in-stream video]   # £3,628 CPA over 90 days
+
+design_system: brand/design-system          # CheqUp Digital Design System (tokens, fonts, assets)
+default_mode: weight-health                  # data-mode theme; others: women-s-health, cardiovascular
+
+voice:
+  tts: kokoro
+  voices: [bf_emma, bf_isabella]   # warm British female; bm_george for the male test cut
+  speed: 0.95
+  words_per_second: 2.5
+
+writer_rules:
+  - Second person, present tense, no hedging. The reader is "you"; CheqUp is "we".
+  - Sentence case for every heading. Only eyebrows and tags are uppercase.
+  - Contractions yes, exclamation marks no, emoji never. Curly apostrophes (’).
+  - Buttons and CTAs state the outcome ("Check my eligibility", "See if it’s right for you"), never "Learn more" or "Submit".
+  - Every number carries its source on screen. A stat without a source is a claim.
+  - Reassure before you explain. Warm, non-judgemental, about connected care rather than the scales.
+  - The hero is the service — Clinician, Health Coach, WeightWatchers app, the plan. Never the medicine.
+  - The first 1.5 seconds must carry the hook as on-screen text from frame 0 (native Reels hooks are the weak point in the account).
+  - Positive framing only. Never describe the viewer's body, weight or feelings about it.
+
+never:     # enforced by cqf/compliance.py — hard fails, not warnings
+  - Naming or implying a prescription-only medicine (brand, generic, "jab", "injection", "pen", "pill", "tablet", "oral", "GLP-1")
+  - Showing pens, needles, syringes, vials, pill packs, injecting, or the syringe/pill icons
+  - Before/after imagery, body close-ups, scales as a hero, measuring tapes on bodies
+  - Asserting personal attributes (e.g. "Are you overweight?", "your belly")
+  - Efficacy superlatives or kg-lost claims ("most effective", "lose 2 stone")
+  - Speed claims such as "2 minute consultation" (upheld ruling A24-1264775)
+  - AI-generated people presented as members, clinicians or reviewers; fabricated testimonials
+  - Real-person likeness without consent (celebrities, WW ambassadors)
+  - The CheqUp Loop graphic (design system: not for digital advertising or campaign work)
+  - Gradients, textures, drop shadows, weight 700, colours outside the token set
+
+approvals_required:      # flags that put a render into HOLD until a human signs off
+  price: Legal sign-off — frame as the membership, not the medicine
+  weightwatchers: WeightWatchers brand approval under the partnership agreement
+  stat: Source + sample size on file
+  review: Verbatim review held on file, with the reviewer's permission
+
+broll:
+  look: >-
+    warm natural daylight, mid-tone, real everyday British homes and streets, unstyled,
+    candid documentary feel, no colour grading, no duotone, no film grain, 35mm lens
+  allowed_subjects: [cooking fresh food at home, walking outdoors, friends laughing on a sofa,
+    phone in hand in a kitchen, morning routine, park in autumn, groceries on a worktop,
+    stretching in a living room, cup of tea by a window]
+  people: unnamed lifestyle extras only, faces optional, never presented as members or clinicians
+  negative: >-
+    syringe, needle, injection pen, pills, tablets, medicine box, vial, hospital, scale, weighing scales,
+    measuring tape, before and after, shirtless, body close-up, belly, text, watermark, logo, gradient
+
+publish:
+  mode: outbox             # same as shorts-factory: build an upload folder + sheet, a human ships it
+  naming: "{concept}_{variant}_{format}_v{version}"
+  meta_utm: "utm_source=meta&utm_medium=paid_social&utm_campaign={campaign}&utm_content={ad_name}"

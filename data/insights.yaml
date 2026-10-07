@@ -1,0 +1,77 @@
+# What CheqUp's own data says — the evidence every concept is planned from.
+# Pulled 2026-10-07, read-only. Refresh with `python -m cqf insights --refresh` (prints the
+# MCP queries to re-run) before each production batch.
+as_of: 2026-10-07
+caveat: >-
+  Meta double-counted purchases ~6 Aug–1 Sep; treat CPAs as directional. Semrush/Ahrefs/OpenRush
+  returned no data (no units/plan) — search volumes are Google Keyword Planner via AdWhispr.
+
+account:            # Meta ad account 556987923580629, last 90 days
+  spend_gbp: 197700
+  purchases: 680
+  cpa_gbp: 291
+  winners:
+    - {ad: UK CONV VIDEO PILLAR 1 METHOD B, id: "120248793760830172", spend: 3300, cpa: 62.51, roas: 2.58, lesson: "Whole-Method explainer video is the best ad in the account (campaign paused)"}
+    - {ad: BOF VIDEO METHOD A JUL_WK2, id: "120247532335060172", spend: 3200, cpa: 115.70, roas: 1.40}
+    - {ad: UK VIDEO SUPPORT B – GOALS, id: "120248793935090172", spend: 1500, cpa: 128.64, roas: 1.33, lesson: "Support/coaching angle converts"}
+  losers:
+    - {ad: TOF AWARENESS VIDEO LIFESTYLE A, spend: 44400, purchases: 2, lesson: "Pure lifestyle video buys ThruPlays, not members"}
+    - {ad: UK VIDEO METHOD B_Oral pill, id: "120249028956990172", spend: 13400, cpa: 173.61, frequency: 3.78, lesson: "Fatigued; 16% reach 25% of video; oral-medicine angle is a compliance risk — retire/rename"}
+  fatigue_frequency_max: 3.0
+  placements:
+    - {placement: Facebook Reels overlay, cpa: 82}
+    - {placement: Audience Network, cpa: 93}
+    - {placement: Instagram Stories, cpa: 176}
+    - {placement: Instagram Feed, cpa: 184}
+    - {placement: Facebook Feed, cpa: 236, spend: 87000}
+    - {placement: Instagram Reels, cpa: 328}
+    - {placement: Facebook Reels, cpa: 470, lesson: "Full-screen 9:16 hook is the weak point"}
+    - {placement: Facebook in-stream video, cpa: 3628, lesson: "Exclude"}
+  audience:
+    - {segment: Women 35–44, cpa: 196}
+    - {segment: Women 45–54, cpa: 251}
+    - {segment: Women 55–64, cpa: 248, purchases: 162}
+    - {segment: Women 65+, cpa: 338, purchases: 95, ctr: 1.05}
+    - {segment: Men (all), cpa: 470, purchases: 109}
+
+proof:              # on-screen numbers must come from here, with the source line
+  trustpilot: {value: "4.4", unit: "/5", label: "Rated Excellent from 14k reviews", source: "Trustpilot, as displayed on chequp.com, 7 Oct 2026", approval: stat}
+  coach_motivated: {value: "90", unit: "%", label: "of coached members said their coach kept them on track", source: "CheqUp member survey — ADD SAMPLE SIZE AND DATE", approval: stat}
+  confident_maintain: {value: "86", unit: "%", label: "feel confident they can maintain their weight long term", source: "CheqUp member survey — ADD SAMPLE SIZE AND DATE", approval: stat}
+  recipes: {value: "4,500", unit: "+", label: "recipes in the WeightWatchers app", source: "WeightWatchers app, included with CheqUp membership", approval: weightwatchers}
+  regulated: "Regulated by the CQC and GPhC · LegitScript certified"
+
+offer:
+  price_line: "Membership from £109 a month"      # approval: price
+  six_month: "Save £120 over 6 months"             # approval: price
+
+search_demand_uk:   # monthly; only the 'usable' rows may shape copy
+  - {term: ww / weight watchers, volume: 93600, usable: true}
+  - {term: mounjaro side effects, volume: 90500, usable: topic_only, as: "support with side effects (no names, no symptoms)"}
+  - {term: weight loss injections, volume: 135000, usable: false}
+  - {term: mounjaro price, volume: 60500, usable: false, signal: "market is price-led"}
+  - {term: wegovy/mounjaro tablets, volume: 22900, usable: false, signal: "oral shift is real — do not chase it"}
+
+competitors:        # Meta Ad Library, GB, active Oct 2026
+  - {brand: Numan, hooks: ["Start your 90-day trial today", "Check your eligibility"], note: heavy online video}
+  - {brand: Voy, hooks: ["What could the next 6 months look like?", "Clinician support, every step of the way"]}
+  - {brand: ZAVA, hooks: ["Weight loss care, now from £49"], note: undercuts £109}
+  - {brand: Juniper UK, hooks: ["Start with Juniper today"]}
+
+compliance_history:
+  - "ASA A24-1264775 (upheld): 'UK's most effective weight loss treatment', '2 minute online consultation'"
+  - "ASA A25-1305722 (upheld Dec 2025): mirror image + 'biggest person in the room' — POM promotion and body-image insecurity"
+  - "CAP/MHRA/GPhC enforcement notice (Apr 2025, updated Sep 2025): no names, no 'jab/pen/injection', no pen imagery, applies to testimonials"
+
+# Concepts ranked by evidence. Each has a storyboard in concepts/<id>.json that cqf renders.
+concepts:
+  - {id: method-20, name: "The Method in 20 seconds", priority: 1, why: "Successor to METHOD B (£62.51 CPA, 2.58 ROAS)", audience: "Women 35–64", formats: ["9x16", "4x5", "1x1"]}
+  - {id: ww-included, name: "WeightWatchers, included", priority: 2, why: "WW ~94k UK searches/mo; compliant trust hook", audience: "Women 45–65+", approvals: [weightwatchers]}
+  - {id: coach-pocket, name: "Your Coach in your pocket", priority: 3, why: "SUPPORT B – GOALS £128 CPA; IG Stories £176", audience: "Women 35–64"}
+  - {id: bumpers-6s, name: "Six-second Reels overlay bumpers ×4", priority: 4, why: "Reels overlay £82 CPA, AN £93", audience: "All women", formats: ["9x16", "1x1"]}
+  - {id: consult-flow, name: "What happens when you start", priority: 5, why: "Answers how-to-start/eligibility demand; matches Numan's eligibility hook", audience: "Prospects"}
+  - {id: six-months, name: "Six months, properly supported", priority: 6, why: "Price-in-copy missing (1/178 ads); Voy 6-month and Numan 90-day in market", approvals: [price]}
+  - {id: real-reviews, name: "Real reviews, read aloud", priority: 7, why: "Moves Trustpilot statics (£146–£576) into motion", approvals: [review, stat]}
+  - {id: off-the-yoyo, name: "What if this time it lasted", priority: 8, why: "Reworks live 'years losing then gaining' hook without negative self-perception", approvals: [stat]}
+  - {id: not-willpower, name: "Not just willpower", priority: 9, why: "Mirrors Voy biology angle; clinician-led"}
+  - {id: clear-simple-65, name: "Clear and simple (65+ cut of method-20)", priority: 10, why: "Highest CTR segment, weak CPA — clarity", formats: ["4x5"]}
