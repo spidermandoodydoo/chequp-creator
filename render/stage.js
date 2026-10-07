@@ -41,6 +41,70 @@ function exitDivider(s, spec) {
     { duration: SETTLE * 2, delay: start, easing: EASE, fill: 'both' });
 }
 
+function fadeIn(node, at, dur = 430) { node.animate([{ opacity: 0 }, { opacity: 1 }], { duration: dur, delay: at, easing: 'linear', fill: 'both' }); }
+function fadeOut(node, at, dur = 430) { node.animate([{ opacity: 1 }, { opacity: 0 }], { duration: dur, delay: at, easing: 'linear', fill: 'both' }); }
+function logoSvg(w) { const d = el('div', '', LOGO.replace('__PATHS__', window.__LOGO_PATHS || '')); d.firstChild.classList.add('live-logo'); d.firstChild.style.width = w + 'px'; return d.firstChild; }
+function plate(s, spec) {
+  if (spec.src && !/\.(mp4|mov|webm)$/i.test(spec.src)) {
+    const p = el('div', 'live-plate', `<img src="${esc(spec.src)}" alt="">`); s.appendChild(p);
+    if (spec.push !== false) p.firstChild.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.05)' }], { duration: spec.dur * 1000, easing: 'linear', fill: 'both' });
+  } else if (!spec.src) s.appendChild(el('div', 'live-grad'));
+  if (spec.wash !== false && spec.src) {
+    const w = spec.wash || (spec.type === 'glass' ? 'top' : spec.type === 'logo' && spec.headline ? 'intro' : 'bottom');
+    s.appendChild(el('div', { top: 'live-topwash', intro: 'live-introwash', bottom: 'live-wash' }[w] || 'live-wash'));
+  }
+}
+function legal(s, spec, top) {
+  if (!spec.legal) return;
+  const l = el('div', 'live-legal', spec.legal_html ? spec.legal : esc(spec.legal)); l.style.top = top; s.appendChild(l); return l;
+}
+
+// meta-live scene builders (replica of the current ad template — see reference/meta-account/LOOK.md)
+const LIVE = {
+  // 0–1.3 s: wordmark fades in (430 ms) centred on the deep gradient, or over the hero plate.
+  logo(spec) {
+    const s = scene('none'); s.style.padding = '0'; plate(s, spec);
+    const c = el('div', 'live-center'); c.style.top = spec.headline ? '48%' : (spec.src ? '30%' : '40%'); c.appendChild(logoSvg(spec.src ? 175 : 170)); s.appendChild(c);
+    if (spec.headline) {   // LTN pattern: hook line under the wordmark from frame 0
+      c.insertAdjacentHTML('beforeend', `<h1 class="live-h" style="font-size:25px;margin-top:10px;padding:0 9%">${esc(spec.headline)}</h1>${spec.body ? `<p class="live-b" style="padding:0 12%">${esc(spec.body)}</p>` : ''}`);
+    } else fadeIn(c, 0);
+    const l = legal(s, spec, spec.headline ? '74%' : '62%'); if (l) fadeIn(l, 0);
+    return s;
+  },
+  // Hero plate + frosted card (wordmark, headline, body, cyan CTA); at switch_at the card
+  // dissolves into a frosted quote card. Price roundel optional.
+  glass(spec) {
+    const s = scene('none'); s.style.padding = '0'; plate(s, spec);
+    const T = (spec.switch_at ?? spec.dur * 0.45) * 1000;
+    const card = el('div', 'live-card' + (spec.card_align === 'center' ? ' center' : ''));
+    card.appendChild(logoSvg(62)).classList.add('wm');
+    card.insertAdjacentHTML('beforeend', `<h2 class="live-h">${esc(spec.headline)}</h2>${spec.body ? `<p class="live-b">${esc(spec.body)}</p>` : ''}${spec.cta ? `<span class="live-cta">${esc(spec.cta)}</span>` : ''}`);
+    s.appendChild(card); fadeIn(card, 0, 430);
+    if (spec.quote) fadeOut(card, T, 430);
+    if (spec.price) {
+      const p = el('div', 'live-price', `<small>${esc(spec.price.pre || 'From')}</small><b>${esc(spec.price.value)}</b><small>${esc(spec.price.post || '/month')}</small>`);
+      p.style.top = '45%'; s.appendChild(p); fadeIn(p, 200); if (spec.quote) fadeOut(p, T);
+    }
+    if (spec.quote) {
+      const q = el('div', 'live-quote', `<div class="qm">“</div><p>${esc(spec.quote)}</p>${spec.by ? `<div class="by">– ${esc(spec.by)}</div>` : ''}`);
+      s.appendChild(q); fadeIn(q, T + 120, 430);
+    }
+    legal(s, spec, '57%');
+    return s;
+  },
+  // End card: deep gradient, wordmark at 33 %, cyan CTA at 48 %, URL at 57 %, legal at 64 %.
+  endcard(spec) {
+    const s = scene('none'); s.style.padding = '0'; s.appendChild(el('div', 'live-grad'));
+    const add = (node, top) => { const c = el('div', 'live-center'); c.style.top = top; c.appendChild(node); s.appendChild(c); fadeIn(c, 0); };
+    add(logoSvg(165), '33%');
+    if (spec.headline) { const h = el('h2', 'live-h', esc(spec.headline)); h.style.cssText = 'font-size:22px;padding:0 10%'; add(h, '43%'); }
+    add(el('span', 'live-cta big', esc(spec.cta)), spec.headline ? '52%' : '48%');
+    add(el('div', 'live-url', esc(spec.url || 'chequp.com')), spec.headline ? '60%' : '57%');
+    legal(s, spec, spec.headline ? '67%' : '64%');
+    return s;
+  },
+};
+
 const BUILD = {
   hook(spec) {
     const s = scene(spec.ground || 'midnight'); s.classList.add(spec.align === 'top' ? 'top' : 'center');
@@ -211,7 +275,8 @@ window.__load = async (spec) => {
   document.documentElement.dataset.format = spec.format || '9x16';
   if (spec.mode && spec.mode !== 'weight-health') document.documentElement.dataset.mode = spec.mode;
   window.__LOGO_PATHS = spec.logo_paths || '';
-  const build = BUILD[spec.type];
+  if (spec.theme) document.documentElement.dataset.theme = spec.theme;
+  const build = (spec.theme === 'meta-live' && LIVE[spec.type]) || BUILD[spec.type];
   if (!build) throw new Error('unknown scene type: ' + spec.type);
   const s = build(spec);
   exitDivider(s, spec);

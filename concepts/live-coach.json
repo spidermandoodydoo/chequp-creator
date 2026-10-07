@@ -1,0 +1,55 @@
+{
+  "id": "live-coach",
+  "concept": "coach-pocket",
+  "variant": "live",
+  "version": 1,
+  "theme": "meta-live",
+  "transition": {
+    "type": "fade",
+    "dur": 0.43
+  },
+  "audience": "Women 35–64",
+  "formats": [
+    "9x16",
+    "4x5",
+    "1x1"
+  ],
+  "meta": {
+    "primary_text": "A free 1:1 Health Coach comes with every CheqUp membership. Message or call whenever you need.",
+    "headline": "Your Coach, whenever you need",
+    "description": "Free 1:1 coaching, included",
+    "cta_button": "LEARN_MORE"
+  },
+  "approvals": {},
+  "scenes": [
+    {
+      "type": "logo",
+      "dur": 1.8,
+      "src": "brand/design-system/assets/img/8a5a6edf3ad2e4e1.jpg",
+      "headline": "Someone in your corner, every step.",
+      "legal": "Subject to eligibility. Terms apply. GPhC Registered.",
+      "broll": "a woman in her fifties smiling at her phone while walking through a leafy London park in autumn"
+    },
+    {
+      "type": "glass",
+      "dur": 6.8,
+      "src": "brand/design-system/assets/img/8a5a6edf3ad2e4e1.jpg",
+      "broll": "a woman in her fifties smiling at her phone while walking through a leafy London park in autumn",
+      "headline": "A Health Coach, whenever you need one",
+      "body": "Message or call your free 1:1 Coach for the everyday moments, not just check-ins.",
+      "cta": "Check eligibility",
+      "switch_at": 3.6,
+      "quote": "So good to be able to communicate with somebody and knowing that someone is there to help and advise.",
+      "by": "Trevor, Trustpilot",
+      "verbatim_ref": "Trustpilot review, verbatim, as shown in CheqUp ad 24505907839002173 (Chequp review v3) — confirm permission on file",
+      "legal": "Subject to eligibility. Terms apply. GPhC Registered."
+    },
+    {
+      "type": "endcard",
+      "dur": 2.6,
+      "cta": "Check eligibility",
+      "url": "chequp.com",
+      "legal": "Subject to eligibility. Terms apply. GPhC Registered."
+    }
+  ]
+}

@@ -131,3 +131,55 @@ body{font-family:var(--font-core);background:transparent}
 
 /* Logo lockup */
 .logo{color:var(--ink);display:block}
+
+/* ===========================================================================================
+   THEME: meta-live — replica of the template CheqUp's Meta ads use today (Method A/B, Goals,
+   Product V1, Lifestyle; Jun–Sep 2026), measured from the account's own files
+   (reference/meta-account/LOOK.md). It departs from the design system on purpose
+   (gradients, frosted glass, cyan CTA, heavier type) because that is what is live and
+   converting. Values below are measured, in CSS px at the 405-wide 9:16 stage.
+   =========================================================================================== */
+html[data-theme="meta-live"]{
+  --live-ink:#FFFFFF; --live-deep:#1F0645; --live-floor:#4F29B8; --live-cta:#80EBFF; --live-cta-ink:#210847;
+  --live-wash:#6A30C8; --live-glass:rgba(255,255,255,.17); --live-glass-ring:rgba(255,255,255,.28);
+  --font-ad:"Kind Sans","Instrument Sans",-apple-system,"Segoe UI",sans-serif; --ad-heavy:700;
+}
+/* Kind Sans is the font in the live ads but isn't in the design system kit; drop
+   KindSans-*.woff2 into brand/fonts/ to enable it — otherwise Instrument Sans 600. */
+html[data-theme="meta-live"] body{font-family:var(--font-ad);font-synthesis:none}
+.live-grad{position:absolute;inset:0;background:linear-gradient(180deg,var(--live-deep) 0%,var(--live-deep) 35%,var(--live-floor) 100%)}
+.live-plate{position:absolute;inset:0;overflow:hidden}
+.live-plate img{width:100%;height:100%;object-fit:cover;display:block;transform-origin:50% 60%}
+.live-wash{position:absolute;inset:0;background:linear-gradient(180deg,rgba(106,48,200,0) 0%,rgba(106,48,200,0) 42%,rgba(106,48,200,.55) 70%,rgba(98,46,186,.78) 100%)}
+.live-topwash{position:absolute;inset:0;background:linear-gradient(180deg,rgba(104,60,245,.85) 0%,rgba(104,60,245,.35) 30%,rgba(104,60,245,0) 52%)}
+.live-logo{display:block;color:var(--live-ink)}
+.live-center{position:absolute;left:0;right:0;display:flex;flex-direction:column;align-items:center;text-align:center}
+.live-card{position:absolute;left:9.4%;right:15%;top:10.7%;padding:18px 20px 18px;border-radius:7px;
+  background:var(--live-glass);box-shadow:inset 0 0 0 1px var(--live-glass-ring);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);color:var(--live-ink)}
+.live-card.center{left:7%;right:7%;text-align:center;display:flex;flex-direction:column;align-items:center}
+.live-card .wm{width:62px;margin-bottom:8px}
+.live-h{color:var(--live-ink);font-family:var(--font-ad);font-weight:var(--ad-heavy);font-size:27px;line-height:1.08;letter-spacing:-.01em;margin:0}
+.live-b{font-family:var(--font-ad);font-weight:400;font-size:16px;line-height:1.18;margin:8px 0 0;opacity:.95}
+.live-cta{display:inline-flex;align-items:center;justify-content:center;height:29px;padding:0 14px;border-radius:999px;
+  background:var(--live-cta);color:var(--live-cta-ink);font-family:var(--font-ad);font-weight:var(--ad-heavy);font-size:14px;margin-top:12px;white-space:nowrap}
+.live-cta.big{height:30px;min-width:47%;font-size:17px;margin-top:0}
+.live-quote{position:absolute;left:7%;right:7%;top:24%;padding:12px 22px 18px;border-radius:7px;text-align:center;
+  background:rgba(255,255,255,.12);box-shadow:inset 0 0 0 1px rgba(255,255,255,.2);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);color:var(--live-ink)}
+.live-quote .qm{font-family:Georgia,serif;font-weight:700;font-size:44px;line-height:.9;font-style:italic;letter-spacing:-.08em}
+.live-quote p{font-family:var(--font-ad);font-weight:var(--ad-heavy);font-size:15.5px;line-height:1.22;margin:2px 0 0}
+.live-quote .by{font-weight:400;font-size:11px;margin-top:6px;opacity:.9}
+.live-legal{position:absolute;left:8%;right:8%;text-align:center;font-family:var(--font-ad);font-size:7.5px;line-height:1.35;color:var(--live-ink);opacity:.92}
+.live-legal b{font-weight:var(--ad-heavy)}
+.live-url{font-family:var(--font-ad);font-size:17px;color:var(--live-ink);margin-top:0}
+.live-price{position:absolute;left:8%;width:78px;height:78px;border-radius:50%;background:#6B2FD6;box-shadow:inset 0 0 0 3px rgba(255,255,255,.18);
+  color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--font-ad);line-height:1}
+.live-price small{font-size:9px}.live-price b{font-size:26px;font-weight:var(--ad-heavy);margin:2px 0}
+/* Creator/UGC captions: white box, purple heavy text, 2–4 word chunks (as in the creator ads). */
+html[data-theme="meta-live"] .captions .box{background:#fff;color:#5B1FA6;border-radius:3px;padding:3px 7px;font-family:var(--font-ad);font-weight:var(--ad-heavy);font-size:20px;letter-spacing:-.01em}
+html[data-theme="meta-live"] .captions .cw,html[data-theme="meta-live"] .captions .cw.on{color:#5B1FA6}
+html[data-theme="meta-live"] .captions{bottom:30%}
+/* LTN-style intro: photo up top, deep purple rising behind the wordmark + hook line. */
+.live-introwash{position:absolute;inset:0;background:linear-gradient(180deg,rgba(74,30,170,0) 0%,rgba(74,30,170,0) 22%,rgba(88,40,200,.72) 46%,rgba(98,46,220,.92) 70%,rgba(104,52,232,.95) 100%)}
+.live-topwash{background:linear-gradient(180deg,rgba(98,52,236,.92) 0%,rgba(98,52,236,.82) 22%,rgba(98,52,236,.45) 42%,rgba(98,52,236,0) 60%)}

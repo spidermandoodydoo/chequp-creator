@@ -1,0 +1,3636 @@
+{
+ "ad_account": "556987923580629",
+ "generated": "2026-10-07",
+ "total_videos_listed": 383,
+ "notes": [
+  "download_hd_url is the 720p progressive rendition Meta exposes (not the uploaded original); null for most videos (source not available to this app).",
+  "picture (thumbnail) URLs omitted: signed/expiring; contact sheets used instead.",
+  "downloaded_source: master | variant_fallback (other ratio/duplicate of same creative) | auto_crop_fallback (Meta auto-crop)."
+ ],
+ "creatives": [
+  {
+   "creative_slug": "chequp-2",
+   "creative_key": "chequp-2",
+   "master_video_id": "2259726191489372",
+   "master_title": "Chequp-2.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 13.303,
+   "created_time": 1788950848,
+   "permalink_url": "/120213728082680172/videos/2259726191489372/?idorvanity=120213728082680172",
+   "master_hd_url_available": true,
+   "downloaded_video_id": "2259726191489372",
+   "downloaded_source": "master",
+   "reference_video": "videos/chequp-2.mp4",
+   "contact_sheet": "sheets/chequp-2.jpg",
+   "variants": [
+    {
+     "id": "2259726191489372",
+     "title": "Chequp-2.mp4",
+     "ratio": "unknown",
+     "created_time": 1788950848,
+     "length": 13.303
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "vd",
+   "creative_key": "vd",
+   "master_video_id": "1584233976411898",
+   "master_title": "VD-1080x1920.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 10,
+   "created_time": 1788515488,
+   "permalink_url": "/120213728082680172/videos/1584233976411898/?idorvanity=120213728082680172",
+   "master_hd_url_available": false,
+   "downloaded_video_id": "1937437950551766",
+   "downloaded_source": "auto_crop_fallback",
+   "reference_video": "videos/vd.mp4",
+   "contact_sheet": "sheets/vd.jpg",
+   "variants": [
+    {
+     "id": "2464916210585772",
+     "title": "VD-1080x1080.mp4",
+     "ratio": "1:1"
+    },
+    {
+     "id": "2149126592650085",
+     "title": "VD-1080x1350.mp4",
+     "ratio": "4:5"
+    },
+    {
+     "id": "1584233976411898",
+     "title": "VD-1080x1920.mp4",
+     "ratio": "9:16",
+     "created_time": 1788515488,
+     "length": 10
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "4:5",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "vd-pl3-wk3",
+   "creative_key": "vd_pl3_wk3",
+   "master_video_id": "2581357328964629",
+   "master_title": "VD_PL3_WK3_1080x1920.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 10,
+   "created_time": 1787140347,
+   "permalink_url": "/120213728082680172/videos/2581357328964629/",
+   "master_hd_url_available": true,
+   "downloaded_video_id": "2581357328964629",
+   "downloaded_source": "master",
+   "reference_video": "videos/vd-pl3-wk3.mp4",
+   "contact_sheet": "sheets/vd-pl3-wk3.jpg",
+   "variants": [
+    {
+     "id": "2581357328964629",
+     "title": "VD_PL3_WK3_1080x1920.mp4",
+     "ratio": "9:16",
+     "created_time": 1787140347,
+     "length": 10
+    },
+    {
+     "id": "2196837484222967",
+     "title": "VD_PL3_WK3_1080x1350.mp4",
+     "ratio": "4:5"
+    },
+    {
+     "id": "1839794937397302",
+     "title": "VD_PL3_WK3_1080x1080.mp4",
+     "ratio": "1:1"
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "4:5",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "vd-pl2-wk3",
+   "creative_key": "vd_pl2_wk3",
+   "master_video_id": "2195594957694748",
+   "master_title": "VD_PL2_WK3_1080x1920.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 10,
+   "created_time": 1787140025,
+   "permalink_url": "/120213728082680172/videos/2195594957694748/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": "1572527821331104",
+   "downloaded_source": "auto_crop_fallback",
+   "reference_video": "videos/vd-pl2-wk3.mp4",
+   "contact_sheet": "sheets/vd-pl2-wk3.jpg",
+   "variants": [
+    {
+     "id": "2195594957694748",
+     "title": "VD_PL2_WK3_1080x1920.mp4",
+     "ratio": "9:16",
+     "created_time": 1787140025,
+     "length": 10
+    },
+    {
+     "id": "1684219666628847",
+     "title": "VD_PL2_WK3_1080x1350.mp4",
+     "ratio": "4:5"
+    },
+    {
+     "id": "1412834640694676",
+     "title": "VD_PL2_WK3_1080x1080.mp4",
+     "ratio": "1:1"
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "4:5",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "vd-pl1-wk3",
+   "creative_key": "vd_pl1_wk3",
+   "master_video_id": "2066504250657688",
+   "master_title": "VD_PL1_WK3_1080x1920.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 10.1,
+   "created_time": 1787139599,
+   "permalink_url": "/120213728082680172/videos/2066504250657688/",
+   "master_hd_url_available": true,
+   "downloaded_video_id": "2066504250657688",
+   "downloaded_source": "master",
+   "reference_video": "videos/vd-pl1-wk3.mp4",
+   "contact_sheet": "sheets/vd-pl1-wk3.jpg",
+   "variants": [
+    {
+     "id": "3395529447320972",
+     "title": "VD_PL1_WK3_1080x1080.mp4",
+     "ratio": "1:1"
+    },
+    {
+     "id": "2066504250657688",
+     "title": "VD_PL1_WK3_1080x1920.mp4",
+     "ratio": "9:16",
+     "created_time": 1787139599,
+     "length": 10.1
+    },
+    {
+     "id": "1066140366280461",
+     "title": "VD_PL1_WK3_1080x1350.mp4",
+     "ratio": "4:5"
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "4:5",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "vd-pl1-a-2026-07-wk4",
+   "creative_key": "vd_pl1-a_2026-07_wk4",
+   "master_video_id": "2178697962989117",
+   "master_title": "VD_PL1-A_2026-07_WK4_1080x1920.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 12,
+   "created_time": 1785420889,
+   "permalink_url": "/120213728082680172/videos/2178697962989117/",
+   "master_hd_url_available": true,
+   "downloaded_video_id": "2178697962989117",
+   "downloaded_source": "master",
+   "reference_video": "videos/vd-pl1-a-2026-07-wk4.mp4",
+   "contact_sheet": "sheets/vd-pl1-a-2026-07-wk4.jpg",
+   "variants": [
+    {
+     "id": "2178697962989117",
+     "title": "VD_PL1-A_2026-07_WK4_1080x1920.mp4",
+     "ratio": "9:16",
+     "created_time": 1785420889,
+     "length": 12
+    },
+    {
+     "id": "1394371652794491",
+     "title": "VD_PL1-A_2026-07_WK4_1080x1350.mp4",
+     "ratio": "4:5"
+    },
+    {
+     "id": "1601629181580338",
+     "title": "VD_PL1-A_2026-07_WK4_1080x1080.mp4",
+     "ratio": "1:1"
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "4:5",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "st-pl1-a-2026-07-wk3",
+   "creative_key": "st-pl1-a_2026-07_wk3",
+   "master_video_id": "1944701862860440",
+   "master_title": "ST-PL1-A_2026-07_WK3-1080x1920.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 12,
+   "created_time": 1784279433,
+   "permalink_url": "/120213728082680172/videos/1944701862860440/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1944701862860440",
+     "title": "ST-PL1-A_2026-07_WK3-1080x1920.mp4",
+     "ratio": "9:16",
+     "created_time": 1784279433,
+     "length": 12
+    },
+    {
+     "id": "1693496121877037",
+     "title": "ST-PL1-A_2026-07_WK3-1080x1350.mp4",
+     "ratio": "4:5"
+    },
+    {
+     "id": "1424791222815985",
+     "title": "ST-PL1-A_2026-07_WK3-1080x1080.mp4",
+     "ratio": "1:1"
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "4:5",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "vd-pl3-lifestyleb-jul-wk2",
+   "creative_key": "vd-pl3_lifestyleb_jul_wk2",
+   "master_video_id": "1039413875406999",
+   "master_title": "VD-PL3_LifestyleB_JUL_WK2-1080x1920.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 12,
+   "created_time": 1784278853,
+   "permalink_url": "/120213728082680172/videos/1039413875406999/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "2756788401360431",
+     "title": "VD-PL3_LifestyleB_JUL_WK2-1080x1350.mp4",
+     "ratio": "4:5"
+    },
+    {
+     "id": "1039413875406999",
+     "title": "VD-PL3_LifestyleB_JUL_WK2-1080x1920.mp4",
+     "ratio": "9:16",
+     "created_time": 1784278853,
+     "length": 12
+    },
+    {
+     "id": "905960095246723",
+     "title": "VD-PL3_LifestyleB_JUL_WK2-1080x1080.mp4",
+     "ratio": "1:1"
+    },
+    {
+     "id": "1027028886885598",
+     "title": "VD-PL3_LifestyleB_JUL_WK2-1080x1920.mp4",
+     "ratio": "9:16"
+    },
+    {
+     "id": "1719647469071941",
+     "title": "VD-PL3_LifestyleB_JUL_WK2-1080x1080.mp4",
+     "ratio": "1:1"
+    },
+    {
+     "id": "2096436544292687",
+     "title": "VD-PL3_LifestyleB_JUL_WK2-1080x1350.mp4",
+     "ratio": "4:5"
+    },
+    {
+     "id": "1554108419462537",
+     "title": "VD-PL3_LifestyleB_JUL_WK2-1080x1920.mp4",
+     "ratio": "9:16"
+    },
+    {
+     "id": "27081325851563590",
+     "title": "VD-PL3_LifestyleB_JUL_WK2-1080x1080.mp4",
+     "ratio": "1:1"
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "4:5",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "vd-pl3-lifestylea-jul-wk2",
+   "creative_key": "vd-pl3_lifestylea_jul_wk2",
+   "master_video_id": "1034124152410726",
+   "master_title": "VD-PL3_LifestyleA_JUL_WK2-1080x1920.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 12.1,
+   "created_time": 1784278686,
+   "permalink_url": "/120213728082680172/videos/1034124152410726/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1572347047743843",
+     "title": "VD-PL3_LifestyleA_JUL_WK2-1080x1350.mp4",
+     "ratio": "4:5"
+    },
+    {
+     "id": "1034124152410726",
+     "title": "VD-PL3_LifestyleA_JUL_WK2-1080x1920.mp4",
+     "ratio": "9:16",
+     "created_time": 1784278686,
+     "length": 12.1
+    },
+    {
+     "id": "881471497908231",
+     "title": "VD-PL3_LifestyleA_JUL_WK2-1080x1080.mp4",
+     "ratio": "1:1"
+    },
+    {
+     "id": "1367893655238108",
+     "title": "VD-PL3_LifestyleA_JUL_WK2-1080x1920.mp4",
+     "ratio": "9:16"
+    },
+    {
+     "id": "1733840061155975",
+     "title": "VD-PL3_LifestyleA_JUL_WK2-1080x1080.mp4",
+     "ratio": "1:1"
+    },
+    {
+     "id": "1300709058511309",
+     "title": "VD-PL3_LifestyleA_JUL_WK2-1080x1920.mp4",
+     "ratio": "9:16"
+    },
+    {
+     "id": "2108937490036838",
+     "title": "VD-PL3_LifestyleA_JUL_WK2-1080x1350.mp4",
+     "ratio": "4:5"
+    },
+    {
+     "id": "2009767632995407",
+     "title": "VD-PL3_LifestyleA_JUL_WK2-1080x1080.mp4",
+     "ratio": "1:1"
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "4:5",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "chequp-ltn-2026-07-jul-wk3-ad1",
+   "creative_key": "chequp_ltn_2026-07_jul_wk3_ad1",
+   "master_video_id": "1718692939457053",
+   "master_title": "CheqUp_LTN_2026-07_JUL_WK3_Ad1_9x16.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 25.002,
+   "created_time": 1784194328,
+   "permalink_url": "/120213728082680172/videos/1718692939457053/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": "1642321753531075",
+   "downloaded_source": "variant_fallback",
+   "reference_video": "videos/chequp-ltn-2026-07-jul-wk3-ad1.mp4",
+   "contact_sheet": "sheets/chequp-ltn-2026-07-jul-wk3-ad1.jpg",
+   "variants": [
+    {
+     "id": "4534404150104912",
+     "title": "CheqUp_LTN_2026-07_JUL_WK3_Ad1_4x5.mp4",
+     "ratio": "4:5"
+    },
+    {
+     "id": "1718692939457053",
+     "title": "CheqUp_LTN_2026-07_JUL_WK3_Ad1_9x16.mp4",
+     "ratio": "9:16",
+     "created_time": 1784194328,
+     "length": 25.002
+    },
+    {
+     "id": "1642321753531075",
+     "title": "CheqUp_LTN_2026-07_JUL_WK3_Ad1_1x1.mp4",
+     "ratio": "1:1",
+     "created_time": 1784194328,
+     "length": 25.002
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "4:5",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "vd-pl3-lifestylea-jun-wk2",
+   "creative_key": "vd_pl3_lifestylea_jun_wk2",
+   "master_video_id": "4654014958257429",
+   "master_title": "VD_PL3_LifestyleA_JUN_WK2_1080x1920.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 10,
+   "created_time": 1783589431,
+   "permalink_url": "/120213728082680172/videos/4654014958257429/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": "2366113633917120",
+   "downloaded_source": "variant_fallback",
+   "reference_video": "videos/vd-pl3-lifestylea-jun-wk2.mp4",
+   "contact_sheet": "sheets/vd-pl3-lifestylea-jun-wk2.jpg",
+   "variants": [
+    {
+     "id": "4654014958257429",
+     "title": "VD_PL3_LifestyleA_JUN_WK2_1080x1920.mp4",
+     "ratio": "9:16",
+     "created_time": 1783589431,
+     "length": 10
+    },
+    {
+     "id": "2366113633917120",
+     "title": "VD_PL3_LifestyleA_JUN_WK2_1080x1080.mp4",
+     "ratio": "1:1",
+     "created_time": 1783589431,
+     "length": 10
+    },
+    {
+     "id": "1754980159022313",
+     "title": "VD_PL3_LifestyleA_JUN_WK2_1080x1350.mp4",
+     "ratio": "4:5"
+    },
+    {
+     "id": "1626611635070791",
+     "title": "VD_PL3_LifestyleA_JUN_WK2_1080x1920.mp4",
+     "ratio": "9:16"
+    },
+    {
+     "id": "1025441020084914",
+     "title": "VD_PL3_LifestyleA_JUN_WK2_1080x1080.mp4",
+     "ratio": "1:1"
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "4:5",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "vd-pl1-methoda-jul-wk1",
+   "creative_key": "vd_pl1_methoda_jul_wk1",
+   "master_video_id": "990082157266017",
+   "master_title": "VD_PL1_MethodA_JUL_WK1_1080x1920.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 10,
+   "created_time": 1783587562,
+   "permalink_url": "/120213728082680172/videos/990082157266017/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": "3273802272827711",
+   "downloaded_source": "variant_fallback",
+   "reference_video": "videos/vd-pl1-methoda-jul-wk1.mp4",
+   "contact_sheet": "sheets/vd-pl1-methoda-jul-wk1.jpg",
+   "variants": [
+    {
+     "id": "3273802272827711",
+     "title": "VD_PL1_MethodA_JUL_WK1_1080x1080.mp4",
+     "ratio": "1:1",
+     "created_time": 1783587562,
+     "length": 10
+    },
+    {
+     "id": "1033585759220151",
+     "title": "VD_PL1_MethodA_JUL_WK1_1080x1350.mp4",
+     "ratio": "4:5"
+    },
+    {
+     "id": "990082157266017",
+     "title": "VD_PL1_MethodA_JUL_WK1_1080x1920.mp4",
+     "ratio": "9:16",
+     "created_time": 1783587562,
+     "length": 10
+    },
+    {
+     "id": "1940438913339458",
+     "title": "VD_PL1_MethodA_JUL_WK1_1080x1920.mp4",
+     "ratio": "9:16"
+    },
+    {
+     "id": "1364402435789360",
+     "title": "VD_PL1_MethodA_JUL_WK1_1080x1350.mp4",
+     "ratio": "4:5"
+    },
+    {
+     "id": "999889839319644",
+     "title": "VD_PL1_MethodA_JUL_WK1_1080x1080.mp4",
+     "ratio": "1:1"
+    },
+    {
+     "id": "2062457497969618",
+     "title": "VD_PL1_MethodA_JUL_WK1_1080x1080.mp4",
+     "ratio": "1:1"
+    },
+    {
+     "id": "2050487525677104",
+     "title": "VD_PL1_MethodA_JUL_WK1_1080x1920.mp4",
+     "ratio": "9:16"
+    },
+    {
+     "id": "1980992775862484",
+     "title": "VD_PL1_MethodA_JUL_WK1_1080x1350.mp4",
+     "ratio": "4:5"
+    },
+    {
+     "id": "1654467575832594",
+     "title": "VD_PL1_MethodA_JUL_WK1_1080x1080.mp4",
+     "ratio": "1:1"
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "4:5",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "vd-pl3-lifestylea-jul-wk1",
+   "creative_key": "vd_pl3_lifestylea_jul_wk1",
+   "master_video_id": "1002867689197908",
+   "master_title": "VD_PL3_LifestyleA_JUL_WK1_1080x1920.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 10,
+   "created_time": 1783522553,
+   "permalink_url": "/120213728082680172/videos/1002867689197908/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": "1561498938704666",
+   "downloaded_source": "variant_fallback",
+   "reference_video": "videos/vd-pl3-lifestylea-jul-wk1.mp4",
+   "contact_sheet": "sheets/vd-pl3-lifestylea-jul-wk1.jpg",
+   "variants": [
+    {
+     "id": "1002867689197908",
+     "title": "VD_PL3_LifestyleA_JUL_WK1_1080x1920.mp4",
+     "ratio": "9:16",
+     "created_time": 1783522553,
+     "length": 10
+    },
+    {
+     "id": "1561498938704666",
+     "title": "VD_PL3_LifestyleA_JUL_WK1_1080x1080.mp4",
+     "ratio": "1:1",
+     "created_time": 1783522509,
+     "length": 10
+    },
+    {
+     "id": "1222273100964398",
+     "title": "VD_PL3_LifestyleA_JUL_WK1_1080x1080.mp4",
+     "ratio": "1:1"
+    },
+    {
+     "id": "996936146728840",
+     "title": "VD_PL3_LifestyleA_JUL_WK1_1080x1350.mp4",
+     "ratio": "4:5"
+    },
+    {
+     "id": "921602357630215",
+     "title": "VD_PL3_LifestyleA_JUL_WK1_1080x1920.mp4",
+     "ratio": "9:16"
+    },
+    {
+     "id": "36941098712172664",
+     "title": "VD_PL3_LifestyleA_JUL_WK1_1080x1920.mp4",
+     "ratio": "9:16"
+    },
+    {
+     "id": "2776597646056881",
+     "title": "VD_PL3_LifestyleA_JUL_WK1_1080x1080.mp4",
+     "ratio": "1:1"
+    },
+    {
+     "id": "1525928138994764",
+     "title": "VD_PL3_LifestyleA_JUL_WK1_1080x1350.mp4",
+     "ratio": "4:5"
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "4:5",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "vd-pl2-supportb-jul-wk2",
+   "creative_key": "vd-pl2_supportb_jul_wk2",
+   "master_video_id": "1036948775815992",
+   "master_title": "VD-PL2_SupportB_JUL_WK2-1080x1920 (1).mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 12.1,
+   "created_time": 1783517337,
+   "permalink_url": "/120213728082680172/videos/1036948775815992/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1036948775815992",
+     "title": "VD-PL2_SupportB_JUL_WK2-1080x1920 (1).mp4",
+     "ratio": "9:16",
+     "created_time": 1783517337,
+     "length": 12.1
+    },
+    {
+     "id": "1324420496030610",
+     "title": "VD-PL2_SupportB_JUL_WK2-1080x1080 (1).mp4",
+     "ratio": "1:1"
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "vd-pl2-supporta-jul-wk2",
+   "creative_key": "vd-pl2_supporta_jul_wk2",
+   "master_video_id": "1811917439945182",
+   "master_title": "VD-PL2_SupportA_JUL_WK2-1080x1920 (1).mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 10.6,
+   "created_time": 1783510964,
+   "permalink_url": "/120213728082680172/videos/1811917439945182/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1788864662271430",
+     "title": "VD-PL2_SupportA_JUL_WK2-1080x1350 (1).mp4",
+     "ratio": "4:5"
+    },
+    {
+     "id": "1811917439945182",
+     "title": "VD-PL2_SupportA_JUL_WK2-1080x1920 (1).mp4",
+     "ratio": "9:16",
+     "created_time": 1783510964,
+     "length": 10.6
+    },
+    {
+     "id": "2130140467714448",
+     "title": "VD-PL2_SupportA_JUL_WK2-1080x1080 (1).mp4",
+     "ratio": "1:1"
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "4:5",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "vd-pl1-methodb-jul-wk2",
+   "creative_key": "vd-pl1_methodb_jul_wk2",
+   "master_video_id": "2265691024235508",
+   "master_title": "VD-PL1_MethodB_JUL_WK2-1080x1920.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 12,
+   "created_time": 1783509658,
+   "permalink_url": "/120213728082680172/videos/2265691024235508/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1978466172791037",
+     "title": "VD-PL1_MethodB_JUL_WK2-1080x1350.mp4",
+     "ratio": "4:5"
+    },
+    {
+     "id": "2265691024235508",
+     "title": "VD-PL1_MethodB_JUL_WK2-1080x1920.mp4",
+     "ratio": "9:16",
+     "created_time": 1783509658,
+     "length": 12
+    },
+    {
+     "id": "857045050817818",
+     "title": "VD-PL1_MethodB_JUL_WK2-1080x1080.mp4",
+     "ratio": "1:1"
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "4:5",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "vd-pl1-methoda-jul-wk2",
+   "creative_key": "vd-pl1_methoda_jul_wk2",
+   "master_video_id": "1362180475878868",
+   "master_title": "VD-PL1_MethodA_JUL_WK2-1080x1920.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 12,
+   "created_time": 1783506206,
+   "permalink_url": "/120213728082680172/videos/1362180475878868/",
+   "master_hd_url_available": true,
+   "downloaded_video_id": "1362180475878868",
+   "downloaded_source": "master",
+   "reference_video": "videos/vd-pl1-methoda-jul-wk2.mp4",
+   "contact_sheet": "sheets/vd-pl1-methoda-jul-wk2.jpg",
+   "variants": [
+    {
+     "id": "1360464205604829",
+     "title": "VD-PL1_MethodA_JUL_WK2-1080x1350.mp4",
+     "ratio": "4:5"
+    },
+    {
+     "id": "1362180475878868",
+     "title": "VD-PL1_MethodA_JUL_WK2-1080x1920.mp4",
+     "ratio": "9:16",
+     "created_time": 1783506206,
+     "length": 12
+    },
+    {
+     "id": "1325740593039117",
+     "title": "VD-PL1_MethodA_JUL_WK2-1080x1080.mp4",
+     "ratio": "1:1"
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "4:5",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "vd-pl1-methodb-jul-wk1",
+   "creative_key": "vd_pl1_methodb_jul_wk1",
+   "master_video_id": "1696099888347188",
+   "master_title": "VD_PL1_MethodB_JUL_WK1_1080x1920.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 10,
+   "created_time": 1782911279,
+   "permalink_url": "/120213728082680172/videos/1696099888347188/",
+   "master_hd_url_available": true,
+   "downloaded_video_id": "1696099888347188",
+   "downloaded_source": "master",
+   "reference_video": "videos/vd-pl1-methodb-jul-wk1.mp4",
+   "contact_sheet": "sheets/vd-pl1-methodb-jul-wk1.jpg",
+   "variants": [
+    {
+     "id": "1696099888347188",
+     "title": "VD_PL1_MethodB_JUL_WK1_1080x1920.mp4",
+     "ratio": "9:16",
+     "created_time": 1782911279,
+     "length": 10
+    },
+    {
+     "id": "1813549569610752",
+     "title": "VD_PL1_MethodB_JUL_WK1_1080x1350.mp4",
+     "ratio": "4:5"
+    },
+    {
+     "id": "1674439177187914",
+     "title": "VD_PL1_MethodB_JUL_WK1_1080x1080.mp4",
+     "ratio": "1:1"
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "4:5",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "vd-pl3-lifestyleb-jun-wk2",
+   "creative_key": "vd_pl3_lifestyleb_jun_wk2",
+   "master_video_id": "1439161654897799",
+   "master_title": "VD_PL3_LifestyleB_JUN_WK2_1080x1920.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 10,
+   "created_time": 1782307965,
+   "permalink_url": "/120213728082680172/videos/1439161654897799/",
+   "master_hd_url_available": true,
+   "downloaded_video_id": "1439161654897799",
+   "downloaded_source": "master",
+   "reference_video": "videos/vd-pl3-lifestyleb-jun-wk2.mp4",
+   "contact_sheet": "sheets/vd-pl3-lifestyleb-jun-wk2.jpg",
+   "variants": [
+    {
+     "id": "1671413084145189",
+     "title": "VD_PL3_LifestyleB_JUN_WK2_1080x1080.mp4",
+     "ratio": "1:1"
+    },
+    {
+     "id": "1439161654897799",
+     "title": "VD_PL3_LifestyleB_JUN_WK2_1080x1920.mp4",
+     "ratio": "9:16",
+     "created_time": 1782307965,
+     "length": 10
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "vd-crsl-pl2-supporta-jun-wk2",
+   "creative_key": "vd-crsl_pl2_supporta_jun_wk2",
+   "master_video_id": "2065555544038174",
+   "master_title": "VD-CRSL_PL2_SupportA_JUN_WK2_1080x1920.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 10,
+   "created_time": 1782296883,
+   "permalink_url": "/120213728082680172/videos/2065555544038174/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "2067160293869928",
+     "title": "VD-CRSL_PL2_SupportA_JUN_WK2_1080x1080.mp4",
+     "ratio": "1:1"
+    },
+    {
+     "id": "2065555544038174",
+     "title": "VD-CRSL_PL2_SupportA_JUN_WK2_1080x1920.mp4",
+     "ratio": "9:16",
+     "created_time": 1782296883,
+     "length": 10
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "vd-pl1-methodb-jun-wk2",
+   "creative_key": "vd_pl1_methodb_jun_wk2",
+   "master_video_id": "2266815707421981",
+   "master_title": "VD_PL1_MethodB_JUN_WK2_1080x1920.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 10,
+   "created_time": 1782296255,
+   "permalink_url": "/120213728082680172/videos/2266815707421981/",
+   "master_hd_url_available": true,
+   "downloaded_video_id": "2266815707421981",
+   "downloaded_source": "master",
+   "reference_video": "videos/vd-pl1-methodb-jun-wk2.mp4",
+   "contact_sheet": "sheets/vd-pl1-methodb-jun-wk2.jpg",
+   "variants": [
+    {
+     "id": "2266815707421981",
+     "title": "VD_PL1_MethodB_JUN_WK2_1080x1920.mp4",
+     "ratio": "9:16",
+     "created_time": 1782296255,
+     "length": 10
+    },
+    {
+     "id": "891304990680284",
+     "title": "VD_PL1_MethodB_JUN_WK2_1080x1080.mp4",
+     "ratio": "1:1"
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "chequp-pl3-c-space-for-life",
+   "creative_key": "chequp_pl3-c_space-for-life",
+   "master_video_id": "1694648074815155",
+   "master_title": "CheqUp_PL3-C_space-for-life_9x16.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 10,
+   "created_time": 1781795583,
+   "permalink_url": "/120213728082680172/videos/1694648074815155/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1694648074815155",
+     "title": "CheqUp_PL3-C_space-for-life_9x16.mp4",
+     "ratio": "9:16",
+     "created_time": 1781795583,
+     "length": 10
+    },
+    {
+     "id": "1350380523714232",
+     "title": "CheqUp_PL3-C_space-for-life_9x16.mp4",
+     "ratio": "9:16"
+    },
+    {
+     "id": "983258864416487",
+     "title": "CheqUp_PL3-C_space-for-life_1x1.mp4",
+     "ratio": "1:1"
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "chequp-pl3-a-off-your-mind",
+   "creative_key": "chequp_pl3-a_off-your-mind",
+   "master_video_id": "1772910060757464",
+   "master_title": "CheqUp_PL3-A_off-your-mind_9x16.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 10,
+   "created_time": 1781795480,
+   "permalink_url": "/120213728082680172/videos/1772910060757464/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1772910060757464",
+     "title": "CheqUp_PL3-A_off-your-mind_9x16.mp4",
+     "ratio": "9:16",
+     "created_time": 1781795480,
+     "length": 10
+    },
+    {
+     "id": "2253648505410136",
+     "title": "CheqUp_PL3-A_off-your-mind_9x16.mp4",
+     "ratio": "9:16"
+    },
+    {
+     "id": "894014287048421",
+     "title": "CheqUp_PL3-A_off-your-mind_1x1.mp4",
+     "ratio": "1:1"
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "chequp-pl3-b-more-clarity",
+   "creative_key": "chequp_pl3-b_more-clarity",
+   "master_video_id": "1044185854712584",
+   "master_title": "CheqUp_PL3-B_more-clarity_9x16.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 10,
+   "created_time": 1781795386,
+   "permalink_url": "/120213728082680172/videos/1044185854712584/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1044185854712584",
+     "title": "CheqUp_PL3-B_more-clarity_9x16.mp4",
+     "ratio": "9:16",
+     "created_time": 1781795386,
+     "length": 10
+    },
+    {
+     "id": "941646002240721",
+     "title": "CheqUp_PL3-B_more-clarity_1x1.mp4",
+     "ratio": "1:1"
+    },
+    {
+     "id": "866022783246028",
+     "title": "CheqUp_PL3-B_more-clarity_9x16.mp4",
+     "ratio": "9:16"
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "chequp-pl2-b-goals",
+   "creative_key": "chequp_pl2-b_goals",
+   "master_video_id": "3874772776163086",
+   "master_title": "CheqUp_PL2-B_goals_9x16.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 10,
+   "created_time": 1781794710,
+   "permalink_url": "/120213728082680172/videos/3874772776163086/",
+   "master_hd_url_available": true,
+   "downloaded_video_id": "3874772776163086",
+   "downloaded_source": "master",
+   "reference_video": "videos/chequp-pl2-b-goals.mp4",
+   "contact_sheet": "sheets/chequp-pl2-b-goals.jpg",
+   "variants": [
+    {
+     "id": "3874772776163086",
+     "title": "CheqUp_PL2-B_goals_9x16.mp4",
+     "ratio": "9:16",
+     "created_time": 1781794710,
+     "length": 10
+    }
+   ],
+   "ratios_available": [
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "chequp-pl2-a-finish-line",
+   "creative_key": "chequp_pl2-a_finish-line",
+   "master_video_id": "977500845168540",
+   "master_title": "CheqUp_PL2-A_finish-line_9x16.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 10,
+   "created_time": 1781794619,
+   "permalink_url": "/120213728082680172/videos/977500845168540/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "977500845168540",
+     "title": "CheqUp_PL2-A_finish-line_9x16.mp4",
+     "ratio": "9:16",
+     "created_time": 1781794619,
+     "length": 10
+    },
+    {
+     "id": "1535806738329342",
+     "title": "CheqUp_PL2-A_finish-line_9x16.mp4",
+     "ratio": "9:16"
+    },
+    {
+     "id": "1661964945074784",
+     "title": "CheqUp_PL2-A_finish-line_1x1.mp4",
+     "ratio": "1:1"
+    },
+    {
+     "id": "1270171528529143",
+     "title": "CheqUp_PL2-A_finish-line_9x16.mp4",
+     "ratio": "9:16"
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "chequp-b-goals",
+   "creative_key": "chequp_b_goals",
+   "master_video_id": "1386674476856810",
+   "master_title": "CheqUp_B_goals_9x16.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 10,
+   "created_time": 1781620764,
+   "permalink_url": "/120213728082680172/videos/1386674476856810/",
+   "master_hd_url_available": true,
+   "downloaded_video_id": "1386674476856810",
+   "downloaded_source": "master",
+   "reference_video": "videos/chequp-b-goals.mp4",
+   "contact_sheet": "sheets/chequp-b-goals.jpg",
+   "variants": [
+    {
+     "id": "1386674476856810",
+     "title": "CheqUp_B_goals_9x16.mp4",
+     "ratio": "9:16",
+     "created_time": 1781620764,
+     "length": 10
+    },
+    {
+     "id": "1009850405242938",
+     "title": "CheqUp_B_goals_1x1.mp4",
+     "ratio": "1:1"
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "chequp-pillar3-02-more-clarity",
+   "creative_key": "chequp_pillar3-02_more-clarity",
+   "master_video_id": "842895848571376",
+   "master_title": "CheqUp_PILLAR3-02_more-clarity_9x16.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 10,
+   "created_time": 1781528687,
+   "permalink_url": "/120213728082680172/videos/842895848571376/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "36264586019854110",
+     "title": "CheqUp_PILLAR3-02_more-clarity_1x1.mp4",
+     "ratio": "1:1"
+    },
+    {
+     "id": "3111903068997254",
+     "title": "CheqUp_PILLAR3-02_more-clarity_4x5.mp4",
+     "ratio": "4:5"
+    },
+    {
+     "id": "842895848571376",
+     "title": "CheqUp_PILLAR3-02_more-clarity_9x16.mp4",
+     "ratio": "9:16",
+     "created_time": 1781528687,
+     "length": 10
+    },
+    {
+     "id": "978410371645461",
+     "title": "CheqUp_PILLAR3-02_more-clarity_9x16.mp4",
+     "ratio": "9:16"
+    },
+    {
+     "id": "974831628665310",
+     "title": "CheqUp_PILLAR3-02_more-clarity_4x5.mp4",
+     "ratio": "4:5"
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "4:5",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "chequp-pillar1-04-up-your-street",
+   "creative_key": "chequp_pillar1-04_up-your-street",
+   "master_video_id": "1690247969067078",
+   "master_title": "CheqUp_PILLAR1-04_up-your-street_9x16.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 10,
+   "created_time": 1781275007,
+   "permalink_url": "/120213728082680172/videos/1690247969067078/",
+   "master_hd_url_available": true,
+   "downloaded_video_id": "1690247969067078",
+   "downloaded_source": "master",
+   "reference_video": "videos/chequp-pillar1-04-up-your-street.mp4",
+   "contact_sheet": "sheets/chequp-pillar1-04-up-your-street.jpg",
+   "variants": [
+    {
+     "id": "1690247969067078",
+     "title": "CheqUp_PILLAR1-04_up-your-street_9x16.mp4",
+     "ratio": "9:16",
+     "created_time": 1781275007,
+     "length": 10
+    },
+    {
+     "id": "1488042699127967",
+     "title": "CheqUp_PILLAR1-04_up-your-street_4x5.mp4",
+     "ratio": "4:5"
+    }
+   ],
+   "ratios_available": [
+    "4:5",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "chequp-product-video-v1",
+   "creative_key": "chequp product video v1",
+   "master_video_id": "1549197836810597",
+   "master_title": "Chequp Product Video V1_9x16.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 10,
+   "created_time": 1781191026,
+   "permalink_url": "/120213728082680172/videos/1549197836810597/",
+   "master_hd_url_available": true,
+   "downloaded_video_id": "1549197836810597",
+   "downloaded_source": "master",
+   "reference_video": "videos/chequp-product-video-v1.mp4",
+   "contact_sheet": "sheets/chequp-product-video-v1.jpg",
+   "variants": [
+    {
+     "id": "1549197836810597",
+     "title": "Chequp Product Video V1_9x16.mp4",
+     "ratio": "9:16",
+     "created_time": 1781191026,
+     "length": 10
+    },
+    {
+     "id": "1009233148245299",
+     "title": "Chequp Product Video V1_4x5.mp4",
+     "ratio": "4:5"
+    }
+   ],
+   "ratios_available": [
+    "4:5",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "vox-pop-street",
+   "creative_key": "vox_pop_street",
+   "master_video_id": "4394406514174758",
+   "master_title": "Vox_Pop_Street_Story.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 18.375,
+   "created_time": 1773438822,
+   "permalink_url": "/120213728082680172/videos/4394406514174758/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "4394406514174758",
+     "title": "Vox_Pop_Street_Story.mp4",
+     "ratio": "9:16",
+     "created_time": 1773438822,
+     "length": 18.375
+    },
+    {
+     "id": "1654266352674396",
+     "title": "Vox_Pop_Street_Grid.mp4",
+     "ratio": "1:1"
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "vox-pop-park",
+   "creative_key": "vox_pop_park",
+   "master_video_id": "2114672092680106",
+   "master_title": "Vox_Pop_Park_Story.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 17.958,
+   "created_time": 1773438822,
+   "permalink_url": "/120213728082680172/videos/2114672092680106/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "2114672092680106",
+     "title": "Vox_Pop_Park_Story.mp4",
+     "ratio": "9:16",
+     "created_time": 1773438822,
+     "length": 17.958
+    },
+    {
+     "id": "911123048355538",
+     "title": "Vox_Pop_Park_Grid.mp4",
+     "ratio": "1:1"
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "timelapse-box",
+   "creative_key": "timelapse_box",
+   "master_video_id": "1649111539627311",
+   "master_title": "Timelapse_Box_Story.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 10.033,
+   "created_time": 1773438822,
+   "permalink_url": "/120213728082680172/videos/1649111539627311/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "2189625561792907",
+     "title": "Timelapse_Box_Grid.mp4",
+     "ratio": "1:1"
+    },
+    {
+     "id": "1649111539627311",
+     "title": "Timelapse_Box_Story.mp4",
+     "ratio": "9:16",
+     "created_time": 1773438822,
+     "length": 10.033
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "03",
+   "creative_key": "03",
+   "master_video_id": "1422930135628075",
+   "master_title": "03 Story.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 13.75,
+   "created_time": 1773438822,
+   "permalink_url": "/120213728082680172/videos/1422930135628075/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": "912803641651328",
+   "downloaded_source": "variant_fallback",
+   "reference_video": "videos/03.mp4",
+   "contact_sheet": "sheets/03.jpg",
+   "variants": [
+    {
+     "id": "1422930135628075",
+     "title": "03 Story.mp4",
+     "ratio": "9:16",
+     "created_time": 1773438822,
+     "length": 13.75
+    },
+    {
+     "id": "912803641651328",
+     "title": "03 Grid.mp4",
+     "ratio": "1:1",
+     "created_time": 1773438822,
+     "length": 13.625
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "fine-print-man",
+   "creative_key": "fine_print_man",
+   "master_video_id": "1352091636964435",
+   "master_title": "Fine_Print_Man_Story.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 12.083,
+   "created_time": 1773438822,
+   "permalink_url": "/120213728082680172/videos/1352091636964435/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1352091636964435",
+     "title": "Fine_Print_Man_Story.mp4",
+     "ratio": "9:16",
+     "created_time": 1773438822,
+     "length": 12.083
+    },
+    {
+     "id": "1224576809848716",
+     "title": "Fine_Print_Man_Grid.mp4",
+     "ratio": "1:1"
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "02-vid",
+   "creative_key": "02 vid",
+   "master_video_id": "1703909077255286",
+   "master_title": "02 Vid.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 19.933,
+   "created_time": 1771942068,
+   "permalink_url": "/120213728082680172/videos/1703909077255286/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1972559593470669",
+     "title": "02 Vid - 1080x1080 (1).mp4",
+     "ratio": "1:1"
+    },
+    {
+     "id": "1703909077255286",
+     "title": "02 Vid.mp4",
+     "ratio": "unknown",
+     "created_time": 1771942068,
+     "length": 19.933
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "01-vid",
+   "creative_key": "01 vid",
+   "master_video_id": "1690876878948523",
+   "master_title": "01 VId.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 38.166,
+   "created_time": 1771942068,
+   "permalink_url": "/120213728082680172/videos/1690876878948523/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1690876878948523",
+     "title": "01 VId.mp4",
+     "ratio": "unknown",
+     "created_time": 1771942068,
+     "length": 38.166
+    },
+    {
+     "id": "978289711196999",
+     "title": "01 VId - 1080x1080.mp4",
+     "ratio": "1:1"
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "03-vid",
+   "creative_key": "03 vid",
+   "master_video_id": "922588107019145",
+   "master_title": "03 Vid.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 13.933,
+   "created_time": 1771942068,
+   "permalink_url": "/120213728082680172/videos/922588107019145/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1246950727439316",
+     "title": "03 Vid - 1080x1080 (1).mp4",
+     "ratio": "1:1"
+    },
+    {
+     "id": "922588107019145",
+     "title": "03 Vid.mp4",
+     "ratio": "unknown",
+     "created_time": 1771942068,
+     "length": 13.933
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "chequp-meet-the-changemakers-debunking-video-1-v4-subbed",
+   "creative_key": "chequp - meet the changemakers - debunking video 1 v4 subbed",
+   "master_video_id": "922533530233409",
+   "master_title": "CheqUp - Meet the ChangeMakers - Debunking Video 1 - 9x16 V4 SUBBED.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 23.8,
+   "created_time": 1770998024,
+   "permalink_url": "/120213728082680172/videos/922533530233409/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "922533530233409",
+     "title": "CheqUp - Meet the ChangeMakers - Debunking Video 1 - 9x16 V4 SUBBED.mp4",
+     "ratio": "9:16",
+     "created_time": 1770998024,
+     "length": 23.8
+    }
+   ],
+   "ratios_available": [
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "chequp-meet-the-changemakers-debunking-video-2-v4-subbed",
+   "creative_key": "chequp - meet the changemakers - debunking video 2 v4 subbed",
+   "master_video_id": "879141158081072",
+   "master_title": "CheqUp - Meet the ChangeMakers - Debunking Video 2 - 9x16 V4 SUBBED.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 14.8,
+   "created_time": 1770998024,
+   "permalink_url": "/120213728082680172/videos/879141158081072/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "879141158081072",
+     "title": "CheqUp - Meet the ChangeMakers - Debunking Video 2 - 9x16 V4 SUBBED.mp4",
+     "ratio": "9:16",
+     "created_time": 1770998024,
+     "length": 14.8
+    }
+   ],
+   "ratios_available": [
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "creator",
+   "creative_key": "creator",
+   "master_video_id": "1957790074808279",
+   "master_title": "Creator - Story.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 40.3,
+   "created_time": 1770406634,
+   "permalink_url": "/120213728082680172/videos/1957790074808279/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1957790074808279",
+     "title": "Creator - Story.mp4",
+     "ratio": "9:16",
+     "created_time": 1770406634,
+     "length": 40.3
+    },
+    {
+     "id": "1515971459502286",
+     "title": "Creator - Grid.mp4",
+     "ratio": "1:1"
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "9",
+   "creative_key": "9",
+   "master_video_id": "2116533945849746",
+   "master_title": "9.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 5.013,
+   "created_time": 1770406236,
+   "permalink_url": "/120213728082680172/videos/2116533945849746/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "2116533945849746",
+     "title": "9.mp4",
+     "ratio": "unknown",
+     "created_time": 1770406236,
+     "length": 5.013
+    },
+    {
+     "id": "696427056458003",
+     "title": "9.mp4",
+     "ratio": "unknown"
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "8",
+   "creative_key": "8",
+   "master_video_id": "1795325161159284",
+   "master_title": "8.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 19,
+   "created_time": 1770406236,
+   "permalink_url": "/120213728082680172/videos/1795325161159284/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1795325161159284",
+     "title": "8.mp4",
+     "ratio": "unknown",
+     "created_time": 1770406236,
+     "length": 19
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "10",
+   "creative_key": "10",
+   "master_video_id": "1609587607048316",
+   "master_title": "10.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 5.013,
+   "created_time": 1770406236,
+   "permalink_url": "/120213728082680172/videos/1609587607048316/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1609587607048316",
+     "title": "10.mp4",
+     "ratio": "unknown",
+     "created_time": 1770406236,
+     "length": 5.013
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "7",
+   "creative_key": "7",
+   "master_video_id": "1586719939232980",
+   "master_title": "7.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 19,
+   "created_time": 1770406236,
+   "permalink_url": "/120213728082680172/videos/1586719939232980/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1586719939232980",
+     "title": "7.mp4",
+     "ratio": "unknown",
+     "created_time": 1770406236,
+     "length": 19
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "1",
+   "creative_key": "1",
+   "master_video_id": "1540668134271222",
+   "master_title": "1.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 5.633,
+   "created_time": 1770406236,
+   "permalink_url": "/120213728082680172/videos/1540668134271222/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1540668134271222",
+     "title": "1.mp4",
+     "ratio": "unknown",
+     "created_time": 1770406236,
+     "length": 5.633
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "2",
+   "creative_key": "2",
+   "master_video_id": "1370196358124634",
+   "master_title": "2.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 5.633,
+   "created_time": 1770406236,
+   "permalink_url": "/120213728082680172/videos/1370196358124634/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1370196358124634",
+     "title": "2.mp4",
+     "ratio": "unknown",
+     "created_time": 1770406236,
+     "length": 5.633
+    },
+    {
+     "id": "768026286252099",
+     "title": "2.mp4",
+     "ratio": "unknown"
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "hook-3-1",
+   "creative_key": "hook 3_1",
+   "master_video_id": "34793954200219716",
+   "master_title": "Hook 3_1 (1).mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 24.733,
+   "created_time": 1768322291,
+   "permalink_url": "/120213728082680172/videos/34793954200219716/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "34793954200219716",
+     "title": "Hook 3_1 (1).mp4",
+     "ratio": "unknown",
+     "created_time": 1768322291,
+     "length": 24.733
+    },
+    {
+     "id": "903602335451046",
+     "title": "Hook 3_1.mp4",
+     "ratio": "unknown"
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "hook-2-1",
+   "creative_key": "hook 2_1",
+   "master_video_id": "2353795105084880",
+   "master_title": "Hook 2_1.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 24.633,
+   "created_time": 1768322291,
+   "permalink_url": "/120213728082680172/videos/2353795105084880/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "2353795105084880",
+     "title": "Hook 2_1.mp4",
+     "ratio": "unknown",
+     "created_time": 1768322291,
+     "length": 24.633
+    },
+    {
+     "id": "893949556915360",
+     "title": "Hook 2_1 (1).mp4",
+     "ratio": "unknown"
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "hook-1-1",
+   "creative_key": "hook 1_1",
+   "master_video_id": "1249163153802873",
+   "master_title": "Hook 1_1 (1).mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 25.033,
+   "created_time": 1768322291,
+   "permalink_url": "/120213728082680172/videos/1249163153802873/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1249163153802873",
+     "title": "Hook 1_1 (1).mp4",
+     "ratio": "unknown",
+     "created_time": 1768322291,
+     "length": 25.033
+    },
+    {
+     "id": "857002910473808",
+     "title": "Hook 1_1.mp4",
+     "ratio": "unknown"
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "hook-3-v1-2",
+   "creative_key": "hook 3 - v1_2",
+   "master_video_id": "1765106524163026",
+   "master_title": "HOOK 3 - V1_2 (1).mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 27.966,
+   "created_time": 1768322116,
+   "permalink_url": "/120213728082680172/videos/1765106524163026/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1765106524163026",
+     "title": "HOOK 3 - V1_2 (1).mp4",
+     "ratio": "unknown",
+     "created_time": 1768322116,
+     "length": 27.966
+    },
+    {
+     "id": "1625185405584738",
+     "title": "HOOK 3 - V1_2.mp4",
+     "ratio": "unknown"
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "hook-2-v1",
+   "creative_key": "hook 2 - v1",
+   "master_video_id": "1193125976126913",
+   "master_title": "HOOK 2 - V1.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 33.933,
+   "created_time": 1768321935,
+   "permalink_url": "/120213728082680172/videos/1193125976126913/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1193125976126913",
+     "title": "HOOK 2 - V1.mp4",
+     "ratio": "unknown",
+     "created_time": 1768321935,
+     "length": 33.933
+    },
+    {
+     "id": "856536717224086",
+     "title": "HOOK 2 - V1 (1).mp4",
+     "ratio": "unknown"
+    },
+    {
+     "id": "1552063042726745",
+     "title": "HOOK 2 - V1.mp4",
+     "ratio": "unknown"
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "hook-1-v1",
+   "creative_key": "hook 1 - v1",
+   "master_video_id": "831145503260862",
+   "master_title": "HOOK 1 - V1 (1).mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 26.833,
+   "created_time": 1768321724,
+   "permalink_url": "/120213728082680172/videos/831145503260862/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "831145503260862",
+     "title": "HOOK 1 - V1 (1).mp4",
+     "ratio": "unknown",
+     "created_time": 1768321724,
+     "length": 26.833
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "hook-1-v2",
+   "creative_key": "hook 1 - v2",
+   "master_video_id": "1732131144437595",
+   "master_title": "HOOK 1 - V2 (1).mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 25.833,
+   "created_time": 1768321565,
+   "permalink_url": "/120213728082680172/videos/1732131144437595/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1732131144437595",
+     "title": "HOOK 1 - V2 (1).mp4",
+     "ratio": "unknown",
+     "created_time": 1768321565,
+     "length": 25.833
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "get-back-your-get-up-and-go",
+   "creative_key": "get back your get up and go",
+   "master_video_id": "3465930490212475",
+   "master_title": "Get back your get up and go.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 17.7,
+   "created_time": 1766442984,
+   "permalink_url": "/120213728082680172/videos/3465930490212475/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "3465930490212475",
+     "title": "Get back your get up and go.mp4",
+     "ratio": "unknown",
+     "created_time": 1766442984,
+     "length": 17.7
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "life-moving-faster-than-you",
+   "creative_key": "life moving faster than you",
+   "master_video_id": "3386062154882224",
+   "master_title": "Life moving faster than you.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 18.966,
+   "created_time": 1766442984,
+   "permalink_url": "/120213728082680172/videos/3386062154882224/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "3386062154882224",
+     "title": "Life moving faster than you.mp4",
+     "ratio": "unknown",
+     "created_time": 1766442984,
+     "length": 18.966
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "are-you-serious-about-weight-loss",
+   "creative_key": "are you serious about weight loss",
+   "master_video_id": "2599720483760592",
+   "master_title": "Are you serious about weight loss_.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 17.633,
+   "created_time": 1766442984,
+   "permalink_url": "/120213728082680172/videos/2599720483760592/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "2599720483760592",
+     "title": "Are you serious about weight loss_.mp4",
+     "ratio": "unknown",
+     "created_time": 1766442984,
+     "length": 17.633
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "re-write-the-rules",
+   "creative_key": "re-write the rules",
+   "master_video_id": "1823591338286248",
+   "master_title": "Re-write the rules.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 24.5,
+   "created_time": 1766442984,
+   "permalink_url": "/120213728082680172/videos/1823591338286248/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1823591338286248",
+     "title": "Re-write the rules.mp4",
+     "ratio": "unknown",
+     "created_time": 1766442984,
+     "length": 24.5
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "comparing-providers",
+   "creative_key": "comparing providers",
+   "master_video_id": "1650062276368015",
+   "master_title": "Comparing providers_.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 18.266,
+   "created_time": 1766442984,
+   "permalink_url": "/120213728082680172/videos/1650062276368015/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1650062276368015",
+     "title": "Comparing providers_.mp4",
+     "ratio": "unknown",
+     "created_time": 1766442984,
+     "length": 18.266
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "feeling-stuck",
+   "creative_key": "feeling stuck",
+   "master_video_id": "1585388276246148",
+   "master_title": "Feeling stuck_.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 23.8,
+   "created_time": 1766442984,
+   "permalink_url": "/120213728082680172/videos/1585388276246148/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1585388276246148",
+     "title": "Feeling stuck_.mp4",
+     "ratio": "unknown",
+     "created_time": 1766442984,
+     "length": 23.8
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "keep-up-with-the-kids",
+   "creative_key": "keep up with the kids",
+   "master_video_id": "1575684330433120",
+   "master_title": "Keep up with the kids.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 12.6,
+   "created_time": 1766442984,
+   "permalink_url": "/120213728082680172/videos/1575684330433120/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1575684330433120",
+     "title": "Keep up with the kids.mp4",
+     "ratio": "unknown",
+     "created_time": 1766442984,
+     "length": 12.6
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "support-is-the-strategy",
+   "creative_key": "support is the strategy",
+   "master_video_id": "1175101488145231",
+   "master_title": "Support is the strategy.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 18.166,
+   "created_time": 1766442984,
+   "permalink_url": "/120213728082680172/videos/1175101488145231/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1175101488145231",
+     "title": "Support is the strategy.mp4",
+     "ratio": "unknown",
+     "created_time": 1766442984,
+     "length": 18.166
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "menopause-hormones",
+   "creative_key": "menopause hormones",
+   "master_video_id": "1147036523959490",
+   "master_title": "Menopause hormones.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 18.4,
+   "created_time": 1766442984,
+   "permalink_url": "/120213728082680172/videos/1147036523959490/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1147036523959490",
+     "title": "Menopause hormones.mp4",
+     "ratio": "unknown",
+     "created_time": 1766442984,
+     "length": 18.4
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "no-guesswork",
+   "creative_key": "no guesswork",
+   "master_video_id": "844646491496945",
+   "master_title": "No guesswork.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 19,
+   "created_time": 1766442984,
+   "permalink_url": "/120213728082680172/videos/844646491496945/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "844646491496945",
+     "title": "No guesswork.mp4",
+     "ratio": "unknown",
+     "created_time": 1766442984,
+     "length": 19
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "consistency",
+   "creative_key": "consistency",
+   "master_video_id": "738653125949677",
+   "master_title": "Consistency.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 19.133,
+   "created_time": 1766442984,
+   "permalink_url": "/120213728082680172/videos/738653125949677/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "738653125949677",
+     "title": "Consistency.mp4",
+     "ratio": "unknown",
+     "created_time": 1766442984,
+     "length": 19.133
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "2-medication-without-support-3",
+   "creative_key": "2_medication without support_3",
+   "master_video_id": "3533965966745366",
+   "master_title": "2_MEDICATION WITHOUT SUPPORT_1X1_3.mp4",
+   "master_ratio_from_title": "1:1",
+   "length": 21.24,
+   "created_time": 1766442651,
+   "permalink_url": "/120213728082680172/videos/3533965966745366/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "3533965966745366",
+     "title": "2_MEDICATION WITHOUT SUPPORT_1X1_3.mp4",
+     "ratio": "1:1",
+     "created_time": 1766442651,
+     "length": 21.24
+    }
+   ],
+   "ratios_available": [
+    "1:1"
+   ]
+  },
+  {
+   "creative_slug": "11-nhs-said-no-2",
+   "creative_key": "11_nhs said no_2",
+   "master_video_id": "2726532117746263",
+   "master_title": "11_NHS SAID NO_1X1_2.mp4",
+   "master_ratio_from_title": "1:1",
+   "length": 29.56,
+   "created_time": 1766442651,
+   "permalink_url": "/120213728082680172/videos/2726532117746263/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "2726532117746263",
+     "title": "11_NHS SAID NO_1X1_2.mp4",
+     "ratio": "1:1",
+     "created_time": 1766442651,
+     "length": 29.56
+    }
+   ],
+   "ratios_available": [
+    "1:1"
+   ]
+  },
+  {
+   "creative_slug": "1-do-i-need-a-health-coach-3",
+   "creative_key": "1_do i need a health coach_3",
+   "master_video_id": "877538131633786",
+   "master_title": "1_DO I NEED A HEALTH COACH_1X1_3 (1).mp4",
+   "master_ratio_from_title": "1:1",
+   "length": 15.12,
+   "created_time": 1766442651,
+   "permalink_url": "/120213728082680172/videos/877538131633786/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "877538131633786",
+     "title": "1_DO I NEED A HEALTH COACH_1X1_3 (1).mp4",
+     "ratio": "1:1",
+     "created_time": 1766442651,
+     "length": 15.12
+    }
+   ],
+   "ratios_available": [
+    "1:1"
+   ]
+  },
+  {
+   "creative_slug": "1-do-i-need-a-health-coach-2",
+   "creative_key": "1_do i need a health coach_2",
+   "master_video_id": "25011903868489714",
+   "master_title": "1_DO I NEED A HEALTH COACH_1X1_2 (1).mp4",
+   "master_ratio_from_title": "1:1",
+   "length": 28.68,
+   "created_time": 1766010281,
+   "permalink_url": "/120213728082680172/videos/25011903868489714/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "25011903868489714",
+     "title": "1_DO I NEED A HEALTH COACH_1X1_2 (1).mp4",
+     "ratio": "1:1",
+     "created_time": 1766010281,
+     "length": 28.68
+    },
+    {
+     "id": "681390681574960",
+     "title": "1_DO I NEED A HEALTH COACH_1X1_2.mp4",
+     "ratio": "1:1"
+    }
+   ],
+   "ratios_available": [
+    "1:1"
+   ]
+  },
+  {
+   "creative_slug": "3-chequp-members-lose-35-1",
+   "creative_key": "3_chequp members lose 35_1",
+   "master_video_id": "3334116070088093",
+   "master_title": "3_CHEQUP MEMBERS LOSE 35_1X1_1 (1).mp4",
+   "master_ratio_from_title": "1:1",
+   "length": 28.6,
+   "created_time": 1766010281,
+   "permalink_url": "/120213728082680172/videos/3334116070088093/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "3334116070088093",
+     "title": "3_CHEQUP MEMBERS LOSE 35_1X1_1 (1).mp4",
+     "ratio": "1:1",
+     "created_time": 1766010281,
+     "length": 28.6
+    },
+    {
+     "id": "862557066355660",
+     "title": "3_CHEQUP MEMBERS LOSE 35_1X1_1.mp4",
+     "ratio": "1:1"
+    }
+   ],
+   "ratios_available": [
+    "1:1"
+   ]
+  },
+  {
+   "creative_slug": "10-three-reasons-1",
+   "creative_key": "10_three reasons_1",
+   "master_video_id": "2107038276789487",
+   "master_title": "10_THREE REASONS_1X1_1 (1).mp4",
+   "master_ratio_from_title": "1:1",
+   "length": 47.36,
+   "created_time": 1766010281,
+   "permalink_url": "/120213728082680172/videos/2107038276789487/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "2107038276789487",
+     "title": "10_THREE REASONS_1X1_1 (1).mp4",
+     "ratio": "1:1",
+     "created_time": 1766010281,
+     "length": 47.36
+    },
+    {
+     "id": "25667095669581271",
+     "title": "10_THREE REASONS_1X1_1.mp4",
+     "ratio": "1:1"
+    }
+   ],
+   "ratios_available": [
+    "1:1"
+   ]
+  },
+  {
+   "creative_slug": "8-intro-prices-2",
+   "creative_key": "8_intro prices_2",
+   "master_video_id": "2059328274850436",
+   "master_title": "8_INTRO PRICES_1X1_2 (1).mp4",
+   "master_ratio_from_title": "1:1",
+   "length": 32.28,
+   "created_time": 1766010281,
+   "permalink_url": "/120213728082680172/videos/2059328274850436/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "2059328274850436",
+     "title": "8_INTRO PRICES_1X1_2 (1).mp4",
+     "ratio": "1:1",
+     "created_time": 1766010281,
+     "length": 32.28
+    },
+    {
+     "id": "4140763399481913",
+     "title": "8_INTRO PRICES_1X1_2.mp4",
+     "ratio": "1:1"
+    }
+   ],
+   "ratios_available": [
+    "1:1"
+   ]
+  },
+  {
+   "creative_slug": "2-medication-without-support-1",
+   "creative_key": "2_medication without support_1",
+   "master_video_id": "1974332190013989",
+   "master_title": "2_MEDICATION WITHOUT SUPPORT_1X1_1 (1).mp4",
+   "master_ratio_from_title": "1:1",
+   "length": 27.2,
+   "created_time": 1766010281,
+   "permalink_url": "/120213728082680172/videos/1974332190013989/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1974332190013989",
+     "title": "2_MEDICATION WITHOUT SUPPORT_1X1_1 (1).mp4",
+     "ratio": "1:1",
+     "created_time": 1766010281,
+     "length": 27.2
+    },
+    {
+     "id": "1174065638174584",
+     "title": "2_MEDICATION WITHOUT SUPPORT_1X1_1.mp4",
+     "ratio": "1:1"
+    },
+    {
+     "id": "1952661528933532",
+     "title": "2_MEDICATION WITHOUT SUPPORT_1X1_1.mp4",
+     "ratio": "1:1"
+    }
+   ],
+   "ratios_available": [
+    "1:1"
+   ]
+  },
+  {
+   "creative_slug": "5-subscriptions-are-good-2",
+   "creative_key": "5_subscriptions are good_2",
+   "master_video_id": "1916904429245711",
+   "master_title": "5_SUBSCRIPTIONS ARE GOOD_1X1_2.mp4",
+   "master_ratio_from_title": "1:1",
+   "length": 32.72,
+   "created_time": 1766010281,
+   "permalink_url": "/120213728082680172/videos/1916904429245711/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1916904429245711",
+     "title": "5_SUBSCRIPTIONS ARE GOOD_1X1_2.mp4",
+     "ratio": "1:1",
+     "created_time": 1766010281,
+     "length": 32.72
+    }
+   ],
+   "ratios_available": [
+    "1:1"
+   ]
+  },
+  {
+   "creative_slug": "11-nhs-said-no-1",
+   "creative_key": "11_nhs said no_1",
+   "master_video_id": "1646754880037342",
+   "master_title": "11_NHS SAID NO_1X1_1.mp4",
+   "master_ratio_from_title": "1:1",
+   "length": 29.56,
+   "created_time": 1766010281,
+   "permalink_url": "/120213728082680172/videos/1646754880037342/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1646754880037342",
+     "title": "11_NHS SAID NO_1X1_1.mp4",
+     "ratio": "1:1",
+     "created_time": 1766010281,
+     "length": 29.56
+    }
+   ],
+   "ratios_available": [
+    "1:1"
+   ]
+  },
+  {
+   "creative_slug": "7-upfront-prices-1",
+   "creative_key": "7_upfront prices_1",
+   "master_video_id": "1561532498303264",
+   "master_title": "7_UPFRONT PRICES_1X1_1.mp4",
+   "master_ratio_from_title": "1:1",
+   "length": 28.92,
+   "created_time": 1766010281,
+   "permalink_url": "/120213728082680172/videos/1561532498303264/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1561532498303264",
+     "title": "7_UPFRONT PRICES_1X1_1.mp4",
+     "ratio": "1:1",
+     "created_time": 1766010281,
+     "length": 28.92
+    }
+   ],
+   "ratios_available": [
+    "1:1"
+   ]
+  },
+  {
+   "creative_slug": "12-confident-and-descreet-2",
+   "creative_key": "12_confident and descreet_2",
+   "master_video_id": "1558663308619179",
+   "master_title": "12_CONFIDENT AND DESCREET_1X1_2 (1).mp4",
+   "master_ratio_from_title": "1:1",
+   "length": 31.32,
+   "created_time": 1766010281,
+   "permalink_url": "/120213728082680172/videos/1558663308619179/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1558663308619179",
+     "title": "12_CONFIDENT AND DESCREET_1X1_2 (1).mp4",
+     "ratio": "1:1",
+     "created_time": 1766010281,
+     "length": 31.32
+    },
+    {
+     "id": "1357535698995293",
+     "title": "12_CONFIDENT AND DESCREET_1X1_2.mp4",
+     "ratio": "1:1"
+    }
+   ],
+   "ratios_available": [
+    "1:1"
+   ]
+  },
+  {
+   "creative_slug": "9-number-one-reason-1",
+   "creative_key": "9_number one reason_1",
+   "master_video_id": "1365942688410085",
+   "master_title": "9_NUMBER ONE REASON_1X1_1.mp4",
+   "master_ratio_from_title": "1:1",
+   "length": 28.32,
+   "created_time": 1766010281,
+   "permalink_url": "/120213728082680172/videos/1365942688410085/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1365942688410085",
+     "title": "9_NUMBER ONE REASON_1X1_1.mp4",
+     "ratio": "1:1",
+     "created_time": 1766010281,
+     "length": 28.32
+    }
+   ],
+   "ratios_available": [
+    "1:1"
+   ]
+  },
+  {
+   "creative_slug": "4-support-extras-1",
+   "creative_key": "4_support extras_1",
+   "master_video_id": "1255337083091258",
+   "master_title": "4_SUPPORT EXTRAS_1X1_1.mp4",
+   "master_ratio_from_title": "1:1",
+   "length": 41,
+   "created_time": 1766010281,
+   "permalink_url": "/120213728082680172/videos/1255337083091258/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1255337083091258",
+     "title": "4_SUPPORT EXTRAS_1X1_1.mp4",
+     "ratio": "1:1",
+     "created_time": 1766010281,
+     "length": 41
+    }
+   ],
+   "ratios_available": [
+    "1:1"
+   ]
+  },
+  {
+   "creative_slug": "6-other-providers-2",
+   "creative_key": "6_other providers_2",
+   "master_video_id": "840034302269464",
+   "master_title": "6_OTHER PROVIDERS_1X1_2.mp4",
+   "master_ratio_from_title": "1:1",
+   "length": 33.4,
+   "created_time": 1766010281,
+   "permalink_url": "/120213728082680172/videos/840034302269464/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "840034302269464",
+     "title": "6_OTHER PROVIDERS_1X1_2.mp4",
+     "ratio": "1:1",
+     "created_time": 1766010281,
+     "length": 33.4
+    }
+   ],
+   "ratios_available": [
+    "1:1"
+   ]
+  },
+  {
+   "creative_slug": "video-01",
+   "creative_key": "video 01",
+   "master_video_id": "1627813871399648",
+   "master_title": "Video 011 - 9x16.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 28.333,
+   "created_time": 1764334071,
+   "permalink_url": "/120213728082680172/videos/1627813871399648/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1627813871399648",
+     "title": "Video 011 - 9x16.mp4",
+     "ratio": "9:16",
+     "created_time": 1764334071,
+     "length": 28.333
+    },
+    {
+     "id": "870988038834682",
+     "title": "Video 01 - 4x5.mp4",
+     "ratio": "4:5"
+    }
+   ],
+   "ratios_available": [
+    "4:5",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "video-02",
+   "creative_key": "video 02",
+   "master_video_id": "1581154143300006",
+   "master_title": "Video 02 - 9x16.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 26.583,
+   "created_time": 1764334071,
+   "permalink_url": "/120213728082680172/videos/1581154143300006/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1581154143300006",
+     "title": "Video 02 - 9x16.mp4",
+     "ratio": "9:16",
+     "created_time": 1764334071,
+     "length": 26.583
+    },
+    {
+     "id": "1424463492427725",
+     "title": "Video 02 - 4x5.mp4",
+     "ratio": "4:5"
+    }
+   ],
+   "ratios_available": [
+    "4:5",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "chequp-bf-subbed",
+   "creative_key": "chequp bf subbed",
+   "master_video_id": "1816942682516326",
+   "master_title": "CheqUP BF SUBBED.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 28.728,
+   "created_time": 1764012563,
+   "permalink_url": "/120213728082680172/videos/1816942682516326/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1816942682516326",
+     "title": "CheqUP BF SUBBED.mp4",
+     "ratio": "unknown",
+     "created_time": 1764012563,
+     "length": 28.728
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "chequp-review-final",
+   "creative_key": "chequp - review - final",
+   "master_video_id": "1732966714030798",
+   "master_title": "Chequp - Review - Final - 9x16.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 21.066,
+   "created_time": 1763996280,
+   "permalink_url": "/120213728082680172/videos/1732966714030798/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1732966714030798",
+     "title": "Chequp - Review - Final - 9x16.mp4",
+     "ratio": "9:16",
+     "created_time": 1763996280,
+     "length": 21.066
+    },
+    {
+     "id": "684374544527659",
+     "title": "Chequp - Review - Final - 4x5.mp4",
+     "ratio": "4:5"
+    }
+   ],
+   "ratios_available": [
+    "4:5",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "pricead",
+   "creative_key": "pricead",
+   "master_video_id": "817963974356393",
+   "master_title": "PriceAd - Story.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 13.2,
+   "created_time": 1763996169,
+   "permalink_url": "/120213728082680172/videos/817963974356393/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": "1176779343954236",
+   "downloaded_source": "variant_fallback",
+   "reference_video": "videos/pricead.mp4",
+   "contact_sheet": "sheets/pricead.jpg",
+   "variants": [
+    {
+     "id": "1176779343954236",
+     "title": "PriceAd - Grid.mp4",
+     "ratio": "1:1",
+     "created_time": 1763996169,
+     "length": 13.2
+    },
+    {
+     "id": "817963974356393",
+     "title": "PriceAd - Story.mp4",
+     "ratio": "9:16",
+     "created_time": 1763996169,
+     "length": 13.2
+    }
+   ],
+   "ratios_available": [
+    "1:1",
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "v1-01-hook-1-main-body-cta-1",
+   "creative_key": "v1.01 - hook 1, main body, cta 1",
+   "master_video_id": "1983666949094488",
+   "master_title": "V1.01 - Hook 1, MAIN BODY, CTA 1.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 28.6,
+   "created_time": 1763995855,
+   "permalink_url": "/120213728082680172/videos/1983666949094488/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1983666949094488",
+     "title": "V1.01 - Hook 1, MAIN BODY, CTA 1.mp4",
+     "ratio": "unknown",
+     "created_time": 1763995855,
+     "length": 28.6
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "v3-01-hook-2-main-body-cta-1",
+   "creative_key": "v3.01 -hook 2, main body, cta 1",
+   "master_video_id": "1500530891162631",
+   "master_title": "V3.01 -Hook 2, MAIN BODY, CTA 1.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 28.066,
+   "created_time": 1763995855,
+   "permalink_url": "/120213728082680172/videos/1500530891162631/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1500530891162631",
+     "title": "V3.01 -Hook 2, MAIN BODY, CTA 1.mp4",
+     "ratio": "unknown",
+     "created_time": 1763995855,
+     "length": 28.066
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "v4-01-hook-2-main-body-cta-2",
+   "creative_key": "v4.01 - hook 2, main body, cta 2",
+   "master_video_id": "1403237101157399",
+   "master_title": "V4.01 - Hook 2, MAIN BODY, CTA 2.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 25.6,
+   "created_time": 1763995855,
+   "permalink_url": "/120213728082680172/videos/1403237101157399/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1403237101157399",
+     "title": "V4.01 - Hook 2, MAIN BODY, CTA 2.mp4",
+     "ratio": "unknown",
+     "created_time": 1763995855,
+     "length": 25.6
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "v2-01-hook-1-main-body-cta-2",
+   "creative_key": "v2.01 -hook 1, main body, cta 2",
+   "master_video_id": "842555218319485",
+   "master_title": "V2.01 -Hook 1, MAIN BODY, CTA 2.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 26.133,
+   "created_time": 1763995855,
+   "permalink_url": "/120213728082680172/videos/842555218319485/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "842555218319485",
+     "title": "V2.01 -Hook 1, MAIN BODY, CTA 2.mp4",
+     "ratio": "unknown",
+     "created_time": 1763995855,
+     "length": 26.133
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "black-friday2",
+   "creative_key": "black friday2",
+   "master_video_id": "3314785332015085",
+   "master_title": "Black Friday2.MOV",
+   "master_ratio_from_title": "unknown",
+   "length": 43.866,
+   "created_time": 1763844438,
+   "permalink_url": "/120213728082680172/videos/3314785332015085/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "3314785332015085",
+     "title": "Black Friday2.MOV",
+     "ratio": "unknown",
+     "created_time": 1763844438,
+     "length": 43.866
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "black-friday1",
+   "creative_key": "black friday1",
+   "master_video_id": "755927707507686",
+   "master_title": "Black Friday1.MOV",
+   "master_ratio_from_title": "unknown",
+   "length": 50.3,
+   "created_time": 1763844438,
+   "permalink_url": "/120213728082680172/videos/755927707507686/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "755927707507686",
+     "title": "Black Friday1.MOV",
+     "ratio": "unknown",
+     "created_time": 1763844438,
+     "length": 50.3
+    },
+    {
+     "id": "1157077293248944",
+     "title": "Black Friday1.MOV",
+     "ratio": "unknown"
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "1a",
+   "creative_key": "1a",
+   "master_video_id": "1337769194499419",
+   "master_title": "1a.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 5,
+   "created_time": 1763041186,
+   "permalink_url": "/120213728082680172/videos/1337769194499419/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1337769194499419",
+     "title": "1a.mp4",
+     "ratio": "unknown",
+     "created_time": 1763041186,
+     "length": 5
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "6b",
+   "creative_key": "6b",
+   "master_video_id": "1373169421189746",
+   "master_title": "6b.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 5,
+   "created_time": 1763040778,
+   "permalink_url": "/120213728082680172/videos/1373169421189746/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1373169421189746",
+     "title": "6b.mp4",
+     "ratio": "unknown",
+     "created_time": 1763040778,
+     "length": 5
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "9b",
+   "creative_key": "9b",
+   "master_video_id": "739167742516869",
+   "master_title": "9b.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 5,
+   "created_time": 1763040778,
+   "permalink_url": "/120213728082680172/videos/739167742516869/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "739167742516869",
+     "title": "9b.mp4",
+     "ratio": "unknown",
+     "created_time": 1763040778,
+     "length": 5
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "6",
+   "creative_key": "6",
+   "master_video_id": "630035793435955",
+   "master_title": "6.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 5,
+   "created_time": 1763040778,
+   "permalink_url": "/120213728082680172/videos/630035793435955/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "630035793435955",
+     "title": "6.mp4",
+     "ratio": "unknown",
+     "created_time": 1763040778,
+     "length": 5
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "chequp-subs-6nov-v1",
+   "creative_key": "chequp subs 6nov v1",
+   "master_video_id": "1322648232451205",
+   "master_title": "CHEQUP SUBS 6NOV V1.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 26.026,
+   "created_time": 1762512990,
+   "permalink_url": "/120213728082680172/videos/1322648232451205/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1322648232451205",
+     "title": "CHEQUP SUBS 6NOV V1.mp4",
+     "ratio": "unknown",
+     "created_time": 1762512990,
+     "length": 26.026
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "chequp-subs-6nov-v2",
+   "creative_key": "chequp subs 6nov v2",
+   "master_video_id": "1200968528640966",
+   "master_title": "CHEQUP SUBS 6NOV V2.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 31.898,
+   "created_time": 1762512990,
+   "permalink_url": "/120213728082680172/videos/1200968528640966/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1200968528640966",
+     "title": "CHEQUP SUBS 6NOV V2.mp4",
+     "ratio": "unknown",
+     "created_time": 1762512990,
+     "length": 31.898
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "chequp-members-subbed-v2",
+   "creative_key": "chequp members subbed v2",
+   "master_video_id": "2688905088129422",
+   "master_title": "Chequp members subbed v2.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 15.266,
+   "created_time": 1761056429,
+   "permalink_url": "/120213728082680172/videos/2688905088129422/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "2688905088129422",
+     "title": "Chequp members subbed v2.mp4",
+     "ratio": "unknown",
+     "created_time": 1761056429,
+     "length": 15.266
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "chequp-15s-jeans",
+   "creative_key": "chequp-15s-jeans",
+   "master_video_id": "4450287248532908",
+   "master_title": "CheqUp-15s-Jeans.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 15,
+   "created_time": 1760686700,
+   "permalink_url": "/120213728082680172/videos/4450287248532908/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "4450287248532908",
+     "title": "CheqUp-15s-Jeans.mp4",
+     "ratio": "unknown",
+     "created_time": 1760686700,
+     "length": 15
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "chequp-6s",
+   "creative_key": "chequp-6s",
+   "master_video_id": "1150837249799711",
+   "master_title": "CheqUp-6s-9X16.mp4",
+   "master_ratio_from_title": "9:16",
+   "length": 6,
+   "created_time": 1760686592,
+   "permalink_url": "/120213728082680172/videos/1150837249799711/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1150837249799711",
+     "title": "CheqUp-6s-9X16.mp4",
+     "ratio": "9:16",
+     "created_time": 1760686592,
+     "length": 6
+    }
+   ],
+   "ratios_available": [
+    "9:16"
+   ]
+  },
+  {
+   "creative_slug": "chequp-all-included",
+   "creative_key": "chequp all included",
+   "master_video_id": "2823513951167507",
+   "master_title": "CheqUp all included.MOV",
+   "master_ratio_from_title": "unknown",
+   "length": 14.8,
+   "created_time": 1760622326,
+   "permalink_url": "/120213728082680172/videos/2823513951167507/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "2823513951167507",
+     "title": "CheqUp all included.MOV",
+     "ratio": "unknown",
+     "created_time": 1760622326,
+     "length": 14.8
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "september",
+   "creative_key": "september",
+   "master_video_id": "4411748072386840",
+   "master_title": "September.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 12.539,
+   "created_time": 1757700406,
+   "permalink_url": "/120213728082680172/videos/4411748072386840/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "4411748072386840",
+     "title": "September.mp4",
+     "ratio": "unknown",
+     "created_time": 1757700406,
+     "length": 12.539
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "long-term-health",
+   "creative_key": "long term health",
+   "master_video_id": "2013026322435472",
+   "master_title": "Long term health.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 10.262,
+   "created_time": 1757700406,
+   "permalink_url": "/120213728082680172/videos/2013026322435472/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "2013026322435472",
+     "title": "Long term health.mp4",
+     "ratio": "unknown",
+     "created_time": 1757700406,
+     "length": 10.262
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "autumn",
+   "creative_key": "autumn",
+   "master_video_id": "1112062977151718",
+   "master_title": "Autumn.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 8.613,
+   "created_time": 1757700406,
+   "permalink_url": "/120213728082680172/videos/1112062977151718/",
+   "master_hd_url_available": true,
+   "downloaded_video_id": "1112062977151718",
+   "downloaded_source": "master",
+   "reference_video": "videos/autumn.mp4",
+   "contact_sheet": "sheets/autumn.jpg",
+   "variants": [
+    {
+     "id": "1112062977151718",
+     "title": "Autumn.mp4",
+     "ratio": "unknown",
+     "created_time": 1757700406,
+     "length": 8.613
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "small-changes",
+   "creative_key": "small changes",
+   "master_video_id": "1104976157961528",
+   "master_title": "Small changes.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 17.832,
+   "created_time": 1757700406,
+   "permalink_url": "/120213728082680172/videos/1104976157961528/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1104976157961528",
+     "title": "Small changes.mp4",
+     "ratio": "unknown",
+     "created_time": 1757700406,
+     "length": 17.832
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "not-optional-extras",
+   "creative_key": "not optional extras",
+   "master_video_id": "1465343861259728",
+   "master_title": "Not optional extras.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 23.17,
+   "created_time": 1755612852,
+   "permalink_url": "/120213728082680172/videos/1465343861259728/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1465343861259728",
+     "title": "Not optional extras.mp4",
+     "ratio": "unknown",
+     "created_time": 1755612852,
+     "length": 23.17
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "big-changes-in-weight-loss-news-one-to-use",
+   "creative_key": "big changes in weight loss news one to use",
+   "master_video_id": "2864540630403413",
+   "master_title": "Big changes in weight loss news ONE TO USE.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 18.5,
+   "created_time": 1755160723,
+   "permalink_url": "/120213728082680172/videos/2864540630403413/",
+   "master_hd_url_available": true,
+   "downloaded_video_id": "2864540630403413",
+   "downloaded_source": "master",
+   "reference_video": "videos/big-changes-in-weight-loss-news-one-to-use.mp4",
+   "contact_sheet": "sheets/big-changes-in-weight-loss-news-one-to-use.jpg",
+   "variants": [
+    {
+     "id": "2864540630403413",
+     "title": "Big changes in weight loss news ONE TO USE.mp4",
+     "ratio": "unknown",
+     "created_time": 1755160723,
+     "length": 18.5
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "the-headlines-may-change-captions",
+   "creative_key": "the headlines may change captions",
+   "master_video_id": "677872471985042",
+   "master_title": "The headlines may change captions (1).mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 20.862,
+   "created_time": 1755159962,
+   "permalink_url": "/120213728082680172/videos/677872471985042/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "677872471985042",
+     "title": "The headlines may change captions (1).mp4",
+     "ratio": "unknown",
+     "created_time": 1755159962,
+     "length": 20.862
+    },
+    {
+     "id": "1976020693160594",
+     "title": "The headlines may change captions (1).mp4",
+     "ratio": "unknown"
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "chequp-review-v3-3",
+   "creative_key": "chequp review v3_3",
+   "master_video_id": "24505907839002173",
+   "master_title": "Chequp review v3_3.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 15,
+   "created_time": 1753867811,
+   "permalink_url": "/120213728082680172/videos/24505907839002173/",
+   "master_hd_url_available": true,
+   "downloaded_video_id": "24505907839002173",
+   "downloaded_source": "master",
+   "reference_video": "videos/chequp-review-v3-3.mp4",
+   "contact_sheet": "sheets/chequp-review-v3-3.jpg",
+   "variants": [
+    {
+     "id": "24505907839002173",
+     "title": "Chequp review v3_3.mp4",
+     "ratio": "unknown",
+     "created_time": 1753867811,
+     "length": 15
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "chequp-review-v1-1",
+   "creative_key": "chequp review v1_1",
+   "master_video_id": "2025499491592403",
+   "master_title": "Chequp review v1_1.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 15,
+   "created_time": 1753867811,
+   "permalink_url": "/120213728082680172/videos/2025499491592403/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "2025499491592403",
+     "title": "Chequp review v1_1.mp4",
+     "ratio": "unknown",
+     "created_time": 1753867811,
+     "length": 15
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "chequp-review-v3-1",
+   "creative_key": "chequp review v3_1",
+   "master_video_id": "1937033873752060",
+   "master_title": "Chequp review v3_1.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 15.019,
+   "created_time": 1753867223,
+   "permalink_url": "/120213728082680172/videos/1937033873752060/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1937033873752060",
+     "title": "Chequp review v3_1.mp4",
+     "ratio": "unknown",
+     "created_time": 1753867223,
+     "length": 15.019
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  },
+  {
+   "creative_slug": "chequp-review-v1",
+   "creative_key": "chequp review v1",
+   "master_video_id": "1851002625854921",
+   "master_title": "Chequp review v1.mp4",
+   "master_ratio_from_title": "unknown",
+   "length": 15,
+   "created_time": 1753867223,
+   "permalink_url": "/120213728082680172/videos/1851002625854921/",
+   "master_hd_url_available": false,
+   "downloaded_video_id": null,
+   "downloaded_source": null,
+   "reference_video": null,
+   "contact_sheet": null,
+   "variants": [
+    {
+     "id": "1851002625854921",
+     "title": "Chequp review v1.mp4",
+     "ratio": "unknown",
+     "created_time": 1753867223,
+     "length": 15
+    }
+   ],
+   "ratios_available": [
+    "unknown"
+   ]
+  }
+ ]
+}

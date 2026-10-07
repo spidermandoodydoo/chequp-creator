@@ -37,6 +37,24 @@ Also from the data: **women 35–64 drive 83% of purchases**. Native FB Reels co
 Reels overlay, so every 9:16 cut puts its hook on screen from frame 0. Exclude **FB in-stream** (£3,628 CPA).
 Pure lifestyle awareness video spent £44k for 2 purchases, so don't make it. Retire the "METHOD B_Oral pill" ad.
 
+## Two looks: what's live, and the design system
+
+`reference/meta-account/` holds CheqUp's own ad videos, pulled read-only from the Meta ad account:
+- 23 small copies and their contact sheets
+- metrics: LUFS, cuts, colours, timings
+- spend joined to each creative
+- **`LOOK.md`**, the measured spec
+
+It turns out none of the live video ads follow the design system. They all use one "glass card" template: a deep purple
+gradient, frosted cards, a cyan CTA pill and heavy type. Method B (about £37k, about £155 CPA) runs on it. So the renderer
+has two themes:
+
+- **`"theme": "meta-live"`** reproduces that template from the measured values. It adds a hook from frame 0, uses
+  verbatim reviews only, and drops the medicine-jar hero. See `concepts/live-*.json`.
+- **The default** is the design system, described below. See `concepts/method-20.json` and the others.
+
+The brand team should choose. The data favours the template, and the brand guidelines favour the system.
+
 ## The design system is the renderer
 
 `render/` builds every frame from `brand/design-system/tokens/*.css`, the files extracted from
@@ -83,7 +101,10 @@ To clear a HOLD, record the sign-off in the board, e.g. `"approvals": {"price": 
 ## Running it
 
 ```bash
-pip install -r requirements.txt          # pyyaml, requests (+ kokoro soundfile for voice)
+pip install -r requirements.txt          # pyyaml, requests
+# voice: Python ≤3.12, then
+pip install "kokoro>=0.9.4" "transformers>=4.44" soundfile \
+  "en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl"
 cd render && npm install && npx playwright install chromium && cd ..
 
 python -m cqf doctor                      # tools, LM Studio on mama, ComfyUI farm, Kokoro

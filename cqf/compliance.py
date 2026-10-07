@@ -47,7 +47,7 @@ EMOJI = re.compile("[\U0001F000-\U0001FAFF\u2600-\u27BF\uFE0F]")
 PLACEHOLDER = re.compile(r"PLACEHOLDER|TODO|TBC|ADD SAMPLE|XX+", re.I)
 SMALL_WORDS = {"a", "an", "and", "as", "at", "but", "by", "for", "in", "of", "on", "or", "the", "to", "with", "your", "you", "it", "is"}
 
-GROUNDS = {"sand", "dark-sand", "yellow-wash", "lavender", "midnight", "purple", "none"}
+GROUNDS = {"gradient", "sand", "dark-sand", "yellow-wash", "lavender", "midnight", "purple", "none"}
 DIVIDERS = {("sand", "midnight"), ("midnight", "lavender"), ("purple", "sand")}   # the three the system defines
 
 
@@ -113,7 +113,7 @@ def lint_board(board: dict) -> list[Issue]:
     scenes = board.get("scenes", [])
     if not scenes:
         return [Issue("FAIL", "board", "no scenes")]
-    if scenes[0].get("type") not in {"hook", "media", "stat", "ui"} or not (scenes[0].get("headline") or scenes[0].get("caption") or scenes[0].get("value") or scenes[0].get("title")):
+    if scenes[0].get("type") not in {"hook", "media", "stat", "ui", "logo", "glass"} or not (scenes[0].get("headline") or scenes[0].get("caption") or scenes[0].get("value") or scenes[0].get("title")):
         issues.append(Issue("FAIL", "scene 0", "first scene must carry the hook as on-screen text from frame 0"))
     if scenes[-1].get("type") != "endcard":
         issues.append(Issue("WARN", f"scene {len(scenes) - 1}", "last scene is not an endcard"))
@@ -130,7 +130,7 @@ def lint_board(board: dict) -> list[Issue]:
             issues.append(Issue("WARN", w, f"divider {g}→{s['exit_to']} is not one of the three defined transitions"))
         for k in ("headline", "title"):
             issues += lint_copy(s.get(k, ""), f"{w}.{k}", heading=True)
-        for k in ("eyebrow", "body", "caption", "label", "quote", "question", "tag", "legal", "vo"):
+        for k in ("eyebrow", "body", "caption", "label", "quote", "question", "tag", "legal", "vo", "by", "url"):
             issues += lint_copy(s.get(k, ""), f"{w}.{k}")
         for j, m in enumerate(s.get("messages", []) or []):
             issues += lint_copy(m.get("text", ""), f"{w}.messages[{j}]")
@@ -152,7 +152,9 @@ def lint_board(board: dict) -> list[Issue]:
             else:
                 issues += lint_copy(s["source"], f"{w}.source")
             issues.append(Issue("HOLD", w, "stat — source and sample size on file"))
-        if s.get("type") == "quote":
+        if s.get("price"):
+            issues += lint_copy(" ".join(str(v) for v in s["price"].values()), f"{w}.price")
+        if s.get("type") in ("quote", "glass") and s.get("quote") is not None:
             if not s.get("verbatim_ref"):
                 issues.append(Issue("FAIL", w, "testimonial without verbatim_ref — reviews must be real, verbatim and on file (CAP 3.45)"))
             issues.append(Issue("HOLD", w, "review — verbatim on file with permission"))

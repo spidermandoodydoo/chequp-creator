@@ -68,9 +68,9 @@ const fsUrl = abs => '/@fs/' + abs.replace(/\\/g, '/').replace(/^\//, '');
 
 async function renderScene(browser, base, board, sc, i, t0, fmt, outDir) {
   const F = FORMATS[fmt], fps = board.fps || 30, n = Math.round(sc.dur * fps);
-  const underlay = sc.type === 'media' && sc.src && VIDEO.test(sc.src) && (sc.frame || 'full') === 'full' ? sc.src : null;
+  const underlay = ['media', 'glass', 'logo'].includes(sc.type) && sc.src && VIDEO.test(sc.src) && (sc.frame || 'full') === 'full' ? sc.src : null;
   const spec = { ...sc, format: fmt, mode: board.mode, logo_paths: board._logo, t0,
-    src: sc.src && !underlay ? fsUrl(sc.src) : sc.src, captions: board.captions, caption_words: board.caption_words, caption_pos: sc.caption_pos, show_captions: sc.show_captions };
+    src: sc.src && !underlay ? fsUrl(sc.src) : sc.src, captions: board.captions, caption_words: board.caption_words, caption_pos: sc.caption_pos, show_captions: sc.show_captions, theme: board.theme };
   const page = await browser.newPage({ viewport: { width: F.vw, height: F.vh }, deviceScaleFactor: F.dpr });
   page.on('pageerror', e => console.error(`  scene ${i} page error:`, e.message));
   await page.goto(`${base}/render/stage.html`);
@@ -136,8 +136,10 @@ async function main() {
   const srv = await serve();
   const base = `http://127.0.0.1:${srv.address().port}`;
   const browser = await chromium.launch();
-  const t0s = []; board.scenes.reduce((t, s) => (t0s.push(t), t + s.dur), 0);
-  const dur = board.scenes.reduce((t, s) => t + s.dur, 0);
+  // Optional crossfade between scenes (the live template dissolves ~430 ms between beats).
+  const xf = board.transition?.type === 'fade' ? (board.transition.dur ?? 0.43) : 0;
+  const t0s = []; board.scenes.reduce((t, s) => (t0s.push(t), t + s.dur - xf), 0);
+  const dur = board.scenes.reduce((t, s) => t + s.dur, 0) - xf * (board.scenes.length - 1);
   console.log(`${board.id} · ${fmt} · ${board.scenes.length} scenes · ${dur.toFixed(1)}s`);
   const results = new Array(board.scenes.length);
   let next = 0;
@@ -154,7 +156,20 @@ async function main() {
   const list = path.join(work, 'concat.txt');
   fs.writeFileSync(list, results.map(r => `file '${r.out.replace(/\\/g, '/').replace(/'/g, "'\\''")}'`).join('\n'));
   const silent = path.join(work, 'silent.mp4');
-  await run('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', list, '-c', 'copy', silent]);
+  if (xf && results.length > 1) {
+    const inputs = results.flatMap(r => ['-i', r.out]);
+    const chain = []; let prev = '[0:v]', off = 0;
+    for (let i = 1; i < results.length; i++) {
+      off += board.scenes[i - 1].dur - xf;
+      const out = i === results.length - 1 ? '[v]' : `[x${i}]`;
+      chain.push(`${prev}[${i}:v]xfade=transition=fade:duration=${xf}:offset=${off.toFixed(3)}${out}`);
+      prev = out;
+    }
+    await run('ffmpeg', ['-y', '-loglevel', 'error', ...inputs, '-filter_complex', chain.join(';'), '-map', '[v]',
+      '-c:v', 'libx264', '-preset', 'medium', '-crf', '14', '-pix_fmt', 'yuv420p', '-r', String(board.fps || 30), silent]);
+  } else {
+    await run('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', list, '-c', 'copy', silent]);
+  }
   const final = path.join(outDir, `${board.id}_${fmt}.mp4`);
   await mixAudio(board, boardDir, silent, final, dur);
   if (results[0].poster) fs.writeFileSync(path.join(outDir, `${board.id}_${fmt}_poster.png`), results[0].poster);

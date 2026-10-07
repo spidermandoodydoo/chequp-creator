@@ -1,0 +1,55 @@
+{
+  "id": "live-method",
+  "concept": "method-20",
+  "variant": "live",
+  "version": 1,
+  "theme": "meta-live",
+  "transition": {
+    "type": "fade",
+    "dur": 0.43
+  },
+  "audience": "Women 35–64",
+  "formats": [
+    "9x16",
+    "4x5",
+    "1x1"
+  ],
+  "meta": {
+    "primary_text": "Your own Clinician, a free 1:1 Health Coach and the WeightWatchers app, all in one membership.",
+    "headline": "The CheqUp Method",
+    "description": "See if it’s right for you",
+    "cta_button": "LEARN_MORE"
+  },
+  "approvals": {},
+  "scenes": [
+    {
+      "type": "logo",
+      "dur": 1.8,
+      "src": "brand/design-system/assets/img/f02b703f91f681a7.jpg",
+      "headline": "Weight health isn’t one thing.",
+      "legal": "Subject to eligibility. Terms apply. GPhC Registered.",
+      "broll": "a woman in her late forties cooking a colourful vegetable stir fry in a sunny home kitchen, phone propped on the worktop"
+    },
+    {
+      "type": "glass",
+      "dur": 6.8,
+      "src": "brand/design-system/assets/img/f02b703f91f681a7.jpg",
+      "broll": "a woman in her late forties cooking a colourful vegetable stir fry in a sunny home kitchen, phone propped on the worktop",
+      "headline": "One membership. Four kinds of support.",
+      "body": "Your own Clinician, a free 1:1 Health Coach, the WeightWatchers app and a plan built around you.",
+      "cta": "Check eligibility",
+      "switch_at": 3.6,
+      "quote": "Really pleased with the service. I feel truly supported.",
+      "by": "Sharon, Trustpilot",
+      "verbatim_ref": "Trustpilot review, verbatim, as shown in CheqUp ad 24505907839002173 (Chequp review v3) — confirm permission on file",
+      "legal": "Subject to eligibility. Terms apply. GPhC Registered."
+    },
+    {
+      "type": "endcard",
+      "dur": 2.6,
+      "cta": "Check eligibility",
+      "url": "chequp.com",
+      "legal": "Subject to eligibility. Terms apply. GPhC Registered."
+    }
+  ]
+}

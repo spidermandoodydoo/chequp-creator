@@ -5,3 +5,8 @@
 @font-face{font-family:"Instrument Sans";font-style:normal;font-weight:400 600;font-display:block;src:url(InstrumentSans-Variable.woff2) format("woff2")}
 @font-face{font-family:"DM Mono";font-style:normal;font-weight:400;font-display:block;src:url(DMMono-400.woff2) format("woff2")}
 @font-face{font-family:"DM Mono";font-style:normal;font-weight:500;font-display:block;src:url(DMMono-500.woff2) format("woff2")}
+/* Kind Sans: the (legacy, licensed) font used in the live Meta ads. Not shipped here.
+   Drop KindSans-Regular.woff2 / KindSans-Bold.woff2 next to this file to match the
+   meta-live theme exactly; until then it falls back to Instrument Sans. */
+@font-face{font-family:"Kind Sans";font-weight:400;font-display:block;src:local("Kind Sans"),url(KindSans-Regular.woff2) format("woff2")}
+@font-face{font-family:"Kind Sans";font-weight:700;font-display:block;src:local("Kind Sans Bold"),url(KindSans-Bold.woff2) format("woff2")}

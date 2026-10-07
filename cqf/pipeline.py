@@ -36,21 +36,28 @@ def lint(board: dict) -> tuple[str, list]:
 
 
 def _broll(cfg: dict, board: dict, ep: Path, use_5090: bool, skip: bool):
-    shots, need = [], []
+    """Generate one clip per distinct b-roll prompt (scenes sharing a prompt share the plate,
+    e.g. a meta-live logo intro and the glass card over the same shot)."""
+    import hashlib
+    by_prompt: dict[str, farm.Shot] = {}
+    need = []
     for i, s in enumerate(board["scenes"]):
-        if s.get("type") == "media" and s.get("broll") and not s.get("src_locked"):
-            key = f"{board['id']}_s{i:02d}"
-            shots.append(farm.Shot(key=key, prompt=s["broll"], motion=s.get("motion", "slow natural movement, gentle handheld camera"),
-                                   out_dir=ep / "broll"))
-            need.append((i, s))
-    if not shots:
+        if s.get("type") in ("media", "glass", "logo") and s.get("broll") and not s.get("src_locked"):
+            if s["type"] != "media" and s.get("src") and not s.get("fallback_src"):
+                s["fallback_src"] = s["src"]          # meta-live boards carry their still as the fallback
+            if s["broll"] not in by_prompt:
+                key = f"{board['id']}_{hashlib.sha1(s['broll'].encode()).hexdigest()[:8]}"
+                by_prompt[s["broll"]] = farm.Shot(key=key, prompt=s["broll"], out_dir=ep / "broll",
+                                                  motion=s.get("motion", "slow natural movement, gentle handheld camera"))
+            need.append((i, s, by_prompt[s["broll"]]))
+    if not need:
         return
     if not skip:
         try:
-            farm.render_shots(cfg, shots, use_5090)
+            farm.render_shots(cfg, list(by_prompt.values()), use_5090)
         except RuntimeError as e:
             print(f"  b-roll unavailable ({e}); using fallback stills")
-    for (i, s), shot in zip(need, shots):
+    for i, s, shot in need:
         if shot.result and shot.result.exists():
             s["src"] = str(shot.result)
         elif s.get("fallback_src"):
@@ -78,6 +85,7 @@ def _voice(cfg: dict, board: dict, ep: Path, skip: bool):
     words_all, segs, t = [], [], 0.0
     lead = 0.15
     vname = board.get("voice") or pv["voices"][0]
+    xf = (board.get("transition") or {}).get("dur", 0.43) if (board.get("transition") or {}).get("type") == "fade" else 0
     for i, s in enumerate(board["scenes"]):
         if s.get("vo"):
             if use_tts:
@@ -89,7 +97,8 @@ def _voice(cfg: dict, board: dict, ep: Path, skip: bool):
                 words = voice.estimate_words(s["vo"], 0, d)
             s["dur"] = round(max(float(s["dur"]), d + lead + 0.35), 2)
             words_all += [{**w, "s": round(w["s"] + t + lead, 3), "e": round(w["e"] + t + lead, 3)} for w in words]
-        t += float(s["dur"])
+        t += float(s["dur"]) - xf
+    t += xf
     if board.get("captions") is None:
         board["captions"] = words_all
     if segs:

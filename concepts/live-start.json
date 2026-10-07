@@ -1,0 +1,55 @@
+{
+  "id": "live-start",
+  "concept": "consult-flow",
+  "variant": "live",
+  "version": 1,
+  "theme": "meta-live",
+  "transition": {
+    "type": "fade",
+    "dur": 0.43
+  },
+  "audience": "Women 35–64",
+  "formats": [
+    "9x16",
+    "4x5",
+    "1x1"
+  ],
+  "meta": {
+    "primary_text": "Answer a few questions about you and your health. A Clinician reviews them and talks you through your options.",
+    "headline": "Here’s how it works",
+    "description": "Check if CheqUp is right for you",
+    "cta_button": "LEARN_MORE"
+  },
+  "approvals": {},
+  "scenes": [
+    {
+      "type": "logo",
+      "dur": 1.8,
+      "src": "brand/design-system/assets/img/af529b1f7714e006.jpg",
+      "headline": "Not sure where to start?",
+      "legal": "Subject to eligibility. Terms apply. GPhC Registered.",
+      "broll": "two friends in their fifties laughing together on a sofa in a sunlit living room with cups of tea"
+    },
+    {
+      "type": "glass",
+      "dur": 6.8,
+      "src": "brand/design-system/assets/img/af529b1f7714e006.jpg",
+      "broll": "two friends in their fifties laughing together on a sofa in a sunlit living room with cups of tea",
+      "headline": "Answer a few questions. We’ll take it from there.",
+      "body": "A Clinician reviews your answers and talks you through your options. No pressure, no judgement.",
+      "cta": "See if it’s right for you",
+      "switch_at": 3.6,
+      "quote": "Very thorough checks but so easy to navigate.",
+      "by": "Sharon, Trustpilot",
+      "verbatim_ref": "Trustpilot review, verbatim, as shown in CheqUp ad 24505907839002173 (Chequp review v3) — confirm permission on file",
+      "legal": "Subject to eligibility. Terms apply. GPhC Registered."
+    },
+    {
+      "type": "endcard",
+      "dur": 2.6,
+      "cta": "See if it’s right for you",
+      "url": "chequp.com",
+      "legal": "Subject to eligibility. Terms apply. GPhC Registered."
+    }
+  ]
+}

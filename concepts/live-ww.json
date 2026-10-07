@@ -1,0 +1,55 @@
+{
+  "id": "live-ww",
+  "concept": "ww-included",
+  "variant": "live",
+  "version": 1,
+  "theme": "meta-live",
+  "transition": {
+    "type": "fade",
+    "dur": 0.43
+  },
+  "audience": "Women 45–65+",
+  "formats": [
+    "9x16",
+    "4x5",
+    "1x1"
+  ],
+  "meta": {
+    "primary_text": "Every CheqUp membership includes the WeightWatchers app, plus your own Clinician and Health Coach.",
+    "headline": "WeightWatchers, included",
+    "description": "One membership, everything included",
+    "cta_button": "LEARN_MORE"
+  },
+  "approvals": {},
+  "scenes": [
+    {
+      "type": "logo",
+      "dur": 1.8,
+      "src": "brand/design-system/assets/img/4b0266983772bc3f.jpg",
+      "headline": "WeightWatchers, included.",
+      "legal": "Subject to eligibility. Terms apply. GPhC Registered.",
+      "broll": "two women in their forties laughing while preparing a fresh salad together in a bright home kitchen"
+    },
+    {
+      "type": "glass",
+      "dur": 6.8,
+      "src": "brand/design-system/assets/img/4b0266983772bc3f.jpg",
+      "broll": "two women in their forties laughing while preparing a fresh salad together in a bright home kitchen",
+      "headline": "The WeightWatchers app comes with your membership",
+      "body": "4,500+ recipes, meal plans and nutrition targets, plus your own Clinician and Health Coach.",
+      "cta": "Check eligibility",
+      "switch_at": 3.6,
+      "quote": "Really pleased with the service. I feel truly supported.",
+      "by": "Sharon, Trustpilot",
+      "verbatim_ref": "Trustpilot review, verbatim, as shown in CheqUp ad 24505907839002173 (Chequp review v3) — confirm permission on file",
+      "legal": "Subject to eligibility. Terms apply. GPhC Registered."
+    },
+    {
+      "type": "endcard",
+      "dur": 2.6,
+      "cta": "Check eligibility",
+      "url": "chequp.com",
+      "legal": "Subject to eligibility. Terms apply. GPhC Registered."
+    }
+  ]
+}

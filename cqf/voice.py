@@ -14,7 +14,7 @@ _pipes: dict = {}
 def _pipeline(lang: str):
     from kokoro import KPipeline  # imported lazily: optional dependency
     if lang not in _pipes:
-        _pipes[lang] = KPipeline(lang_code=lang)
+        _pipes[lang] = KPipeline(lang_code=lang, repo_id="hexgrad/Kokoro-82M")
     return _pipes[lang]
 
 
