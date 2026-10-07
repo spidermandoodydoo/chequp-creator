@@ -183,3 +183,7 @@ html[data-theme="meta-live"] .captions{bottom:30%}
 /* LTN-style intro: photo up top, deep purple rising behind the wordmark + hook line. */
 .live-introwash{position:absolute;inset:0;background:linear-gradient(180deg,rgba(74,30,170,0) 0%,rgba(74,30,170,0) 22%,rgba(88,40,200,.72) 46%,rgba(98,46,220,.92) 70%,rgba(104,52,232,.95) 100%)}
 .live-topwash{background:linear-gradient(180deg,rgba(98,52,236,.92) 0%,rgba(98,52,236,.82) 22%,rgba(98,52,236,.45) 42%,rgba(98,52,236,0) 60%)}
+/* Shorter frames: the card fills more of the height, so legal moves to the bottom edge. */
+html[data-format="4x5"] .live-legal,html[data-format="1x1"] .live-legal{top:auto!important;bottom:4.5%}
+html[data-format="1x1"] .live-card{top:7%}
+html[data-format="1x1"] .live-quote{top:18%}
