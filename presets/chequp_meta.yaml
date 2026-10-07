@@ -58,7 +58,9 @@ approvals_required:      # flags that put a render into HOLD until a human signs
 broll:
   look: >-
     warm natural daylight, mid-tone, real everyday British homes and streets, unstyled,
-    candid documentary feel, no colour grading, no duotone, no film grain, 35mm lens
+    candid documentary feel, no colour grading, no duotone, no film grain, 35mm lens,
+    vertical composition with the main subject and faces in the lower half of the frame and calm
+    empty space (wall, sky, soft background) in the upper third, where the text card sits
   allowed_subjects: [cooking fresh food at home, walking outdoors, friends laughing on a sofa,
     phone in hand in a kitchen, morning routine, park in autumn, groceries on a worktop,
     stretching in a living room, cup of tea by a window]

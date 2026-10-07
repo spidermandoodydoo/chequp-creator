@@ -47,6 +47,7 @@ function logoSvg(w) { const d = el('div', '', LOGO.replace('__PATHS__', window._
 function plate(s, spec) {
   if (spec.src && !/\.(mp4|mov|webm)$/i.test(spec.src)) {
     const p = el('div', 'live-plate', `<img src="${esc(spec.src)}" alt="">`); s.appendChild(p);
+    if (spec.focus) p.firstChild.style.objectPosition = spec.focus;   // e.g. "30% 20%" keeps a face in shorter crops
     if (spec.push !== false) p.firstChild.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.05)' }], { duration: spec.dur * 1000, easing: 'linear', fill: 'both' });
   } else if (!spec.src) s.appendChild(el('div', 'live-grad'));
   if (spec.wash !== false && spec.src) {
@@ -133,6 +134,7 @@ const BUILD = {
     const s = scene('none'); s.style.padding = '0';
     if (spec.src && !/\.(mp4|mov|webm)$/i.test(spec.src)) {
       const m = el('div', 'media-full', `<img src="${esc(spec.src)}" alt="">`); s.appendChild(m);
+      if (spec.focus) m.firstChild.style.objectPosition = spec.focus;
       if (spec.push !== false) m.firstChild.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.06)' }], { duration: spec.dur * 1000, easing: 'linear', fill: 'both' });
     }
     if (spec.caption) { const c = el('div', 'media-caption', esc(spec.caption)); s.appendChild(c); reveal(c, 240); }

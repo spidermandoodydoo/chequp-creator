@@ -63,7 +63,8 @@
       "broll": "a woman in her fifties smiling at her phone while walking through a leafy London park in autumn",
       "motion": "she walks towards camera, leaves moving in the breeze",
       "caption": "Free 1:1 coaching, included",
-      "fallback_src": "brand/design-system/assets/img/8a5a6edf3ad2e4e1.jpg"
+      "fallback_src": "brand/design-system/assets/img/8a5a6edf3ad2e4e1.jpg",
+      "focus": "28% 22%"
     },
     {
       "type": "endcard",
