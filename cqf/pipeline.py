@@ -35,68 +35,112 @@ def lint(board: dict) -> tuple[str, list]:
     return compliance.verdict(issues), issues
 
 
-def _broll(cfg: dict, board: dict, ep: Path, use_5090: bool, skip: bool):
-    """Generate one clip per distinct b-roll prompt (scenes sharing a prompt share the plate,
-    e.g. a meta-live logo intro and the glass card over the same shot)."""
+def _aspects(board: dict, formats: list[str] | None) -> list[str]:
+    fmts = formats or board.get("formats") or ["9x16"]
+    out = []
+    if any(f in ("9x16", "4x5", "1x1") for f in fmts):
+        out.append("9x16")                 # 4:5 and 1:1 are crops of the 9:16 plate
+    if "16x9" in fmts:
+        out.append("16x9")                 # VOD gets its own native horizontal plate
+    return out
+
+
+def _broll(cfg: dict, board: dict, ep: Path, use_5090: bool, skip: bool, formats: list[str] | None = None) -> bool:
+    """One plate per distinct (prompt, aspect); scenes sharing a prompt share it. Returns True if any
+    plate is UNVERIFIED (no vision check), which keeps the board on HOLD."""
     import hashlib
-    by_prompt: dict[str, farm.Shot] = {}
+    shots: dict[tuple, farm.Shot] = {}
     need = []
     for i, s in enumerate(board["scenes"]):
         if s.get("type") in ("media", "glass", "logo") and s.get("broll") and not s.get("src_locked"):
             if s["type"] != "media" and s.get("src") and not s.get("fallback_src"):
                 s["fallback_src"] = s["src"]          # meta-live boards carry their still as the fallback
-            if s["broll"] not in by_prompt:
-                key = f"{board['id']}_{hashlib.sha1(s['broll'].encode()).hexdigest()[:8]}"
-                by_prompt[s["broll"]] = farm.Shot(key=key, prompt=s["broll"], out_dir=ep / "broll",
-                                                  motion=s.get("motion", "slow natural movement, gentle handheld camera"))
-            need.append((i, s, by_prompt[s["broll"]]))
+            for asp in _aspects(board, formats):
+                k = (s["broll"], asp)
+                if k not in shots:
+                    h = hashlib.sha1(s["broll"].encode()).hexdigest()[:8]
+                    # cached by prompt+aspect across ALL boards (out/broll/): a shot used by four boards renders once
+                    shots[k] = farm.Shot(key=f"{h}_{asp}", prompt=s["broll"], out_dir=path(cfg, "out_dir") / "broll", aspect=asp,
+                                         people=s.get("people"), mode=s.get("broll_mode", "still"),
+                                         motion=s.get("motion", "The light stays steady. The camera pushes in very slowly."))
+                need.append((i, s, asp, shots[k]))
     if not need:
-        return
-    if not skip:
+        return False
+    if not skip and cfg["farm"].get("machines"):
         try:
-            farm.render_shots(cfg, list(by_prompt.values()), use_5090)
+            farm.render_shots(cfg, list(shots.values()), use_5090)
         except RuntimeError as e:
             print(f"  b-roll unavailable ({e}); using fallback stills")
-    for i, s, shot in need:
+    unverified = False
+    for i, s, asp, shot in need:
         if shot.result and shot.result.exists():
-            s["src"] = str(shot.result)
+            s.setdefault("src_by_aspect", {})[asp] = str(shot.result)
+            unverified |= shot.unverified
         elif s.get("fallback_src"):
-            s["src"] = str((ROOT / s["fallback_src"]).resolve()) if not Path(s["fallback_src"]).is_absolute() else s["fallback_src"]
+            fb = s["fallback_src"]
+            s["src"] = str((ROOT / fb).resolve()) if not Path(fb).is_absolute() else fb
         else:
             raise RuntimeError(f"scene {i}: no b-roll and no fallback_src")
+    return unverified
+
+
+def _lines(s: dict) -> list[dict]:
+    """A scene's VO as [{voice, text}]: a plain string is one announcer line; a list is dialogue."""
+    vo = s.get("vo")
+    if not vo:
+        return []
+    if isinstance(vo, str):
+        return [{"voice": "announcer", "text": vo}]
+    return [x if isinstance(x, dict) else {"voice": "announcer", "text": str(x)} for x in vo]
+
+
+def _cast(board: dict, pv: dict, role: str) -> tuple[str, float]:
+    """Voice id + speed for a role: board.voices > preset voice.cast > board.voice > first preset voice."""
+    role = {"cheqqup": "chequp"}.get(role, role)
+    c = (board.get("voices") or {}).get(role) or (pv.get("cast") or {}).get(role) or {}
+    if isinstance(c, str):
+        c = {"voice": c}
+    return c.get("voice") or board.get("voice") or pv["voices"][0], float(c.get("speed") or pv.get("speed", 1.0))
 
 
 def _voice(cfg: dict, board: dict, ep: Path, skip: bool):
-    """Synthesize VO per scene, stretch scenes to fit their line, build captions + one vo.wav."""
+    """Synthesize VO per scene (one announcer line or a dialogue of several voices), stretch scenes
+    to fit, record each scene's start (for SFX) and line timings, build captions + one vo.wav."""
     from . import voice
     vcfg, pv = cfg["voice"], cfg["_preset"]["voice"]
-    lines = [(i, s) for i, s in enumerate(board["scenes"]) if s.get("vo")]
-    if not lines:
+    if not any(_lines(s) for s in board["scenes"]):
         return
     use_tts = not skip and vcfg.get("backend") == "kokoro"
     if use_tts:
         try:
             import kokoro  # noqa: F401
         except ImportError:
-            print("  kokoro not installed — rendering silent with estimated caption timing (pip install kokoro soundfile)")
+            print("  kokoro not installed — rendering silent with estimated caption timing")
             use_tts = False
     vdir = ep / "vo"
     vdir.mkdir(exist_ok=True)
     words_all, segs, t = [], [], 0.0
-    lead = 0.15
-    vname = board.get("voice") or pv["voices"][0]
-    xf = (board.get("transition") or {}).get("dur", 0.43) if (board.get("transition") or {}).get("type") == "fade" else 0
+    lead, gap = 0.15, float(pv.get("dialogue_gap_s", 0.3))
+    tr = board.get("transition") or {}
+    xf = tr.get("dur", 0.43) if tr.get("type") == "fade" else 0
     for i, s in enumerate(board["scenes"]):
-        if s.get("vo"):
+        s["_t0"] = round(t, 3)
+        lines, cur, times = _lines(s), lead, []
+        for j, ln in enumerate(lines):
+            vid, spd = _cast(board, pv, ln.get("voice", "announcer"))
             if use_tts:
-                wav = vdir / f"s{i:02d}.wav"
-                d, words = voice.speak(s["vo"], wav, vname, pv.get("speed", 0.95), vcfg.get("lang_code", "b"), vcfg.get("sample_rate", 24000))
-                segs.append((t + lead, wav))
+                wav = vdir / f"s{i:02d}_{j}.wav"
+                d, words = voice.speak(ln["text"], wav, vid, spd, vcfg.get("lang_code", "b"), vcfg.get("sample_rate", 24000))
+                segs.append((t + cur, wav))
             else:
-                d = len(s["vo"].split()) / pv.get("words_per_second", 2.5)
-                words = voice.estimate_words(s["vo"], 0, d)
-            s["dur"] = round(max(float(s["dur"]), d + lead + 0.35), 2)
-            words_all += [{**w, "s": round(w["s"] + t + lead, 3), "e": round(w["e"] + t + lead, 3)} for w in words]
+                d = len(ln["text"].split()) / pv.get("words_per_second", 2.8)
+                words = voice.estimate_words(ln["text"], 0, d)
+            words_all += [{**w, "s": round(w["s"] + t + cur, 3), "e": round(w["e"] + t + cur, 3)} for w in words]
+            times.append([round(cur, 3), round(cur + d, 3)])
+            cur += d + (float(ln.get("pause_after", gap)) if j < len(lines) - 1 else 0)
+        if lines:
+            s["_line_times"] = times
+            s["dur"] = round(max(float(s["dur"]), cur + 0.35), 2)
         t += float(s["dur"]) - xf
     t += xf
     if board.get("captions") is None:
@@ -114,10 +158,53 @@ def _voice(cfg: dict, board: dict, ep: Path, skip: bool):
         board.setdefault("audio", {})["vo"] = str(ep / "vo.wav")
 
 
+def _sfx(board: dict, ep: Path):
+    """Scene-level sfx [{at (s from scene start), kind, dur?}] → one track; 'silence' ducks the music."""
+    from . import sfx
+    cues, quiet = [], []
+    t = 0.0
+    tr = board.get("transition") or {}
+    xf = tr.get("dur", 0.43) if tr.get("type") == "fade" else 0
+    for s in board["scenes"]:
+        t0 = s.get("_t0", t)
+        for c in s.get("sfx") or []:
+            at = t0 + float(c.get("at", 0))
+            if c.get("kind") == "silence":
+                quiet.append((at, at + float(c.get("dur", 1.5))))
+            else:
+                cues.append({**c, "at": at})
+        t = t0 + float(s["dur"]) - xf
+    total = sum(float(s["dur"]) for s in board["scenes"]) - xf * (len(board["scenes"]) - 1)
+    if cues:
+        board.setdefault("audio", {})["sfx"] = str(sfx.track(cues, total, ep / "sfx.wav"))
+    music = (board.get("audio") or {}).get("music")
+    if quiet and music and Path(music).exists() and str(music).startswith(str(ep)):
+        sfx.silence_music(Path(music), quiet)
+
+
+def _music(cfg: dict, board: dict, ep: Path):
+    """Generated bed under the VO (or as the only audio, like the live template)."""
+    mc = cfg.get("music", {})
+    if not mc.get("generate") or (board.get("audio") or {}).get("music"):
+        return
+    from . import music
+    tr = board.get("transition") or {}
+    xf = tr.get("dur", 0.43) if tr.get("type") == "fade" else 0
+    dur = sum(float(s["dur"]) for s in board["scenes"]) - xf * (len(board["scenes"]) - 1)
+    live = board.get("theme") == "meta-live"
+    out = music.bed(dur + 0.5, ep / "music.wav", "bright" if live else "warm", 100 if live else 86)
+    has_vo = bool((board.get("audio") or {}).get("vo"))
+    board.setdefault("audio", {}).update(music=str(out), music_gain_db=mc.get("gain_db_under_vo", -21) if has_vo else mc.get("gain_db_solo", -6))
+
+
 def _render(cfg: dict, board: dict, ep: Path, fmt: str) -> Path:
     b = copy.deepcopy(board)
     b["format"], b["fps"] = fmt, cfg["render"]["fps"]
+    asp = "16x9" if fmt == "16x9" else "9x16"
     for s in b["scenes"]:
+        by = s.pop("src_by_aspect", None)
+        if by:
+            s["src"] = by.get(asp) or next(iter(by.values()))
         if s.get("src") and not Path(s["src"]).is_absolute():
             s["src"] = str((ROOT / s["src"]).resolve())
     if b.get("audio", {}).get("music") and not Path(b["audio"]["music"]).is_absolute():
@@ -152,15 +239,21 @@ def produce(cfg: dict, board_path: Path, formats: list[str] | None = None, *, us
         _state(ep, status="blocked", verdict=v)
         return {"id": board["id"], "verdict": v, "files": []}
     _state(ep, status="linted", verdict=v)
-    _broll(cfg, board, ep, use_5090, skip_broll)
-    _state(ep, status="broll")
+    unverified = _broll(cfg, board, ep, use_5090, skip_broll, formats)
+    _state(ep, status="broll", broll_unverified=unverified)
     _voice(cfg, board, ep, skip_voice)
+    _music(cfg, board, ep)
+    _sfx(board, ep)
     _state(ep, status="voice")
     files = []
     for fmt in formats or board.get("formats") or cfg["render"]["formats"]:
         out = _render(cfg, board, ep, fmt)
         files.append({"format": fmt, "file": str(out), **_probe(out)})
-    _state(ep, status="rendered", verdict=v, files=files, approvals_needed=sorted({i.rule.split(' — ')[0] for i in issues if i.level == "HOLD"}))
+    needs = sorted({i.rule.split(' — ')[0] for i in issues if i.level == "HOLD"})
+    if unverified:
+        needs.append("b-roll vision check (plates UNVERIFIED: check by eye)")
+        v = "HOLD" if v == "PASS" else v
+    _state(ep, status="rendered", verdict=v, files=files, approvals_needed=needs)
     return {"id": board["id"], "verdict": v, "files": files}
 
 

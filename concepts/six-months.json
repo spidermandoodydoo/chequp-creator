@@ -49,10 +49,13 @@
     {
       "type": "media",
       "dur": 2.8,
-      "broll": "two friends in their fifties laughing together on a sofa in a sunlit living room with cups of tea",
-      "motion": "natural laughter, slow drift of camera",
+      "broll": "Close view of two women's hands holding mismatched ceramic mugs of tea above a grey linen sofa in a Victorian terraced house on a sunny afternoon. On the left, a cream cable-knit jumper sleeve and a hand with short unpainted nails; on the right, a Black woman's hand with a chambray shirt cuff and a thin silver bracelet. A folded mustard throw lies on the sofa cushions below the mugs, a trailing houseplant on a side table. Low sun from a tall sash window out of frame on the left throws crisp window-shaped patches of light on the warm white wall behind. Only their hands and forearms are in frame. Vertical frame: the upper half is plain warm white wall with a patch of sunlight, the mugs and hands sit just below the centre, the sofa cushions and folded throw fill the bottom. 50mm lens at f/5.6.",
+      "motion": "Steam curls slowly from both mugs; the hand on the right lifts its mug a little and lowers it again. The patch of sunlight on the wall stays steady. The camera pushes in very slowly.",
       "fallback_src": "brand/design-system/assets/img/af529b1f7714e006.jpg",
-      "caption": "Progress is personal"
+      "caption": "Progress is personal",
+      "broll_brief": "two friends in their fifties laughing together on a sofa in a sunlit living room with cups of tea",
+      "people": "hands_pair",
+      "broll_mode": "still"
     },
     {
       "type": "hook",

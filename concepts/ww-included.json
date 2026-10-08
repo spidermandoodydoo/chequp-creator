@@ -38,11 +38,14 @@
     {
       "type": "media",
       "dur": 3.0,
-      "broll": "close shot of hands chopping fresh asparagus, herbs and lemon on a wooden board in a bright kitchen, morning window light",
-      "motion": "slow push in as the knife moves, steam from a pan in the background",
+      "broll": "Close, high-angle view of a woman's hands slicing a bunch of fresh green asparagus on a thick wooden chopping board on a pale stone worktop in a bright home kitchen in the morning. Her right hand holds a chef's knife partway through six spears laid side by side; her left hand, fingertips tucked, steadies them. Beside the board: a lemon cut in half, a small pile of chopped flat-leaf parsley. Only her hands and forearms are in frame: a woman in her late fifties with a striped sleeve rolled up and short unpainted nails. Sun from a window on the left rakes across the board and throws crisp shadows from the spears. Vertical frame: the upper half is plain sunlit white tiled wall, the board and hands sit just below the centre, the stone worktop fills the bottom. 50mm lens at f/8.",
+      "motion": "The knife slowly finishes one cut through the spears and rests on the board; the left hand stays still. The sunlight on the board stays steady. Fixed camera.",
       "caption": "Plans that fit around your week",
-      "fallback_src": "brand/design-system/assets/img/f02b703f91f681a7.jpg",
-      "vo": "Plans that fit around your week."
+      "fallback_src": "brand/design-system/assets/img/4b0266983772bc3f.jpg",
+      "vo": "Plans that fit around your week.",
+      "broll_brief": "close shot of hands chopping fresh asparagus, herbs and lemon on a wooden board in a bright kitchen, morning window light",
+      "people": "hands",
+      "broll_mode": "still"
     },
     {
       "type": "checklist",

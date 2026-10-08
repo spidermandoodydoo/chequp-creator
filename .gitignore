@@ -4,3 +4,4 @@ __pycache__/
 render/node_modules/
 concepts/variants/*.json
 !concepts/variants/.gitkeep
+.venv/

@@ -44,11 +44,15 @@ def doctor(cfg: dict, a):
         print("ok   kokoro")
     except ImportError:
         print("MISS kokoro (pip install kokoro soundfile) — renders will be silent")
-    try:
+    if cfg["llm"]["backend"] != "lmstudio":
+        from .llm import find_claude
+        print(f"{'ok  ' if find_claude() else 'MISS'} LLM backend {cfg['llm']['backend']} (local profile)")
+    else:
+      try:
         models = requests.get(f"{cfg['llm']['base_url']}/models", timeout=5).json().get("data", [])
         ids = [m["id"] for m in models]
         print(f"{'ok  ' if cfg['llm']['model'] in ids else 'IDLE'} LM Studio on mama: {ids or 'no model loaded'}")
-    except requests.RequestException:
+      except requests.RequestException:
         print("DOWN LM Studio on mama (render phase, or mama offline) — planning falls back to claude -p")
     live = farm.servers(cfg, use_5090=a.use_5090)
     print(f"{'ok  ' if live else 'DOWN'} ComfyUI farm: {len(live)} servers {[s.url for s in live]}")
@@ -57,7 +61,7 @@ def doctor(cfg: dict, a):
 
 def main(argv: list[str] | None = None):
     ap = argparse.ArgumentParser(prog="cqf", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--config", default="config.yaml")
+    ap.add_argument("--config", default="config.yaml", help="config.yaml = this machine; config.mama.yaml = mama's GPUs")
     sub = ap.add_subparsers(dest="cmd", required=True)
     d = sub.add_parser("doctor"); d.add_argument("--use-5090", action="store_true")
     li = sub.add_parser("lint"); li.add_argument("boards", nargs="+")

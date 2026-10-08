@@ -25,17 +25,22 @@
     {
       "type": "logo",
       "dur": 1.8,
-      "src": "brand/design-system/assets/img/8a5a6edf3ad2e4e1.jpg",
+      "src": "brand/design-system/assets/img/3d885b83417b27de.jpg",
       "headline": "Someone in your corner, every step.",
       "legal": "Subject to eligibility. Terms apply. GPhC Registered.",
-      "broll": "a woman in her fifties smiling at her phone while walking through a leafy London park in autumn",
-      "focus": "28% 22%"
+      "broll": "A woman in her fifties seen from behind and slightly to one side walks away along a leaf-covered tarmac path in a London park on a bright autumn morning, a phone in her right hand at waist height. Shoulder-length ash-blonde hair with grey streaks, camel wool coat, rust knitted scarf, dark jeans, white trainers. London plane trees in yellow and russet, fallen leaves on the path, black iron railings and Georgian terraced houses beyond. Low sun ahead of her rim-lights her hair and coat and throws long crisp shadows towards the camera. Vertical frame, she is small in the frame at mid-distance: the upper half is pale bright sky through thinning branches, she sits just below the centre, the path and leaves fill the bottom. Eye level, 50mm lens at f/8.",
+      "focus": "28% 22%",
+      "vo": "Someone in your corner, every step of the way.",
+      "broll_brief": "a woman in her fifties smiling at her phone while walking through a leafy London park in autumn",
+      "motion": "She walks slowly away along the path; a few yellow leaves drift down around her. The light stays steady. The camera pushes in very slowly.",
+      "people": "back_view",
+      "broll_mode": "still"
     },
     {
       "type": "glass",
       "dur": 6.8,
-      "src": "brand/design-system/assets/img/8a5a6edf3ad2e4e1.jpg",
-      "broll": "a woman in her fifties smiling at her phone while walking through a leafy London park in autumn",
+      "src": "brand/design-system/assets/img/3d885b83417b27de.jpg",
+      "broll": "A woman in her fifties seen from behind and slightly to one side walks away along a leaf-covered tarmac path in a London park on a bright autumn morning, a phone in her right hand at waist height. Shoulder-length ash-blonde hair with grey streaks, camel wool coat, rust knitted scarf, dark jeans, white trainers. London plane trees in yellow and russet, fallen leaves on the path, black iron railings and Georgian terraced houses beyond. Low sun ahead of her rim-lights her hair and coat and throws long crisp shadows towards the camera. Vertical frame, she is small in the frame at mid-distance: the upper half is pale bright sky through thinning branches, she sits just below the centre, the path and leaves fill the bottom. Eye level, 50mm lens at f/8.",
       "headline": "A Health Coach, whenever you need one",
       "body": "Message or call your free 1:1 Coach for the everyday moments, not just check-ins.",
       "cta": "Check eligibility",
@@ -44,14 +49,21 @@
       "by": "Trevor, Trustpilot",
       "verbatim_ref": "Trustpilot review, verbatim, as shown in CheqUp ad 24505907839002173 (Chequp review v3) — confirm permission on file",
       "legal": "Subject to eligibility. Terms apply. GPhC Registered.",
-      "focus": "28% 22%"
+      "focus": "28% 22%",
+      "vo": "Message or call your Health Coach whenever you need them. It’s included, free.",
+      "broll_brief": "a woman in her fifties smiling at her phone while walking through a leafy London park in autumn",
+      "motion": "She walks slowly away along the path; a few yellow leaves drift down around her. The light stays steady. The camera pushes in very slowly.",
+      "people": "back_view",
+      "broll_mode": "still"
     },
     {
       "type": "endcard",
       "dur": 2.6,
       "cta": "Check eligibility",
       "url": "chequp.com",
-      "legal": "Subject to eligibility. Terms apply. GPhC Registered."
+      "legal": "Subject to eligibility. Terms apply. GPhC Registered.",
+      "vo": "Check your eligibility at chequp dot com."
     }
-  ]
+  ],
+  "voice": "bf_emma"
 }

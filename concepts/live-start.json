@@ -28,13 +28,18 @@
       "src": "brand/design-system/assets/img/af529b1f7714e006.jpg",
       "headline": "Not sure where to start?",
       "legal": "Subject to eligibility. Terms apply. GPhC Registered.",
-      "broll": "two friends in their fifties laughing together on a sofa in a sunlit living room with cups of tea"
+      "broll": "Close view of two women's hands holding mismatched ceramic mugs of tea above a grey linen sofa in a Victorian terraced house on a sunny afternoon. On the left, a cream cable-knit jumper sleeve and a hand with short unpainted nails; on the right, a Black woman's hand with a chambray shirt cuff and a thin silver bracelet. A folded mustard throw lies on the sofa cushions below the mugs, a trailing houseplant on a side table. Low sun from a tall sash window out of frame on the left throws crisp window-shaped patches of light on the warm white wall behind. Only their hands and forearms are in frame. Vertical frame: the upper half is plain warm white wall with a patch of sunlight, the mugs and hands sit just below the centre, the sofa cushions and folded throw fill the bottom. 50mm lens at f/5.6.",
+      "vo": "Not sure where to start? Here’s how it works.",
+      "broll_brief": "two friends in their fifties laughing together on a sofa in a sunlit living room with cups of tea",
+      "motion": "Steam curls slowly from both mugs; the hand on the right lifts its mug a little and lowers it again. The patch of sunlight on the wall stays steady. The camera pushes in very slowly.",
+      "people": "hands_pair",
+      "broll_mode": "still"
     },
     {
       "type": "glass",
       "dur": 6.8,
       "src": "brand/design-system/assets/img/af529b1f7714e006.jpg",
-      "broll": "two friends in their fifties laughing together on a sofa in a sunlit living room with cups of tea",
+      "broll": "Close view of two women's hands holding mismatched ceramic mugs of tea above a grey linen sofa in a Victorian terraced house on a sunny afternoon. On the left, a cream cable-knit jumper sleeve and a hand with short unpainted nails; on the right, a Black woman's hand with a chambray shirt cuff and a thin silver bracelet. A folded mustard throw lies on the sofa cushions below the mugs, a trailing houseplant on a side table. Low sun from a tall sash window out of frame on the left throws crisp window-shaped patches of light on the warm white wall behind. Only their hands and forearms are in frame. Vertical frame: the upper half is plain warm white wall with a patch of sunlight, the mugs and hands sit just below the centre, the sofa cushions and folded throw fill the bottom. 50mm lens at f/5.6.",
       "headline": "Answer a few questions. We’ll take it from there.",
       "body": "A Clinician reviews your answers and talks you through your options. No pressure, no judgement.",
       "cta": "See if it’s right for you",
@@ -42,14 +47,21 @@
       "quote": "Very thorough checks but so easy to navigate.",
       "by": "Sharon, Trustpilot",
       "verbatim_ref": "Trustpilot review, verbatim, as shown in CheqUp ad 24505907839002173 (Chequp review v3) — confirm permission on file",
-      "legal": "Subject to eligibility. Terms apply. GPhC Registered."
+      "legal": "Subject to eligibility. Terms apply. GPhC Registered.",
+      "vo": "Answer a few questions. A UK Clinician reviews them and talks you through your options.",
+      "broll_brief": "two friends in their fifties laughing together on a sofa in a sunlit living room with cups of tea",
+      "motion": "Steam curls slowly from both mugs; the hand on the right lifts its mug a little and lowers it again. The patch of sunlight on the wall stays steady. The camera pushes in very slowly.",
+      "people": "hands_pair",
+      "broll_mode": "still"
     },
     {
       "type": "endcard",
       "dur": 2.6,
       "cta": "See if it’s right for you",
       "url": "chequp.com",
-      "legal": "Subject to eligibility. Terms apply. GPhC Registered."
+      "legal": "Subject to eligibility. Terms apply. GPhC Registered.",
+      "vo": "No pressure, no judgement. See if it’s right for you, at chequp dot com."
     }
-  ]
+  ],
+  "voice": "bf_emma"
 }

@@ -1,0 +1,101 @@
+# chequp-creator runtime config: PC profile, run ON the Windows 5090 PC (C:\Users\white).
+#   .venv\Scripts\python.exe -m cqf --config config.pc.yaml ...
+# The 5090 also runs shorts-factory's daemon: pause it first (empty file data\STOP in
+# shorts-factory) or CheqUp jobs just queue behind its Wan jobs on the same ComfyUI.
+# chequp-creator runtime config. Same shape as shorts-factory's config.yaml where the
+# concepts overlap (farm.machines, models.wan22, qa.*, publish.mode).
+
+preset: presets/chequp_meta.yaml
+data_dir: data
+out_dir: out
+
+# --- mama: Linux box, 7x RTX 3090 (24 GB). Reached over Tailscale. --------------------------
+# Two jobs compete for the same 7 cards, so production runs in two phases
+# (see mama/cq_phase.sh):  plan  = Qwen3-235B in LM Studio across all 7 cards
+#                          render = ComfyUI, one server per card, Wan 2.2 b-roll
+mama:
+  host: 100.75.169.5          # Tailscale; LAN is 192.168.0.193
+
+llm:
+  backend: claude_cli         # the PC's Claude Code CLI (find_claude also checks %APPDATA%\Claude\claude-code)
+  fallback: lmstudio          # Qwen on mama if it's in plan phase
+  base_url: http://100.75.169.5:1234/v1
+  model: qwen/qwen3-235b-a22b-2507
+  temperature: 0.7
+  max_tokens: 6000
+  timeout_s: 600
+
+farm:
+  machines:
+    - name: mama
+      host: 100.75.169.5
+      first_port: 8189        # GPU0/8188 is Dan's own ComfyUI; the farm is GPUs 1-6 (8189-8194)
+      gpus: 6
+      role: broll
+      enabled: false          # CheqUp never uses mama (Dan, 8 Oct: "not mama, mama is getting hot")
+    - name: pc-5090
+      host: 127.0.0.1
+      first_port: 8188
+      gpus: 1
+      role: hero              # the PC's own ComfyUI (C:\Users\white\ComfyUI-Installs), Wan 2.2 already installed
+      enabled: true
+  probe_timeout_s: 5
+  job_timeout_s: 1800         # one still: Qwen 50 steps x4 seeds + SeedVR2 7B
+  clip_timeout_s: 10800       # one i2v clip: Wan 30 steps + SeedVR2 + FILM
+
+models:
+  qwen_image:                 # stills: Qwen-Image-2512 fp8, 50 steps, cfg 4, shift 3.1, SeedVR2 7B 2x in-graph
+    graph: cqf/graphs/qwen_still.json
+    sizes: {"9x16": [928, 1664], "16x9": [1664, 928]}
+  seedvr2:
+    unet: seedvr2_7b_fp16.safetensors     # seedvr2_7b_fp8_e4m3fn.safetensors if the PC has < 64 GB RAM
+    vae: seedvr2_ema_vae_fp16.safetensors
+  ace_step:
+    checkpoint: ace_step_1.5_turbo_aio.safetensors
+  wan22:                      # identical files to shorts-factory (Comfy-Org fp8 + lightx2v 4-step)
+    t2v_high: wan2.2_t2v_high_noise_14B_fp8_scaled.safetensors
+    t2v_low: wan2.2_t2v_low_noise_14B_fp8_scaled.safetensors
+    t2v_lora_high: wan2.2_t2v_lightx2v_4steps_lora_v1.1_high_noise.safetensors
+    t2v_lora_low: wan2.2_t2v_lightx2v_4steps_lora_v1.1_low_noise.safetensors
+    i2v_high: wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors
+    i2v_low: wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors
+    i2v_lora_high: wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors
+    i2v_lora_low: wan2.2_i2v_lightx2v_4steps_lora_v1_low_noise.safetensors
+    text_encoder: umt5_xxl_fp8_e4m3fn_scaled.safetensors
+    vae: wan_2.1_vae.safetensors
+    width: 720
+    height: 1280
+    frames: 81                # ~5 s at 16 fps
+    fps: 16
+    steps: 4                  # legacy draft path only; the quality clip graph is below
+    shift: 8.0
+    clip:                     # i2v: 30 steps, cfg 3.5, shift 5, switch at 11 -> SeedVR2 1.5x -> FILM 2x (30 fps)
+      graph: cqf/graphs/wan_i2v_clip.json
+      sizes: {"9x16": [720, 1280], "16x9": [1280, 720]}
+      frames: 81
+
+broll:
+  candidates: 4               # seeds per shot; Claude vision scores them and keeps the best
+  qa: claude_vision           # claude_vision | none
+  max_rerolls: 1
+
+render:
+  formats: ["9x16", "4x5", "1x1"]
+  fps: 30
+  jobs: 4                     # parallel Chromium pages
+  node: node
+
+voice:
+  backend: kokoro             # kokoro | none
+  lang_code: b                # British English
+  sample_rate: 24000
+
+music:
+  generate: true
+  backend: ace_step           # ACE-Step 1.5 on the 5090's ComfyUI; falls back to the procedural bed
+  seed: 7
+  gain_db_under_vo: -21
+  gain_db_solo: -6
+
+publish:
+  mode: outbox                # outbox only — nothing is pushed to Meta automatically

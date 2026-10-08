@@ -115,6 +115,9 @@ body{font-family:var(--font-core);background:transparent}
 .bubble.them{align-self:flex-start;background:var(--color-surface-tertiary);color:var(--color-primary-dark);box-shadow:var(--hairline-card);border-bottom-left-radius:var(--r-xxs)}
 .bubble.you{align-self:flex-end;background:var(--color-primary-base);color:var(--color-on-primary-base);border-bottom-right-radius:var(--r-xxs)}
 .bubble.typing{display:flex;gap:5px;padding:14px 16px}
+/* Auto-reply: the category's non-answer. Flat Dark Sand, muted ink, mono label — deliberately lifeless. */
+.bubble.bot{align-self:flex-start;background:var(--color-surface-secondary);color:var(--color-primary-dark-72);border-bottom-left-radius:var(--r-xxs)}
+.bubble.bot b{font-family:var(--font-mono);font-weight:500;letter-spacing:0;text-transform:none;color:var(--color-primary-dark-48)}
 .bubble.typing i{width:7px;height:7px;border-radius:50%;background:var(--color-primary-dark-32)}
 
 /* Divider — ellipse of the next section's colour rising into the current one. */
@@ -187,3 +190,17 @@ html[data-theme="meta-live"] .captions{bottom:30%}
 html[data-format="4x5"] .live-legal,html[data-format="1x1"] .live-legal{top:auto!important;bottom:4.5%}
 html[data-format="1x1"] .live-card{top:7%}
 html[data-format="1x1"] .live-quote{top:18%}
+
+/* 16:9 (VOD / YouTube). The design system's desktop breakpoints apply automatically at this width. */
+html[data-format="16x9"]{--safe-top:54px;--safe-bottom:54px;--safe-x:72px}
+html[data-format="16x9"] .scene.center,html[data-format="16x9"] .scene{align-items:flex-start}
+html[data-format="16x9"] .display,html[data-format="16x9"] .h1{max-width:70%}
+html[data-format="16x9"] .relief-scene{flex-direction:row;align-items:center;gap:56px}
+html[data-format="16x9"] .relief-media{flex:0 0 44%}
+html[data-format="16x9"] .relief-copy{flex:1}
+html[data-format="16x9"] .relief-copy .h1,html[data-format="16x9"] .relief-copy .h3{max-width:none}
+html[data-format="16x9"] .steps,html[data-format="16x9"] .checks{max-width:62%}
+html[data-format="16x9"] .captions .box{font-size:26px}
+/* VOD is watched across a room: hooks go bigger than the web desktop ramp (Vicky: "less subtle"). */
+html[data-format="16x9"] .display{font-size:84px;max-width:80%}
+html[data-format="16x9"] .relief-copy .h1{font-size:56px}

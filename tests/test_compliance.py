@@ -41,7 +41,8 @@ def test_board_rules():
 
 
 def test_approvals_clear_holds():
-    b = {"scenes": [{"type": "hook", "dur": 2, "headline": "Membership from £109 a month."}, {"type": "endcard", "dur": 2, "headline": "x", "cta": "Start your check"}]}
+    b = {"scenes": [{"type": "hook", "dur": 2, "headline": "Membership from £109 a month.", "vo": "x"}, {"type": "endcard", "dur": 2, "headline": "x", "cta": "Start your check"}],
+         "meta": {"url": "https://chequp.com/lp/method"}}
     assert verdict(lint_board(b)) == "HOLD"
     b["approvals"] = {"price": "Legal, 2026-10-08"}
     assert verdict(lint_board(b)) == "PASS"
@@ -49,6 +50,15 @@ def test_approvals_clear_holds():
 
 def test_typography():
     assert fix_typography("you're not") == "you’re not"
+
+
+
+
+def test_unlicensed_and_landing():
+    b = {"scenes": [{"type": "media", "dur": 3, "fallback_src": "brand/design-system/assets/img/f02b703f91f681a7.jpg", "caption": "x", "vo": "x"},
+                    {"type": "endcard", "dur": 2, "headline": "x", "cta": "Start your check"}], "meta": {"url": "https://chequp.com/how-it-works"}}
+    rules = " ".join(i.rule for i in lint_board(b))
+    assert "Stocksy" in rules and "landing page" in rules
 
 
 if __name__ == "__main__":

@@ -125,9 +125,13 @@ const BUILD = {
       const d = 'M210 0C325.98 0 420 31.34 420 70V272C420 298.51 398.51 320 372 320H48C21.49 320 0 298.51 0 272V70C0 31.34 94.02 0 210 0Z';
       const wrap = el('div', '', `<svg class="relief" viewBox="0 0 420 420"><defs><clipPath id="${id}"><path transform="scale(1,1.3125)" d="${d}"/></clipPath></defs>` +
         (spec.src && !/\.(mp4|mov|webm)$/i.test(spec.src) ? `<image href="${esc(spec.src)}" width="420" height="420" preserveAspectRatio="xMidYMid slice" clip-path="url(#${id})"/>` : `<path transform="scale(1,1.3125)" d="${d}" fill="var(--color-surface-secondary)"/>`) + '</svg>');
+      s.classList.add('relief-scene'); wrap.className = 'relief-media';
       s.appendChild(wrap); reveal(wrap, 0, SETTLE, 24);
-      if (spec.tag) { const g = el('span', 'tag', esc(spec.tag)); g.style.marginTop = 'var(--space-lg)'; s.appendChild(g); reveal(g, SETTLE); }
-      if (spec.headline) { const h = el('h2', 'h3'); h.style.marginTop = 'var(--space-md)'; s.appendChild(h); words(h, spec.headline, SETTLE + QUICK); }
+      // Copy block: the "reveal" line is the hero (big and direct), not a caption.
+      const copy = el('div', 'relief-copy'); s.appendChild(copy);
+      if (spec.tag) { const g = el('span', 'tag', esc(spec.tag)); copy.appendChild(g); reveal(g, SETTLE); }
+      if (spec.headline) { const h = el('h2', spec.size === 'h1' ? 'h1' : 'h3'); h.style.marginTop = 'var(--space-md)'; copy.appendChild(h); words(h, spec.headline, SETTLE + QUICK); }
+      if (spec.body) { const b = el('p', 'body-lg', esc(spec.body)); copy.appendChild(b); reveal(b, SETTLE * 2 + spec.headline.split(/\s+/).length * STAGGER); }
       return s;
     }
     // Full bleed. Video b-roll is composited underneath by ffmpeg, so the page stays transparent.
@@ -224,12 +228,16 @@ const BUILD = {
     const msgs = spec.messages || [], start = spec.title ? 700 : 200;
     const per = Math.max(600, (spec.dur * 1000 - start - 800) / Math.max(1, msgs.length));
     msgs.forEach((m, i) => {
-      const at = start + i * per;
-      if (m.from !== 'you') {
-        const typing = el('div', 'bubble them typing', '<i></i><i></i><i></i>'); box.appendChild(typing);
+      // Timing: explicit "at" (s), else the VO line it belongs to ("line": n), else evenly spaced.
+      const lt = spec._line_times || [];
+      const at = m.at != null ? m.at * 1000 : (m.line != null && lt[m.line] ? lt[m.line][0] * 1000 : start + i * per);
+      const kind = m.from === 'you' ? 'you' : m.from === 'bot' ? 'bot' : 'them';
+      if (kind !== 'you' && m.typing !== false) {
+        const typing = el('div', 'bubble ' + kind + ' typing', '<i></i><i></i><i></i>'); box.appendChild(typing);
         tickers.push(ms => { typing.style.display = ms >= at - 520 && ms < at ? 'flex' : 'none'; });
       }
-      const b = el('div', 'bubble ' + (m.from === 'you' ? 'you' : 'them'), (m.from !== 'you' && m.name ? `<b>${esc(m.name)}</b>` : '') + esc(m.text));
+      const label = kind === 'bot' ? (m.name || 'Automated reply') : (kind === 'them' ? m.name : '');
+      const b = el('div', 'bubble ' + kind, (label ? `<b>${esc(label)}</b>` : '') + esc(m.text));
       box.appendChild(b); reveal(b, at, SETTLE, 10);
       tickers.push(ms => { b.style.display = ms >= at ? '' : 'none'; });
     });
@@ -254,7 +262,7 @@ function buildCaptions(spec) {
   const words = spec.captions || [];
   // Captions are for sound-off viewing. Graphic scenes already show their words, so by default
   // only media scenes without their own caption get them; `show_captions` overrides per scene.
-  const on = spec.show_captions ?? (spec.type === 'media' && !spec.caption);
+  const on = spec.show_captions ?? (spec.type === 'media' && !spec.caption && !spec.headline);
   if (!words.length || !on) return;
   const wrap = el('div', 'captions', '<div class="box"></div>'); document.getElementById('stage').appendChild(wrap);
   const box = wrap.firstChild, off = (spec.t0 || 0) * 1000;

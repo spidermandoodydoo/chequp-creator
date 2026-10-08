@@ -1,0 +1,80 @@
+{
+  "id": "made-simple-social",
+  "concept": "made-simple",
+  "variant": "social",
+  "version": 1,
+  "audience": "Women 35–64, UK",
+  "formats": [
+    "9x16",
+    "4x5"
+  ],
+  "meta": {
+    "primary_text": "Most weight loss stops at the order. The CheqUp Method gives you a UK Clinician, a free 1:1 Health Coach and the WeightWatchers app, working together around your life.",
+    "headline": "Weight loss made simple with The CheqUp Method",
+    "description": "Check my eligibility",
+    "cta_button": "LEARN_MORE"
+  },
+  "approvals": {},
+  "scenes": [
+    {
+      "type": "hook",
+      "dur": 2.4,
+      "ground": "midnight",
+      "eyebrow": "The CheqUp Method",
+      "headline": "Most weight loss stops at the order.",
+      "vo": "Most weight loss stops at the order. Ours doesn’t."
+    },
+    {
+      "type": "media",
+      "frame": "relief",
+      "dur": 3.6,
+      "ground": "sand",
+      "src": "brand/design-system/assets/img/4b0266983772bc3f.jpg",
+      "tag": "Your Health Coach",
+      "headline": "Meals planned around her night shifts.",
+      "size": "h1",
+      "vo": "Her meals, planned around her night shifts by her Health Coach.",
+      "broll": "Close, high-angle view of a woman's hands packing a lunch into a clear glass container on a pale oak worktop in a home kitchen on a bright morning. Her right hand lays sugar snap peas beside a row of six halved cherry tomatoes, a handful of sliced cucumber rounds, two halved boiled eggs and a scoop of green lentil salad; her left hand steadies the container. Beside it: a small wooden board with a halved lemon and a few sprigs of flat-leaf parsley. Only her hands and forearms are in frame, a grey sweatshirt cuff pushed back, short unpainted nails, a woman in her fifties. Low sun from a sash window on the left throws crisp shadows across the worktop. Vertical frame: the upper half is plain sunlit white tiled wall, the hands and container sit just below the centre, the oak worktop fills the bottom. 50mm lens at f/5.6.",
+      "broll_brief": "hands preparing a packed lunch of fresh vegetables in a calm kitchen at dawn",
+      "motion": "Her right hand slowly sets one more sugar snap pea into the container, then both hands rest still on the worktop. The sunlight stays steady. Fixed camera.",
+      "people": "hands",
+      "broll_mode": "still",
+      "fallback_src": "brand/design-system/assets/img/4b0266983772bc3f.jpg"
+    },
+    {
+      "type": "media",
+      "frame": "relief",
+      "dur": 3.6,
+      "ground": "sand",
+      "src": "brand/design-system/assets/img/606e92b0ef9e59c3.jpg",
+      "tag": "Your Clinician",
+      "headline": "Reviewed by a UK Clinician who knows her history.",
+      "size": "h1",
+      "vo": "Her health, reviewed by a UK Clinician who knows her history.",
+      "broll": "A woman in her fifties seen from behind, standing on a narrow stone path in the small sunny back garden of a Victorian terraced house in early autumn, holding a white mug of tea in her right hand. She has shoulder-length grey-blonde hair and wears a loose sage-green cardigan over a cream top and dark blue jeans. Beds of lavender and late pink roses line the path, with a weathered wooden bench and a red brick garden wall beyond and a London plane tree above the wall. She is small in the frame, turned fully away towards the bench. Low late-afternoon sun from the right rim-lights her hair and throws long crisp shadows across the path. Vertical frame: the upper half is plain pale blue sky above the brick wall, she sits just below the centre, the lavender and stone path fill the bottom. 50mm lens at f/5.6.",
+      "broll_brief": "a woman in her fifties smiling in a sunny garden, relaxed",
+      "motion": "The lavender sways gently in a light breeze and she slowly lifts the mug and lowers it again. The light stays steady. The camera pushes in very slowly.",
+      "people": "back_view",
+      "broll_mode": "still",
+      "fallback_src": "brand/design-system/assets/img/606e92b0ef9e59c3.jpg"
+    },
+    {
+      "type": "hook",
+      "dur": 3.0,
+      "ground": "purple",
+      "size": "h1",
+      "headline": "Weight loss made simple with The CheqUp Method.",
+      "vo": "Weight loss, made simple, with The CheqUp Method.",
+      "exit_to": "sand"
+    },
+    {
+      "type": "endcard",
+      "dur": 3.2,
+      "ground": "sand",
+      "headline": "See if it’s right for you.",
+      "cta": "Check my eligibility",
+      "legal": "Illustrative scenarios. CheqUp Health Ltd · Regulated by the CQC and GPhC · Eligibility criteria apply.",
+      "vo": "Check your eligibility at chequp dot com."
+    }
+  ]
+}

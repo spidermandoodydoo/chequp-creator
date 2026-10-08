@@ -106,6 +106,9 @@ def lint_prompt(text: str, where: str) -> list[Issue]:
     return [Issue("FAIL", where, f"b-roll prompt asks for banned imagery ('{h}')", text) for h in _hits(IMAGE_TERMS, text)]
 
 
+UNLICENSED = {"1de894af3390969a.jpg", "8a5a6edf3ad2e4e1.jpg", "f02b703f91f681a7.jpg"}   # Stocksy comps (see preset)
+
+
 def lint_board(board: dict) -> list[Issue]:
     """Lint a whole storyboard: copy, prompts, design-system rules, approvals."""
     issues: list[Issue] = []
@@ -113,10 +116,14 @@ def lint_board(board: dict) -> list[Issue]:
     scenes = board.get("scenes", [])
     if not scenes:
         return [Issue("FAIL", "board", "no scenes")]
-    if scenes[0].get("type") not in {"hook", "media", "stat", "ui", "logo", "glass"} or not (scenes[0].get("headline") or scenes[0].get("caption") or scenes[0].get("value") or scenes[0].get("title")):
+    s0 = scenes[0]
+    chat_hook = s0.get("type") == "chat" and s0.get("messages") and (s0.get("title") or float(s0["messages"][0].get("at", 0) or 0) <= 0.5)
+    if not chat_hook and (s0.get("type") not in {"hook", "media", "stat", "ui", "logo", "glass"} or not (s0.get("headline") or s0.get("caption") or s0.get("value") or s0.get("title"))):
         issues.append(Issue("FAIL", "scene 0", "first scene must carry the hook as on-screen text from frame 0"))
     if scenes[-1].get("type") != "endcard":
         issues.append(Issue("WARN", f"scene {len(scenes) - 1}", "last scene is not an endcard"))
+    if not any(s.get("vo") for s in scenes):
+        issues.append(Issue("WARN", "board", "no voiceover — CheqUp is a UK brand; every ad gets a British VO line per scene"))
     total = sum(float(s.get("dur", 0)) for s in scenes)
     if total > 60:
         issues.append(Issue("WARN", "board", f"{total:.0f}s is long for paid social — Method winner was ~20s"))
@@ -130,8 +137,11 @@ def lint_board(board: dict) -> list[Issue]:
             issues.append(Issue("WARN", w, f"divider {g}→{s['exit_to']} is not one of the three defined transitions"))
         for k in ("headline", "title"):
             issues += lint_copy(s.get(k, ""), f"{w}.{k}", heading=True)
-        for k in ("eyebrow", "body", "caption", "label", "quote", "question", "tag", "legal", "vo", "by", "url"):
+        for k in ("eyebrow", "body", "caption", "label", "quote", "question", "tag", "legal", "by", "url"):
             issues += lint_copy(s.get(k, ""), f"{w}.{k}")
+        vo = s.get("vo")
+        for j, ln in enumerate(vo if isinstance(vo, list) else ([vo] if vo else [])):
+            issues += lint_copy(ln.get("text", "") if isinstance(ln, dict) else str(ln), f"{w}.vo[{j}]")
         for j, m in enumerate(s.get("messages", []) or []):
             issues += lint_copy(m.get("text", ""), f"{w}.messages[{j}]")
         if s.get("type") == "chat" and "illustrative" not in (s.get("note") or "Illustrative conversation").lower():
@@ -158,19 +168,25 @@ def lint_board(board: dict) -> list[Issue]:
             if not s.get("verbatim_ref"):
                 issues.append(Issue("FAIL", w, "testimonial without verbatim_ref — reviews must be real, verbatim and on file (CAP 3.45)"))
             issues.append(Issue("HOLD", w, "review — verbatim on file with permission"))
+        for k in ("src", "fallback_src"):
+            if s.get(k) and str(s[k]).replace("\\", "/").rsplit("/", 1)[-1] in UNLICENSED:
+                issues.append(Issue("FAIL", f"{w}.{k}", "watermarked Stocksy comp — not licensed for ads", s[k]))
         if s.get("loop") or "chequp-loop" in str(s.get("src", "")):
             issues.append(Issue("FAIL", w, "the CheqUp Loop is not for digital advertising"))
         if s.get("type") == "media" and s.get("person_role") in {"member", "clinician", "reviewer", "coach"}:
             issues.append(Issue("FAIL", w, "AI-generated person presented as a member/clinician/reviewer"))
 
     meta = board.get("meta", {})
+    url = meta.get("url", "")
+    if not url or "TBC" in url or "how-it-works" in url:
+        issues.append(Issue("HOLD", "meta.url", "landing page not approved — /how-it-works names prescription medicines and shows pens"))
     for k in ("primary_text", "headline", "description"):
         issues += lint_copy(meta.get(k, ""), f"meta.{k}", heading=(k == "headline"))
     if meta.get("cta_button") and meta["cta_button"].upper() not in {"LEARN_MORE", "SIGN_UP", "GET_STARTED", "APPLY_NOW", "GET_OFFER", "SEE_MORE", "CHECK_ELIGIBILITY", "BOOK_NOW", "DOWNLOAD"}:
         issues.append(Issue("WARN", "meta.cta_button", f"unknown Meta CTA type {meta['cta_button']}"))
 
     # Approvals recorded in the board clear the matching HOLDs.
-    keys = {"price": "price", "WeightWatchers": "weightwatchers", "stat": "stat", "review": "review"}
+    keys = {"price": "price", "WeightWatchers": "weightwatchers", "stat": "stat", "review": "review", "landing page": "landing"}
     kept = []
     for it in issues:
         if it.level == "HOLD":

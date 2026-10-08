@@ -25,16 +25,21 @@
     {
       "type": "logo",
       "dur": 1.8,
-      "src": "brand/design-system/assets/img/f02b703f91f681a7.jpg",
+      "src": "brand/design-system/assets/img/4b0266983772bc3f.jpg",
       "headline": "Weight health isn’t one thing.",
       "legal": "Subject to eligibility. Terms apply. GPhC Registered.",
-      "broll": "a woman in her late forties cooking a colourful vegetable stir fry in a sunny home kitchen, phone propped on the worktop"
+      "broll": "Close view over a black wok on a gas hob in a sunny home kitchen: sliced red and yellow peppers, broccoli florets, sugar snap peas, sliced spring onions and strips of carrot glisten as a woman's right hand turns them with a wooden spatula. Only her hand and forearm are in frame, a rolled-up denim shirt sleeve, short unpainted nails. A smartphone leans against the white tiled splashback with its screen dark. Warm late-afternoon sun from a window on the left lights the rising steam and throws crisp shadows across the cream worktop. Vertical frame: the upper half is plain sunlit white tiled splashback, the wok sits just below the centre, the worktop edge fills the bottom. 35mm lens at f/5.6, the vegetables in sharp focus.",
+      "vo": "Weight health isn’t one thing. So we don’t treat it like one.",
+      "broll_brief": "a woman in her late forties cooking a colourful vegetable stir fry in a sunny home kitchen, phone propped on the worktop",
+      "motion": "Steam rises slowly from the wok and the wooden spatula turns the vegetables once, gently. The phone stays still. The camera pushes in very slowly.",
+      "people": "hands",
+      "broll_mode": "still"
     },
     {
       "type": "glass",
       "dur": 6.8,
-      "src": "brand/design-system/assets/img/f02b703f91f681a7.jpg",
-      "broll": "a woman in her late forties cooking a colourful vegetable stir fry in a sunny home kitchen, phone propped on the worktop",
+      "src": "brand/design-system/assets/img/4b0266983772bc3f.jpg",
+      "broll": "Close view over a black wok on a gas hob in a sunny home kitchen: sliced red and yellow peppers, broccoli florets, sugar snap peas, sliced spring onions and strips of carrot glisten as a woman's right hand turns them with a wooden spatula. Only her hand and forearm are in frame, a rolled-up denim shirt sleeve, short unpainted nails. A smartphone leans against the white tiled splashback with its screen dark. Warm late-afternoon sun from a window on the left lights the rising steam and throws crisp shadows across the cream worktop. Vertical frame: the upper half is plain sunlit white tiled splashback, the wok sits just below the centre, the worktop edge fills the bottom. 35mm lens at f/5.6, the vegetables in sharp focus.",
       "headline": "One membership. Four kinds of support.",
       "body": "Your own Clinician, a free 1:1 Health Coach, the WeightWatchers app and a plan built around you.",
       "cta": "Check eligibility",
@@ -42,14 +47,21 @@
       "quote": "Really pleased with the service. I feel truly supported.",
       "by": "Sharon, Trustpilot",
       "verbatim_ref": "Trustpilot review, verbatim, as shown in CheqUp ad 24505907839002173 (Chequp review v3) — confirm permission on file",
-      "legal": "Subject to eligibility. Terms apply. GPhC Registered."
+      "legal": "Subject to eligibility. Terms apply. GPhC Registered.",
+      "vo": "Your own Clinician, a free one-to-one Health Coach, and the WeightWatchers app. One membership.",
+      "broll_brief": "a woman in her late forties cooking a colourful vegetable stir fry in a sunny home kitchen, phone propped on the worktop",
+      "motion": "Steam rises slowly from the wok and the wooden spatula turns the vegetables once, gently. The phone stays still. The camera pushes in very slowly.",
+      "people": "hands",
+      "broll_mode": "still"
     },
     {
       "type": "endcard",
       "dur": 2.6,
       "cta": "Check eligibility",
       "url": "chequp.com",
-      "legal": "Subject to eligibility. Terms apply. GPhC Registered."
+      "legal": "Subject to eligibility. Terms apply. GPhC Registered.",
+      "vo": "See if CheqUp is right for you, at chequp dot com."
     }
-  ]
+  ],
+  "voice": "bf_emma"
 }

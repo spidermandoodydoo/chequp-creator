@@ -23,6 +23,7 @@ const FORMATS = {
   '9x16': { vw: 405, vh: 720, dpr: 8 / 3, W: 1080, H: 1920 },
   '4x5': { vw: 432, vh: 540, dpr: 2.5, W: 1080, H: 1350 },
   '1x1': { vw: 432, vh: 432, dpr: 2.5, W: 1080, H: 1080 },
+  '16x9': { vw: 960, vh: 540, dpr: 2, W: 1920, H: 1080 },   // VOD / YouTube
 };
 const VIDEO = /\.(mp4|mov|webm|mkv)$/i;
 
@@ -81,7 +82,7 @@ async function renderScene(browser, base, board, sc, i, t0, fmt, outDir) {
   const pipeIn = ['-f', 'image2pipe', '-c:v', 'png', '-framerate', String(fps), '-i', '-'];
   const argv = underlay
     ? ['-y', '-loglevel', 'error', '-stream_loop', '-1', '-i', underlay, ...pipeIn, '-filter_complex',
-      `[0:v]scale=${F.W}:${F.H}:force_original_aspect_ratio=increase,crop=${F.W}:${F.H},setsar=1,fps=${fps},trim=duration=${sc.dur},setpts=PTS-STARTPTS[bg];[1:v]scale=${F.W}:${F.H}[fg];[bg][fg]overlay=format=auto,format=yuv420p`,
+      `[0:v]scale=${F.W}:${F.H}:force_original_aspect_ratio=increase:flags=lanczos,crop=${F.W}:${F.H},setsar=1,fps=${fps},trim=duration=${sc.dur},setpts=PTS-STARTPTS[bg];[1:v]scale=${F.W}:${F.H}[fg];[bg][fg]overlay=format=auto,format=yuv420p`,
       '-frames:v', String(n), ...enc, out]
     : ['-y', '-loglevel', 'error', ...pipeIn, '-vf', `scale=${F.W}:${F.H},format=yuv420p`, '-frames:v', String(n), ...enc, out];
   let poster = null;
@@ -102,21 +103,28 @@ async function renderScene(browser, base, board, sc, i, t0, fmt, outDir) {
 }
 
 async function mixAudio(board, boardDir, silent, final, dur) {
+  // VO on top, music ducked under it, SFX (dings/chimes/hold music) mixed in un-ducked, then -14 LUFS.
   const abs = p => p && (path.isAbsolute(p) ? p : path.join(boardDir, p));
-  const vo = abs(board.audio?.vo), music = abs(board.audio?.music);
+  const vo = abs(board.audio?.vo), music = abs(board.audio?.music), sfx = abs(board.audio?.sfx);
   const inputs = ['-i', silent], parts = [];
   let idx = 1;
-  if (vo) { inputs.push('-i', vo); parts.push(`[${idx++}:a]aresample=48000,apad,atrim=0:${dur}[vo]`); }
-  if (music) { inputs.push('-stream_loop', '-1', '-i', music); parts.push(`[${idx++}:a]aresample=48000,atrim=0:${dur},volume=${board.audio?.music_gain_db ?? -18}dB,afade=t=out:st=${Math.max(0, dur - 1)}:d=1[mu]`); }
+  if (vo) { inputs.push('-i', vo); parts.push(`[${idx++}:a]aresample=48000,aformat=channel_layouts=stereo,apad,atrim=0:${dur}[vo]`); }
+  if (music) { inputs.push('-stream_loop', '-1', '-i', music); parts.push(`[${idx++}:a]aresample=48000,aformat=channel_layouts=stereo,atrim=0:${dur},volume=${board.audio?.music_gain_db ?? -18}dB,afade=t=out:st=${Math.max(0, dur - 1)}:d=1[mu]`); }
+  if (sfx) { inputs.push('-i', sfx); parts.push(`[${idx++}:a]aresample=48000,aformat=channel_layouts=stereo,apad,atrim=0:${dur},volume=${board.audio?.sfx_gain_db ?? -4}dB[sx]`); }
   const LOUD = 'loudnorm=I=-14:TP=-1:LRA=11';
-  let graph, map = '[a]';
-  if (vo && music) graph = [...parts, '[vo]asplit=2[vo1][vo2]',   // VO keys the duck and is mixed on top
-    '[mu][vo1]sidechaincompress=threshold=0.03:ratio=8:attack=20:release=300[duck]',
-    `[vo2][duck]amix=inputs=2:duration=first:normalize=0,${LOUD}[a]`];
-  else if (vo) graph = [...parts, `[vo]${LOUD}[a]`];
-  else if (music) graph = [...parts, `[mu]${LOUD}[a]`];
-  else { inputs.push('-f', 'lavfi', '-t', String(dur), '-i', 'anullsrc=r=48000:cl=stereo'); map = '1:a'; }
-  const argv = ['-y', '-loglevel', 'error', ...inputs, ...(graph ? ['-filter_complex', graph.join(';')] : []),
+  const beds = [];                       // labels to sum before loudness
+  const graph = [...parts];
+  if (vo && music) {
+    graph.push('[vo]asplit=2[vo1][vo2]', '[mu][vo1]sidechaincompress=threshold=0.03:ratio=8:attack=20:release=300[duck]');
+    beds.push('[vo2]', '[duck]');
+  } else if (vo) beds.push('[vo]');
+  else if (music) beds.push('[mu]');
+  if (sfx) beds.push('[sx]');
+  let map = '[a]';
+  if (beds.length > 1) graph.push(`${beds.join('')}amix=inputs=${beds.length}:duration=first:normalize=0,${LOUD}[a]`);
+  else if (beds.length === 1) graph.push(`${beds[0]}${LOUD}[a]`);
+  else { inputs.push('-f', 'lavfi', '-t', String(dur), '-i', 'anullsrc=r=48000:cl=stereo'); map = `${idx}:a`; }
+  const argv = ['-y', '-loglevel', 'error', ...inputs, ...(beds.length ? ['-filter_complex', graph.join(';')] : []),
     '-map', '0:v', '-map', map, '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-ar', '48000', '-t', String(dur), '-movflags', '+faststart', final];
   await run('ffmpeg', argv);
 }

@@ -3,7 +3,7 @@
 name: chequp_meta
 brand: CheqUp
 product: The CheqUp Method — weight-health membership (Clinician, Health Coach, WeightWatchers app, plan)
-landing_default: https://chequp.com/how-it-works   # use dedicated LPs, not the homepage (Jul data: purchase rate doubled off-homepage)
+landing_default: LANDING-URL-TBC   # needs a legal-approved LP. NOT /how-it-works: it names Mounjaro/Wegovy, shows pens and 'one dose taken weekly' (checked 8 Oct)
 
 audience:
   primary: Women 35–64 in the UK (566 of 680 purchases; best CPA women 35–44 £196, volume women 55–64)
@@ -15,9 +15,14 @@ formats:               # every concept renders all three unless it says otherwis
   "9x16": {placements: [FB Reels, IG Reels, Stories, Reels overlay], hook_by_s: 1.5}
   "4x5":  {placements: [FB Feed, IG Feed]}
   "1x1":  {placements: [Audience Network, Marketplace]}
+  "16x9": {placements: [VOD, YouTube, connected TV]}   # only when a board lists it
 exclude_placements: [Facebook in-stream video]   # £3,628 CPA over 90 days
 
-design_system: brand/design-system          # CheqUp Digital Design System (tokens, fonts, assets)
+design_system: brand/design-system
+unlicensed_assets:     # Stocksy watermarked comps inside the design-system kit — never in an ad until licensed
+  - 1de894af3390969a.jpg   # Peninsula / Stocksy 6950238
+  - 8a5a6edf3ad2e4e1.jpg   # DZ FILM / Stocksy 7340865
+  - f02b703f91f681a7.jpg   # Adrian Rodd / Stocksy 7164755          # CheqUp Digital Design System (tokens, fonts, assets)
 default_mode: weight-health                  # data-mode theme; others: women-s-health, cardiovascular
 
 voice:
@@ -48,6 +53,10 @@ never:     # enforced by cqf/compliance.py — hard fails, not warnings
   - Real-person likeness without consent (celebrities, WW ambassadors)
   - The CheqUp Loop graphic (design system: not for digital advertising or campaign work)
   - Gradients, textures, drop shadows, weight 700, colours outside the token set
+  - Recognisable AI-generated faces (AI plates show hands, objects, places, backs or distant figures only)
+  - Anyone who looks under 25 or underweight (CAP 13.3)
+  - Mirrors or appearance checks
+  - Stock content passed through AI models
 
 approvals_required:      # flags that put a render into HOLD until a human signs off
   price: Legal sign-off — frame as the membership, not the medicine
@@ -56,18 +65,31 @@ approvals_required:      # flags that put a render into HOLD until a human signs
   review: Verbatim review held on file, with the reviewer's permission
 
 broll:
-  look: >-
+  # Prompt rules: reference/broll-prompt-rules.md. Shot policy: reference/broll-shot-policy.md.
+  look_positive: "Editorial lifestyle photograph on a full-frame digital camera, candid and unposed. Warm natural sunlight with crisp, defined shadows, balanced exposure, true-to-life colour, natural contrast, clean whites, sharp focus and fine real texture."
+  look_legacy_ab_only: >-   # the old `look`; farm.py never sends it. Read only by scripts/ab_grid.py variant A; delete after the A/B
     warm natural daylight, mid-tone, real everyday British homes and streets, unstyled,
     candid documentary feel, no colour grading, no duotone, no film grain, 35mm lens,
     vertical composition with the main subject and faces in the lower half of the frame and calm
     empty space (wall, sky, soft background) in the upper third, where the text card sits
-  allowed_subjects: [cooking fresh food at home, walking outdoors, friends laughing on a sofa,
-    phone in hand in a kitchen, morning routine, park in autumn, groceries on a worktop,
-    stretching in a living room, cup of tea by a window]
-  people: unnamed lifestyle extras only, faces optional, never presented as members or clinicians
-  negative: >-
-    syringe, needle, injection pen, pills, tablets, medicine box, vial, hospital, scale, weighing scales,
-    measuring tape, before and after, shirtless, body close-up, belly, text, watermark, logo, gradient
+  people: >-
+    AI plates never contain a recognisable face. Allowed: hands and forearms; one adult (40s-60s, everyday
+    clothes) seen from behind or at a distance; distant out-of-focus figures. Every shot carries a people tag.
+    Anyone the script treats as "her", any face, member, coach or clinician comes from real, released photography.
+  people_add_on:
+    none: "person, people, face, hands, arm, portrait"
+    hands: "face, head, hair, portrait, looking at the camera, second person, extra hands"
+    hands_pair: "face, head, hair, portrait, looking at the camera, third person, extra hands"
+    back_view: "face, front view, profile, portrait, looking at the camera, close-up"
+    distant: "face, portrait, looking at the camera, close-up, crowd"
+  allowed_subjects: [fresh food being prepared (hands only), groceries on a worktop, cup of tea by a window,
+    a laid kitchen or garden table with no one at it, trainers by the front door, empty sunlit UK kitchens and
+    living rooms, park paths and terraced streets, a woman walking away from camera in a park,
+    a woman seen from behind in a garden]
+  # Qwen-Image runs at cfg 4, so this negative is live. The Chinese suffix is Qwen-Image-2512's official negative (model card).
+  negative: "blurry, soft focus, out of focus, hazy, foggy, washed out, low contrast, flat grey light, muddy shadows, overexposed, oversaturated, colour grading, teal and orange, duotone, sepia, film grain, noise, halftone dots, speckled texture, JPEG artefacts, CGI, 3D render, illustration, painting, waxy skin, plastic skin, airbrushed skin, doll-like face, portrait, close-up of a face, looking at the camera, stock photo pose, posing for the camera, child, teenager, school uniform, underweight, very thin, deformed hands, extra fingers, fused fingers, missing fingers, malformed limbs, mushy food, melted vegetables, cluttered composition, text, caption, subtitles, watermark, logo, brand name, lit phone screen, syringe, needle, injection pen, pen, marker pen, pills, tablets, capsules, medicine box, vial, hospital, doctor, nurse, stethoscope, lab coat, scrubs, lanyard, weighing scales, kitchen scales, measuring tape, mirror, before and after, shirtless, bare midriff, body close-up, belly, 低分辨率，低画质，肢体畸形，手指畸形，画面过饱和，蜡像感，人脸无细节，过度光滑，画面具有AI感。构图混乱。文字模糊，扭曲。"
+  negative_wan: "色调艳丽，过曝，静态，细节模糊不清，字幕，风格，作品，画作，画面，静止，整体发灰，最差质量，低质量，JPEG压缩残留，丑陋的，残缺的，多余的手指，画得不好的手部，画得不好的脸部，畸形的，毁容的，形态畸形的肢体，手指融合，静止不动的画面，杂乱的背景，三条腿，背景人很多，倒着走"   # verbatim from Wan2.2 shared_config.py sample_neg_prompt
+  negative_i2v_extra: "camera shake, handheld wobble, fast motion, sudden movement, morphing, warping hands, extra fingers, flicker, changing light, colour shift, text, watermark, syringe, pills, scales, face"
 
 publish:
   mode: outbox             # same as shorts-factory: build an upload folder + sheet, a human ships it

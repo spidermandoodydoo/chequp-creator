@@ -54,11 +54,14 @@
     {
       "type": "media",
       "dur": 3.0,
-      "broll": "a woman in her late forties laughing while cooking a colourful vegetable stir fry in a sunny home kitchen, phone propped on the worktop",
-      "motion": "she tosses the pan and glances at her phone, gentle handheld camera",
+      "broll": "Close view over a black wok on a gas hob in a sunny home kitchen: sliced red and yellow peppers, broccoli florets, sugar snap peas, sliced spring onions and strips of carrot glisten as a woman's right hand turns them with a wooden spatula. Only her hand and forearm are in frame, a rolled-up denim shirt sleeve, short unpainted nails. A smartphone leans against the white tiled splashback with its screen dark. Warm late-afternoon sun from a window on the left lights the rising steam and throws crisp shadows across the cream worktop. Vertical frame: the upper half is plain sunlit white tiled splashback, the wok sits just below the centre, the worktop edge fills the bottom. 35mm lens at f/5.6, the vegetables in sharp focus.",
+      "motion": "Steam rises slowly from the wok and the wooden spatula turns the vegetables once, gently. The phone stays still. The camera pushes in very slowly.",
       "caption": "Message or call your Coach whenever you need",
-      "fallback_src": "brand/design-system/assets/img/f02b703f91f681a7.jpg",
-      "vo": "Message or call your Coach whenever you need."
+      "fallback_src": "brand/design-system/assets/img/4b0266983772bc3f.jpg",
+      "vo": "Message or call your Coach whenever you need.",
+      "broll_brief": "a woman in her late forties laughing while cooking a colourful vegetable stir fry in a sunny home kitchen, phone propped on the worktop",
+      "people": "hands",
+      "broll_mode": "still"
     },
     {
       "type": "stat",

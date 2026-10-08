@@ -1,5 +1,3 @@
-# chequp-creator runtime config: LOCAL profile (this machine, no GPU). For mama's GPUs use
-#   python -m cqf --config config.mama.yaml …
 # chequp-creator runtime config. Same shape as shorts-factory's config.yaml where the
 # concepts overlap (farm.machines, models.wan22, qa.*, publish.mode).
 
@@ -15,12 +13,27 @@ mama:
   host: 100.75.169.5          # Tailscale; LAN is 192.168.0.193
 
 llm:
-  backend: claude_cli         # Claude on this machine writes variants (no mama)
-  fallback: anthropic_api
+  backend: lmstudio           # lmstudio (Qwen on mama) | claude_cli | anthropic_api
+  base_url: http://100.75.169.5:1234/v1
+  model: qwen/qwen3-235b-a22b-2507
+  temperature: 0.7
+  max_tokens: 6000
+  fallback: claude_cli        # used when mama is in render phase / unreachable
   timeout_s: 600
 
 farm:
-  machines: []                # no GPUs here: media scenes use fallback_src (CheqUp's photography)
+  machines:
+    - name: mama
+      host: 100.75.169.5
+      first_port: 8189        # GPU0/8188 is Dan's own ComfyUI; the farm is GPUs 1-6 (8189-8194)
+      gpus: 6
+      role: broll
+    - name: pc-5090
+      host: 127.0.0.1
+      first_port: 8188
+      gpus: 1
+      role: hero              # shared with shorts-factory's daemon; only used with --use-5090
+      enabled: false
   probe_timeout_s: 5
   job_timeout_s: 1800
 
@@ -60,7 +73,7 @@ voice:
   sample_rate: 24000
 
 music:
-  generate: true              # procedural bed (cqf/music.py) when a board has no music file
+  generate: true
   gain_db_under_vo: -21
   gain_db_solo: -6
 

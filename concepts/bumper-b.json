@@ -21,7 +21,8 @@
       "dur": 3.0,
       "ground": "sand",
       "headline": "Clinician. Health Coach. WeightWatchers app. One membership.",
-      "exit_to": "midnight"
+      "exit_to": "midnight",
+      "vo": "Clinician. Health Coach. WeightWatchers app. One membership."
     },
     {
       "type": "endcard",
@@ -29,7 +30,8 @@
       "ground": "midnight",
       "headline": "The CheqUp Method",
       "cta": "See if it’s right for you",
-      "legal": "CheqUp Health Ltd · Regulated by the CQC and GPhC · LegitScript certified · Eligibility criteria apply."
+      "legal": "CheqUp Health Ltd · Regulated by the CQC and GPhC · LegitScript certified · Eligibility criteria apply.",
+      "vo": "The CheqUp Method. Check your eligibility."
     }
   ]
 }

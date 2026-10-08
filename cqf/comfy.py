@@ -2,12 +2,86 @@
 shorts-factory uses): a single-frame t2v still, then i2v from the chosen still."""
 from __future__ import annotations
 
+import json
+import json
 import random
 import time
 import uuid
 from pathlib import Path
 
 import requests
+
+GRAPHS = Path(__file__).resolve().parent / "graphs"
+MIN_VERSION = (0, 39, 2)            # SeedVR2 + FrameInterpolate + nested SaveVideo codec keys
+REQUIRED_NODES = ["SeedVR2Conditioning", "SeedVR2TemporalChunk", "FrameInterpolate", "ResizeImageMaskNode", "SaveVideo"]
+_NUM = {"{{SEED}}": "seed", "{{WIDTH}}": "width", "{{HEIGHT}}": "height", "{{FRAMES}}": "frames"}
+
+
+def load_graph(name: str) -> str:
+    return (GRAPHS / name).read_text(encoding="utf-8")
+
+
+def fill(graph_json: str, **v) -> dict:
+    """Fill {{PLACEHOLDERS}} after json.loads (never by text-replacing raw JSON).
+    Numeric placeholders are quoted strings in the file and become ints here."""
+    assert v.get("width", 16) % 16 == 0 and v.get("height", 16) % 16 == 0, "sizes must be multiples of 16"
+    assert v.get("frames", 1) % 4 == 1, "frames must be 4n+1"
+
+    def walk(x):
+        if isinstance(x, dict):
+            return {k: walk(y) for k, y in x.items()}
+        if isinstance(x, list):
+            return [walk(y) for y in x]
+        if isinstance(x, str):
+            if x in _NUM:
+                return int(v[_NUM[x]])
+            for k, y in v.items():
+                x = x.replace("{{%s}}" % k.upper(), str(y))
+        return x
+    return walk(json.loads(graph_json))
+
+
+def graph_models(graph: dict) -> list[str]:
+    """Every model filename a graph loads (for the per-server model check)."""
+    keys = ("unet_name", "clip_name", "vae_name", "lora_name", "model_name")
+    return sorted({n["inputs"][k] for n in graph.values() for k in keys
+                   if isinstance(n.get("inputs", {}).get(k), str) and "{{" not in n["inputs"][k]})
+
+GRAPHS = Path(__file__).resolve().parent / "graphs"
+MIN_VERSION = (0, 39, 2)            # SeedVR2 + FrameInterpolate + nested SaveVideo codec keys
+REQUIRED_NODES = ["SeedVR2Conditioning", "SeedVR2TemporalChunk", "FrameInterpolate", "ResizeImageMaskNode", "SaveVideo"]
+_NUM = {"{{SEED}}": "seed", "{{WIDTH}}": "width", "{{HEIGHT}}": "height", "{{FRAMES}}": "frames"}
+
+
+def load_graph(name: str) -> str:
+    return (GRAPHS / name).read_text(encoding="utf-8")
+
+
+def fill(graph_json: str, **v) -> dict:
+    """Fill {{PLACEHOLDERS}} after json.loads (never by text-replacing raw JSON).
+    Numeric placeholders are quoted strings in the file and become ints here."""
+    assert v.get("width", 16) % 16 == 0 and v.get("height", 16) % 16 == 0, "sizes must be multiples of 16"
+    assert v.get("frames", 1) % 4 == 1, "frames must be 4n+1"
+
+    def walk(x):
+        if isinstance(x, dict):
+            return {k: walk(y) for k, y in x.items()}
+        if isinstance(x, list):
+            return [walk(y) for y in x]
+        if isinstance(x, str):
+            if x in _NUM:
+                return int(v[_NUM[x]])
+            for k, y in v.items():
+                x = x.replace("{{%s}}" % k.upper(), str(y))
+        return x
+    return walk(json.loads(graph_json))
+
+
+def graph_models(graph: dict) -> list[str]:
+    """Every model filename a graph loads (for the per-server model check)."""
+    keys = ("unet_name", "clip_name", "vae_name", "lora_name", "model_name")
+    return sorted({n["inputs"][k] for n in graph.values() for k in keys
+                   if isinstance(n.get("inputs", {}).get(k), str) and "{{" not in n["inputs"][k]})
 
 
 class Comfy:
@@ -24,11 +98,49 @@ class Comfy:
         """Return the model files this server is missing."""
         info = requests.get(f"{self.url}/object_info", timeout=30).json()
         avail = set()
-        for node in ("UNETLoader", "CLIPLoader", "VAELoader", "LoraLoaderModelOnly"):
+        for node in ("UNETLoader", "CLIPLoader", "VAELoader", "LoraLoaderModelOnly", "FrameInterpolationModelLoader"):
             for spec in info.get(node, {}).get("input", {}).get("required", {}).values():
                 if isinstance(spec, list) and spec and isinstance(spec[0], list):
                     avail.update(spec[0])
+                elif isinstance(spec, list) and spec and spec[0] == "COMBO" and len(spec) > 1 and isinstance(spec[1], dict):
+                    avail.update(spec[1].get("options", []))   # V3 node schema
         return [n for n in names if n not in avail]
+
+    def preflight(self) -> list[str]:
+        """Problems that would make the quality graphs fail on this server (empty = good)."""
+        problems = []
+        try:
+            ver = requests.get(f"{self.url}/system_stats", timeout=10).json().get("system", {}).get("comfyui_version", "0")
+            nums = tuple(int(p) for p in str(ver).lstrip("v").split("-")[0].split(".")[:3] if p.isdigit())
+            if nums < MIN_VERSION:
+                problems.append(f"ComfyUI {ver} < {'.'.join(map(str, MIN_VERSION))} (update ComfyUI)")
+        except (requests.RequestException, ValueError) as e:
+            problems.append(f"system_stats: {e}")
+        for node in REQUIRED_NODES:
+            try:
+                if node not in requests.get(f"{self.url}/object_info/{node}", timeout=15).json():
+                    problems.append(f"missing node {node} (update ComfyUI)")
+            except requests.RequestException as e:
+                problems.append(f"object_info/{node}: {e}")
+        return problems
+
+    def preflight(self) -> list[str]:
+        """Problems that would make the quality graphs fail on this server (empty = good)."""
+        problems = []
+        try:
+            ver = requests.get(f"{self.url}/system_stats", timeout=10).json().get("system", {}).get("comfyui_version", "0")
+            nums = tuple(int(p) for p in str(ver).lstrip("v").split("-")[0].split(".")[:3] if p.isdigit())
+            if nums < MIN_VERSION:
+                problems.append(f"ComfyUI {ver} < {'.'.join(map(str, MIN_VERSION))} (update ComfyUI)")
+        except (requests.RequestException, ValueError) as e:
+            problems.append(f"system_stats: {e}")
+        for node in REQUIRED_NODES:
+            try:
+                if node not in requests.get(f"{self.url}/object_info/{node}", timeout=15).json():
+                    problems.append(f"missing node {node} (update ComfyUI)")
+            except requests.RequestException as e:
+                problems.append(f"object_info/{node}: {e}")
+        return problems
 
     def upload(self, path: Path) -> str:
         with open(path, "rb") as f:
@@ -36,12 +148,13 @@ class Comfy:
         r.raise_for_status()
         return r.json()["name"]
 
-    def run(self, graph: dict, out_dir: Path, stem: str) -> list[Path]:
+    def run(self, graph: dict, out_dir: Path, stem: str, timeout: int | None = None) -> list[Path]:
+        limit = timeout or self.timeout
         r = requests.post(f"{self.url}/prompt", json={"prompt": graph, "client_id": self.client_id}, timeout=60)
         if not r.ok:
             raise RuntimeError(f"ComfyUI rejected graph: {r.text[:500]}")
         pid, t0 = r.json()["prompt_id"], time.time()
-        while time.time() - t0 < self.timeout:
+        while time.time() - t0 < limit:
             h = requests.get(f"{self.url}/history/{pid}", timeout=30).json().get(pid)
             if h:
                 status = h.get("status", {})
@@ -56,13 +169,13 @@ class Comfy:
     def _download(self, h: dict, out_dir: Path, stem: str) -> list[Path]:
         out_dir.mkdir(parents=True, exist_ok=True)
         files = []
-        for node_out in h.get("outputs", {}).values():
+        for node_id, node_out in h.get("outputs", {}).items():
             for key in ("images", "videos", "gifs", "animated"):
                 for f in node_out.get(key, []) if isinstance(node_out.get(key), list) else []:
                     if not isinstance(f, dict) or "filename" not in f:
                         continue
                     data = requests.get(f"{self.url}/view", params={"filename": f["filename"], "subfolder": f.get("subfolder", ""), "type": f.get("type", "output")}, timeout=120).content
-                    p = out_dir / f"{stem}{'' if not files else '_' + str(len(files))}{Path(f['filename']).suffix}"
+                    p = out_dir / f"{stem}_n{node_id}{Path(f['filename']).suffix}"   # _n10 native, _n20 master
                     p.write_bytes(data)
                     files.append(p)
         if not files:
@@ -117,6 +230,6 @@ def clip_graph(m: dict, image_name: str, prompt: str, negative: str, seed: int |
     return g
 
 
-def model_files(m: dict) -> list[str]:
+def model_files(m: dict) -> list[str]:   # legacy Wan-still/draft path only   # legacy Wan-still/draft path only
     return [m[k] for k in ("t2v_high", "t2v_low", "t2v_lora_high", "t2v_lora_low", "i2v_high", "i2v_low",
                            "i2v_lora_high", "i2v_lora_low", "text_encoder", "vae")]

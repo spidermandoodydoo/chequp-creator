@@ -28,13 +28,18 @@
       "src": "brand/design-system/assets/img/4b0266983772bc3f.jpg",
       "headline": "WeightWatchers, included.",
       "legal": "Subject to eligibility. Terms apply. GPhC Registered.",
-      "broll": "two women in their forties laughing while preparing a fresh salad together in a bright home kitchen"
+      "broll": "Close, high-angle view of two women's hands making a salad together in a wide white ceramic bowl on a pale oak worktop in a bright home kitchen on a sunny late morning. On the left, a hand with an olive-green linen sleeve rolled up tears butterhead lettuce leaves into the bowl; on the right, a South Asian woman's hand with a thin gold bangle tips halved cherry tomatoes in from a small wooden board. Beside the bowl: thick slices of cucumber, a halved lemon and a small glass jug of olive oil. Only their hands and forearms are in frame, short unpainted nails. Sun from a window on the right throws crisp shadows and makes the lettuce glisten. Vertical frame: the upper half is plain sunlit white tiled wall, the bowl and hands sit just below the centre, the oak worktop fills the bottom. 50mm lens at f/5.6.",
+      "vo": "The WeightWatchers app comes included with CheqUp.",
+      "broll_brief": "two women in their forties laughing while preparing a fresh salad together in a bright home kitchen",
+      "motion": "The hand on the left slowly drops one more lettuce leaf into the bowl; the other hand rests on the board. The sunlight stays steady. Fixed camera.",
+      "people": "hands_pair",
+      "broll_mode": "still"
     },
     {
       "type": "glass",
       "dur": 6.8,
       "src": "brand/design-system/assets/img/4b0266983772bc3f.jpg",
-      "broll": "two women in their forties laughing while preparing a fresh salad together in a bright home kitchen",
+      "broll": "Close, high-angle view of two women's hands making a salad together in a wide white ceramic bowl on a pale oak worktop in a bright home kitchen on a sunny late morning. On the left, a hand with an olive-green linen sleeve rolled up tears butterhead lettuce leaves into the bowl; on the right, a South Asian woman's hand with a thin gold bangle tips halved cherry tomatoes in from a small wooden board. Beside the bowl: thick slices of cucumber, a halved lemon and a small glass jug of olive oil. Only their hands and forearms are in frame, short unpainted nails. Sun from a window on the right throws crisp shadows and makes the lettuce glisten. Vertical frame: the upper half is plain sunlit white tiled wall, the bowl and hands sit just below the centre, the oak worktop fills the bottom. 50mm lens at f/5.6.",
       "headline": "The WeightWatchers app comes with your membership",
       "body": "4,500+ recipes, meal plans and nutrition targets, plus your own Clinician and Health Coach.",
       "cta": "Check eligibility",
@@ -42,14 +47,21 @@
       "quote": "Really pleased with the service. I feel truly supported.",
       "by": "Sharon, Trustpilot",
       "verbatim_ref": "Trustpilot review, verbatim, as shown in CheqUp ad 24505907839002173 (Chequp review v3) — confirm permission on file",
-      "legal": "Subject to eligibility. Terms apply. GPhC Registered."
+      "legal": "Subject to eligibility. Terms apply. GPhC Registered.",
+      "vo": "Over four thousand five hundred recipes, plus your own Clinician and Health Coach.",
+      "broll_brief": "two women in their forties laughing while preparing a fresh salad together in a bright home kitchen",
+      "motion": "The hand on the left slowly drops one more lettuce leaf into the bowl; the other hand rests on the board. The sunlight stays steady. Fixed camera.",
+      "people": "hands_pair",
+      "broll_mode": "still"
     },
     {
       "type": "endcard",
       "dur": 2.6,
       "cta": "Check eligibility",
       "url": "chequp.com",
-      "legal": "Subject to eligibility. Terms apply. GPhC Registered."
+      "legal": "Subject to eligibility. Terms apply. GPhC Registered.",
+      "vo": "Check your eligibility at chequp dot com."
     }
-  ]
+  ],
+  "voice": "bf_emma"
 }

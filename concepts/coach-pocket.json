@@ -60,11 +60,14 @@
     {
       "type": "media",
       "dur": 2.8,
-      "broll": "a woman in her fifties smiling at her phone while walking through a leafy London park in autumn",
-      "motion": "she walks towards camera, leaves moving in the breeze",
+      "broll": "A woman in her fifties seen from behind and slightly to one side walks away along a leaf-covered tarmac path in a London park on a bright autumn morning, a phone in her right hand at waist height. Shoulder-length ash-blonde hair with grey streaks, camel wool coat, rust knitted scarf, dark jeans, white trainers. London plane trees in yellow and russet, fallen leaves on the path, black iron railings and Georgian terraced houses beyond. Low sun ahead of her rim-lights her hair and coat and throws long crisp shadows towards the camera. Vertical frame, she is small in the frame at mid-distance: the upper half is pale bright sky through thinning branches, she sits just below the centre, the path and leaves fill the bottom. Eye level, 50mm lens at f/8.",
+      "motion": "She walks slowly away along the path; a few yellow leaves drift down around her. The light stays steady. The camera pushes in very slowly.",
       "caption": "Free 1:1 coaching, included",
-      "fallback_src": "brand/design-system/assets/img/8a5a6edf3ad2e4e1.jpg",
-      "focus": "28% 22%"
+      "fallback_src": "brand/design-system/assets/img/3d885b83417b27de.jpg",
+      "focus": "28% 22%",
+      "broll_brief": "a woman in her fifties smiling at her phone while walking through a leafy London park in autumn",
+      "people": "back_view",
+      "broll_mode": "still"
     },
     {
       "type": "endcard",
