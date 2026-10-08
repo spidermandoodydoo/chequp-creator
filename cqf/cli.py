@@ -1,11 +1,12 @@
 """python -m cqf <command>
 
-  doctor                 check node/ffmpeg/playwright, mama's LM Studio + ComfyUI farm, Kokoro
+  doctor                 check node/ffmpeg/playwright, LLM, ComfyUI (b-roll models), Kokoro/Chatterbox, ACE-Step
   lint <board.json>...   compliance + brand-voice check (no rendering)
-  plan <concept> [-n 3]  hook variants via Qwen on mama → concepts/variants/
-  make <board.json>...   lint → b-roll → voice → render all formats
+  plan <concept> [-n 3]  hook variants via the configured LLM (claude -p) → concepts/variants/
+  make <board.json>...   lint → b-roll → voice → music → sfx → render all formats
   batch [--top 5]        make every concept in insights priority order (+ its variants)
   outbox                 collect renders into out/outbox/<date>/ with ads_sheet.csv + preview page
+  report [board...]      out/REPORT.md + report.json: what actually made each piece (engines, shots, errors)
 """
 from __future__ import annotations
 
@@ -44,6 +45,24 @@ def doctor(cfg: dict, a):
         print("ok   kokoro")
     except ImportError:
         print("MISS kokoro (pip install kokoro soundfile) — renders will be silent")
+    pv, cb = cfg["_preset"].get("voice", {}), cfg["voice"].get("chatterbox_python")
+    if pv.get("engine") == "chatterbox" or any((c or {}).get("engine") == "chatterbox" for c in (pv.get("cast") or {}).values() if isinstance(c, dict)):
+        cbp = cb and (Path(cb) if Path(cb).is_absolute() else ROOT / cb)    # voice: a Kokoro fallback exists, so never fails doctor
+        print(f"{'ok  ' if cbp and cbp.exists() else 'MISS'} chatterbox env {cb} (scripts/setup_local.sh / setup_pc.ps1) — else Kokoro fallback")
+        refs = {(pv.get("chatterbox") or {}).get("ref")} | {c.get("ref") for c in (pv.get("cast") or {}).values() if isinstance(c, dict)}
+        for ref in sorted(r for r in refs if r):
+            have = (ROOT / ref).is_file()
+            print(f"{'ok  ' if have else 'MISS'} chatterbox reference {ref}" + ("" if have else " (python scripts/make_voice_refs.py, on the PC) — else Kokoro fallback"))
+        try:
+            import faster_whisper  # noqa: F401
+            print("ok   faster-whisper (take picking + caption timings)")
+        except ImportError:
+            print("MISS faster-whisper — first Chatterbox take is used, captions estimated")
+        try:
+            import parselmouth  # noqa: F401
+            print("ok   praat-parselmouth (rejects takes with pitch squeaks)")
+        except ImportError:
+            print("MISS praat-parselmouth — takes ranked on Whisper alone")
     if cfg["llm"]["backend"] != "lmstudio":
         from .llm import find_claude
         print(f"{'ok  ' if find_claude() else 'MISS'} LLM backend {cfg['llm']['backend']} (local profile)")
@@ -54,27 +73,41 @@ def doctor(cfg: dict, a):
         print(f"{'ok  ' if cfg['llm']['model'] in ids else 'IDLE'} LM Studio on mama: {ids or 'no model loaded'}")
       except requests.RequestException:
         print("DOWN LM Studio on mama (render phase, or mama offline) — planning falls back to claude -p")
-    live = farm.servers(cfg, use_5090=a.use_5090)
+    live = farm.servers(cfg, use_5090=a.use_5090, need_clips=getattr(a, "clips", False))
     print(f"{'ok  ' if live else 'DOWN'} ComfyUI farm: {len(live)} servers {[s.url for s in live]}")
+    mbk = (cfg.get("music") or {}).get("backend") or "procedural"
+    if mbk not in ("ace_step", "procedural"):        # pipeline._music raises on this, so every board would stop
+        ok = False
+        print(f"FAIL music: music.backend {mbk!r} must be ace_step or procedural")
+    elif mbk == "ace_step":    # music: a fallback exists, so ACE-Step being unavailable never fails doctor
+        from . import music
+        srv, why = music.ace_server(cfg, music.ace_graph(cfg))
+        print(f"ok   music: ACE-Step 1.5 on {srv.url}" if srv else f"WARN music: ACE-Step 1.5 unavailable ({why}); procedural bed instead")
+    else:
+        print("ok   music: procedural bed (music.backend: procedural)")
     return 0 if ok else 1
 
 
 def main(argv: list[str] | None = None):
     ap = argparse.ArgumentParser(prog="cqf", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--config", default="config.yaml", help="config.yaml = this machine; config.mama.yaml = mama's GPUs")
+    ap.add_argument("--config", default="config.yaml", help="config.yaml = this machine (no GPU); config.pc.yaml = Dan's 5090 PC (all media generation)")
     sub = ap.add_subparsers(dest="cmd", required=True)
     d = sub.add_parser("doctor"); d.add_argument("--use-5090", action="store_true")
+    d.add_argument("--clips", action="store_true", help="also require the Wan 2.2 i2v clip models (pc_run -Clips)")
     li = sub.add_parser("lint"); li.add_argument("boards", nargs="+")
     pl = sub.add_parser("plan"); pl.add_argument("concept"); pl.add_argument("-n", type=int, default=3); pl.add_argument("--brief", default="")
     mk = sub.add_parser("make"); mk.add_argument("boards", nargs="+")
     ba = sub.add_parser("batch"); ba.add_argument("--top", type=int, default=5); ba.add_argument("--variants", action="store_true")
     for p in (mk, ba):
-        p.add_argument("--format", action="append", dest="formats", help="9x16 | 4x5 | 1x1 (repeatable; default all)")
+        p.add_argument("--format", action="append", dest="formats", help="9x16 | 4x5 | 1x1 | 16x9 (repeatable; default: the board's formats)")
         p.add_argument("--use-5090", action="store_true", help="also queue b-roll on the PC 5090 (shared with shorts-factory)")
         p.add_argument("--no-broll", action="store_true", help="skip GPU b-roll; use each scene's fallback_src")
         p.add_argument("--no-voice", action="store_true")
         p.add_argument("--strict", action="store_true", help="refuse HOLD boards instead of rendering drafts")
+        p.add_argument("--clips", action="store_true", help="every AI b-roll shot becomes a Wan 2.2 i2v clip (slow; pc_run -Clips)")
     ob = sub.add_parser("outbox"); ob.add_argument("--campaign", default="chequp_method")
+    from . import report
+    report.add_parser(sub)
     a = ap.parse_args(argv)
     cfg = config.load(a.config)
 
@@ -101,11 +134,23 @@ def main(argv: list[str] | None = None):
             boards = [ROOT / "concepts" / f"{c['id']}.json" for c in top if (ROOT / "concepts" / f"{c['id']}.json").exists()]
             if a.variants:
                 boards += [p for c in top for p in sorted((ROOT / "concepts" / "variants").glob(f"{c['id']}-*.json"))]
-        results = [pipeline.produce(cfg, b, a.formats, use_5090=a.use_5090, skip_broll=a.no_broll, skip_voice=a.no_voice,
-                                    allow_hold=not a.strict) for b in boards]
+        results = []
+        for b in boards:          # one failed board must not cost the rest: its state.json says status "error"
+            try:
+                results.append(pipeline.produce(cfg, b, a.formats, use_5090=a.use_5090, skip_broll=a.no_broll,
+                                                skip_voice=a.no_voice, allow_hold=not a.strict, clips=a.clips))
+            except Exception as e:  # noqa: BLE001
+                import traceback
+                traceback.print_exc()
+                print(f"ERROR {Path(b).stem}: {type(e).__name__}: {e} (carrying on with the next board)")
+                results.append({"id": Path(b).stem, "verdict": "ERROR", "files": []})
         print("\nsummary")
         for r in results:
-            print(f"  {r['verdict']:4} {r['id']}: " + ", ".join(f"{f['format']} {f['dur']}s {f['mb']}MB" for f in r["files"]))
+            print(f"  {r['verdict']:5} {r['id']}: " + ", ".join(f"{f['format']} {f['dur']}s {f['mb']}MB" for f in r["files"]))
+        if any(r["verdict"] in ("ERROR", "FAIL") for r in results):
+            sys.exit(1)       # a board failed (pc_run.ps1 reads out/REPORT.md / report.json for which)
         return
+    if a.cmd == "report":
+        sys.exit(report.run(cfg, a))
     if a.cmd == "outbox":
         print("outbox ->", pipeline.outbox(cfg, a.campaign))

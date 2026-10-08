@@ -1,0 +1,261 @@
+{
+  "id": "numan-standard-plan-30",
+  "concept": "numan-standard-plan",
+  "variant": "30",
+  "version": 2,
+  "audience": "Women 35–64, UK",
+  "formats": [
+    "9x16",
+    "4x5"
+  ],
+  "meta": {
+    "primary_text": "A plan with your name on it. With The CheqUp Method, your Health Coach builds it around your week, by message or call, with a UK Clinician who reviews your history and the WeightWatchers app included.",
+    "headline": "Weight loss made simple with The CheqUp Method",
+    "description": "Check my eligibility",
+    "cta_button": "LEARN_MORE"
+  },
+  "approvals": {},
+  "approvals_pending": {
+    "landing": "Legal-approved landing page needed. meta.url is unset and the endcard url is ‘TBC’ on purpose: the url placeholder is a HOLD no approvals key clears, so the board can’t publish until someone sets the approved URL after every item below is signed off (compliance.py doesn’t read approvals_pending yet). Never /how-it-works.",
+    "weightwatchers": "WeightWatchers partner approval for the app mention. Confirm ‘included’ is true for every membership tier, and give WeightWatchers sight of the full script (its app sits next to an anti-automation joke).",
+    "platform_line": "‘Made simple’ is also used by Oxford Online Pharmacy, My Health Needs UK and LloydsPharmacy (Meta, 8 Oct). Vicky’s line; flagged, not changed.",
+    "proposition": "‘A plan with your name on it.’ Confirm plans are individually built by the Health Coach around the member’s week (not a template with a merged name). The first letter says ‘To the occupier,’ rather than another person’s name (the earlier ‘Dear Gary,’), so nothing implies rivals send health plans to the wrong person.",
+    "comparative_claims": "Legal question: the device implies a comparison with the category (others’ ‘personal’ plans are generic). Before publication legal needs (a) evidence that the parodied behaviour is a real, typical category practice and (b) evidence of CheqUp’s own journey: a human Coach for every member, plans individually built, no auto-reply in the channels a member uses (site chat, onboarding emails, app nudges, the bundled WeightWatchers app). CAP 3.1, 3.3, 3.7; 3.33 if a rival becomes identifiable.",
+    "coach_contact": "Legal question, not a conclusion: does any part of the film imply a reply time or availability? If legal reads one, CheqUp must hold evidence of typical Coach first-contact and reply times (CAP 3.7; ruling A24-1264775). Also confirm exactly which contact modes exist (‘by message or call’; video?) and that Coaches are people, not automated.",
+    "indirect_pom": "Legal question: do the signals together read as a prescribing-pharmacy service (sign-up, ‘a UK Clinician’, ‘Eligibility criteria apply’, ‘Regulated by the CQC and GPhC’, the ‘Check my eligibility’ button)? ASA guidance: a consultation ad should not indicate that the likely outcome is a POM; A25-1305722 upheld POM promotion without a named medicine. ‘Eligibility’ is no longer spoken. Ask whether GPhC must appear in this legal line, and confirm a non-medication membership path exists that makes ‘eligibility’ accurate.",
+    "clinician": "‘A UK Clinician reviews your history’: confirm a clinician reviews each member’s history (the line no longer says members talk to the clinician, or that the clinician ‘knows’ them).",
+    "illustrative": "The letters, the Coach chat, the names Jo, Susan and Sue are illustrative; the legal line says so.",
+    "voices": "The customer’s voice is synthetic (Chatterbox from a Kokoro-made reference; no real person cloned); she is a dramatised prospective customer, not a member or a testimonial. The Health Coach is never voiced by TTS: Coach chat bubbles are unvoiced and the spoken CheqUp lines are third-person announcer lines.",
+    "broll_required": "No fallback stills on purpose: every design-system photo shows smiling faces, which would cast a real model as the Coach, the Clinician or the customer. If a plate fails, the board errors (REPORT.md says which scene) instead of rendering a misleading still. For a layout-only draft, copy the board to the scratchpad and set src_locked on its media scenes.",
+    "timing": "Bot and Coach bubbles use fixed ‘at’ times set at least 0.45 s after each line’s estimated end (2.9 words/s). Re-set them after the PC voice pass if a read runs slower (the renderer has no ‘after_line’ yet).",
+    "formats_16x9": "16x9 dropped until the renderer has a 16:9 chat layout, a -23 LUFS VOD master (render.mjs normalises to -14 LUFS) and a visible endcard URL, and the cut is re-timed to about 29.5 s. Live-action is the VOD route (Clearcast first).",
+    "live_action": "Live-action shooting script: reference/numan-style-scripts.md"
+  },
+  "scenes": [
+    {
+      "type": "media",
+      "frame": "full",
+      "dur": 1.6,
+      "caption": "Ooh. My plan.",
+      "vo": [
+        {
+          "voice": "customer",
+          "text": "Ooh. My plan."
+        }
+      ],
+      "sfx": [
+        {
+          "at": 0,
+          "kind": "silence",
+          "dur": 1.6
+        }
+      ],
+      "broll": "A single blank white envelope lying on a coir doormat just inside the dark green front door of a Victorian terraced house on a bright morning. A brass letterbox sits in the lower half of the door above the mat. Encaustic floor tiles in terracotta, cream and black run along the hallway, with the bottom step of a carpeted staircase, a white-painted radiator and a pair of grey felt slippers beside it on the right. Low sun through the door's small stained-glass panel throws crisp coloured patches of light across the tiles. Vertical frame: the upper half is the plain dark green painted door, the envelope and doormat sit just below the centre, the patterned tiles fill the bottom. 50mm lens at f/8.",
+      "broll_brief": "a blank envelope on the doormat inside a Victorian front door",
+      "motion": "Light from the stained-glass panel shifts slowly across the envelope and the tiles. The camera pushes in very slowly.",
+      "people": "none",
+      "broll_mode": "still"
+    },
+    {
+      "type": "hook",
+      "dur": 1.9,
+      "ground": "dark-sand",
+      "size": "h1",
+      "eyebrow": "Your personal weight loss plan",
+      "headline": "To the occupier,",
+      "sfx": [
+        {
+          "at": 0,
+          "kind": "silence",
+          "dur": 1.9
+        }
+      ],
+      "vo": [
+        {
+          "voice": "customer",
+          "text": "It’s Sue.",
+          "pause_before": 0.5
+        }
+      ],
+      "show_captions": true
+    },
+    {
+      "type": "hook",
+      "dur": 1.9,
+      "ground": "dark-sand",
+      "size": "h1",
+      "eyebrow": "Your personal weight loss plan",
+      "headline": "Dear valued customer,",
+      "sfx": [
+        {
+          "at": 0,
+          "kind": "silence",
+          "dur": 1.9
+        }
+      ],
+      "vo": [
+        {
+          "voice": "customer",
+          "text": "Still Sue.",
+          "pause_before": 0.5
+        }
+      ],
+      "show_captions": true
+    },
+    {
+      "type": "hook",
+      "dur": 3.3,
+      "ground": "midnight",
+      "headline": "Dear {first_name},",
+      "sfx": [
+        {
+          "at": 0,
+          "kind": "silence",
+          "dur": 3.3
+        }
+      ],
+      "vo": [
+        {
+          "voice": "customer",
+          "text": "Dear…",
+          "pause_before": 0.5,
+          "pause_after": 0
+        },
+        {
+          "voice": "customer",
+          "text": "first name.",
+          "pause_before": 0.6
+        }
+      ],
+      "show_captions": true
+    },
+    {
+      "type": "chat",
+      "dur": 3.7,
+      "ground": "sand",
+      "messages": [
+        {
+          "from": "coach",
+          "name": "Your CheqUp Health Coach",
+          "text": "Hiya, I’m Jo. Susan or Sue?",
+          "at": 0.5
+        },
+        {
+          "from": "you",
+          "text": "Sue.",
+          "line": 0
+        },
+        {
+          "from": "coach",
+          "name": "Your CheqUp Health Coach",
+          "text": "Hi, Sue. Tell me about your week.",
+          "at": 2.55
+        }
+      ],
+      "note": "Illustrative conversation",
+      "sfx": [
+        {
+          "at": 0.5,
+          "kind": "ding"
+        },
+        {
+          "at": 2.55,
+          "kind": "ding"
+        }
+      ],
+      "vo": [
+        {
+          "voice": "customer",
+          "text": "Sue.",
+          "pause_before": 1.6
+        }
+      ]
+    },
+    {
+      "type": "hook",
+      "dur": 3.0,
+      "ground": "lavender",
+      "size": "h1",
+      "eyebrow": "The CheqUp Method",
+      "headline": "Dear Sue,",
+      "body": "A plan with your name on it.",
+      "vo": [
+        {
+          "voice": "announcer",
+          "text": "A plan with your name on it."
+        }
+      ]
+    },
+    {
+      "type": "media",
+      "frame": "relief",
+      "dur": 2.8,
+      "ground": "sand",
+      "tag": "Your UK Clinician",
+      "headline": "Reviews your history.",
+      "size": "h1",
+      "vo": [
+        {
+          "voice": "announcer",
+          "text": "A UK Clinician reviews your history,"
+        }
+      ],
+      "broll": "A white mug of tea and a phone lying face-down on the painted sill of a tall sash window in the front room of a Victorian terraced house on a bright morning. Beside them on the sill: a small fern in a terracotta pot and a folded pair of reading glasses. Beyond the glass: a quiet terraced street with black iron railings and a London plane tree turning gold. Below the sill: a white-painted radiator with a folded grey wool blanket on top. Low morning sun through the window throws crisp window-shaped patches of light across the sill and the wall. Vertical frame: the upper half is plain white painted wall and window frame, the mug and phone sit just below the centre, the radiator and oak floorboards fill the bottom. 50mm lens at f/5.6.",
+      "broll_brief": "a mug of tea and a face-down phone on a sash-window sill (the UK Clinician beat, people-free)",
+      "motion": "Steam rises slowly from the mug while the plane tree leaves move gently outside the window. The light stays steady. The camera pushes in very slowly.",
+      "people": "none",
+      "broll_mode": "still"
+    },
+    {
+      "type": "media",
+      "frame": "relief",
+      "dur": 2.5,
+      "ground": "sand",
+      "tag": "WeightWatchers app",
+      "headline": "Included.",
+      "size": "h1",
+      "vo": [
+        {
+          "voice": "announcer",
+          "text": "and the WeightWatchers app, included."
+        }
+      ],
+      "broll": "Close, high-angle view of a woman's hands packing a lunch into a clear glass container on a pale oak worktop in a home kitchen in the late afternoon. Her right hand lays a row of sugar snap peas beside a portion of brown rice and sliced grilled chicken; her left hand holds the glass lid ready. Beside the container: a punnet of cherry tomatoes, a red apple and a folded blue-and-white striped tea towel. Only her hands and forearms are in frame, a navy cardigan sleeve, short unpainted nails and a thin gold bangle, a South Asian woman in her fifties. Low sun from a window on the left throws crisp window-shaped patches of light across the worktop. Vertical frame: the upper half is plain sunlit white tiled splashback, the hands and container sit just below the centre, the worktop edge fills the bottom. 50mm lens at f/8.",
+      "broll_brief": "her hands packing a lunch into a glass container in the late afternoon (the WeightWatchers app beat)",
+      "motion": "Her right hand slowly lays one more sugar snap pea into the container, then rests on the worktop. Fixed camera.",
+      "people": "hands",
+      "broll_mode": "still"
+    },
+    {
+      "type": "hook",
+      "dur": 4.5,
+      "ground": "purple",
+      "size": "h1",
+      "headline": "Weight loss made simple with The CheqUp Method.",
+      "vo": [
+        {
+          "voice": "announcer",
+          "text": "Weight loss, made simple, with The CheqUp Method.",
+          "style": "tagline"
+        }
+      ],
+      "exit_to": "sand"
+    },
+    {
+      "type": "endcard",
+      "dur": 4.3,
+      "ground": "sand",
+      "headline": "See if it’s right for you.",
+      "body": "Health Coach by message or call. UK Clinician. WeightWatchers app.",
+      "cta": "Check my eligibility",
+      "legal": "Illustrative scenarios. CheqUp Health Ltd · Regulated by the CQC and GPhC · Eligibility criteria apply.",
+      "url": "TBC",
+      "vo": [
+        {
+          "voice": "announcer",
+          "text": "See if it’s right for you at chequp.com."
+        }
+      ]
+    }
+  ]
+}

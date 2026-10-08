@@ -18,7 +18,7 @@ mama:
 
 llm:
   backend: claude_cli         # the PC's Claude Code CLI (find_claude also checks %APPDATA%\Claude\claude-code)
-  fallback: lmstudio          # Qwen on mama if it's in plan phase
+  fallback: null              # no LM Studio-on-mama fallback: CheqUp never sends anything to mama (base_url unused)
   base_url: http://100.75.169.5:1234/v1
   model: qwen/qwen3-235b-a22b-2507
   temperature: 0.7
@@ -86,16 +86,20 @@ render:
   node: node
 
 voice:
-  backend: kokoro             # kokoro | none
-  lang_code: b                # British English
+  backend: tts                # tts | none  (engine per line: presets/*.yaml voice block)
+  lang_code: b                # British English (Kokoro)
   sample_rate: 24000
+  chatterbox_python: .venv-chatterbox/Scripts/python.exe   # torch 2.7.1 cu128 env from scripts/setup_pc.ps1
 
 music:
   generate: true
   backend: ace_step           # ACE-Step 1.5 on the 5090's ComfyUI; falls back to the procedural bed
-  seed: 7
+  seed: 7                     # beds are cached in out/music by look, length, seed and checkpoint: change for a new take
   gain_db_under_vo: -21
   gain_db_solo: -6
 
 publish:
   mode: outbox                # outbox only — nothing is pushed to Meta automatically
+
+shorts_factory:               # shares this PC's ComfyUI + GPU. scripts\pc_run.ps1 checks its pause file
+  dir: C:\Users\white\heatmap\shorts-factory   # paused while <dir>\data\STOP exists; only Dan resumes it

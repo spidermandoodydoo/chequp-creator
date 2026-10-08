@@ -25,11 +25,35 @@ unlicensed_assets:     # Stocksy watermarked comps inside the design-system kit 
   - f02b703f91f681a7.jpg   # Adrian Rodd / Stocksy 7164755          # CheqUp Digital Design System (tokens, fonts, assets)
 default_mode: weight-health                  # data-mode theme; others: women-s-health, cardiovascular
 
-voice:
-  tts: kokoro
-  voices: [bf_emma, bf_isabella]   # warm British female; bm_george for the male test cut
-  speed: 0.95
-  words_per_second: 2.5
+voice:   # cqf/voice.py. Upbeat British newsreader read; listen before any production run (8 Oct tests were measured, not heard)
+  engine: chatterbox               # chatterbox | kokoro. Falls back to Kokoro per line if config chatterbox_python or the ref is missing
+  voices: ["bf_emma,bf_alice"]     # Kokoro voice: 50/50 blend keeps emma's sound with alice's movement (pitch SD 2.2 -> 3.6 st)
+  speed: 1.05                      # Kokoro only. Chatterbox has no speed knob: pace follows cfg_weight (lower = slower)
+  words_per_second: 2.9            # silent-render estimate (~175 wpm incl. pauses)
+  dialogue_gap_s: 0.3
+  chatterbox:                      # original 0.5B English model (Turbo/Nano ignore exaggeration + cfg_weight)
+    # Profile "bouncy" (Dan's pick of 8 Oct = sample 1): bootstrapped lively reference, energy 0.85, pauses tightened.
+    #   Day 23 script: pitch SD 4.6 st (was 2.8), brighter (232 Hz), inner pauses capped at 0.15 s.
+    # Alternatives: "fluid"  = ref announcer_ref.wav, exaggeration 0.9, cfg_weight 0.4, temperature 0.9, tighten on (3.5 st, quickest)
+    #               "steady" = ref announcer_ref.wav, exaggeration 0.7, cfg_weight 0.5, temperature 0.8, no tighten (first recommendation)
+    ref: brand/voice/announcer_bouncy_ref.wav   # Chatterbox read of a promo paragraph from the Kokoro-made announcer_ref: synthetic, no real person
+    exaggeration: 0.85
+    cfg_weight: 0.4
+    temperature: 0.9
+    tighten_pauses: {max_gap: 0.22, to: 0.15}
+    takes: 3                       # all takes kept as vo/sNN_J.tN.wav; Whisper picks the best, swap by ear if needed
+    seed: 1234
+  styles:                          # a line opts in with "style": "<name>"
+    tagline: {exaggeration: 0.5, cfg_weight: 0.3, tempo: 0.8, speed: 0.9, pause_before: 0.35}   # "That’s The CheqUp Method.": a beat, then slower (Numan's end lines run at half pace)
+  cast:                            # dialogue roles: scene "vo": [{"voice": "<role>", "text": "..."}]; boards can override via "voices"
+    announcer: {}                  # the defaults above
+    chequp: {}                     # the CheqUp staffer in a dialogue = the announcer voice
+    customer: {ref: brand/voice/customer_ref.wav, exaggeration: 0.5, cfg_weight: 0.5, voice: bf_isabella}
+    male: {engine: kokoro, voice: bm_fable, speed: 1.05}   # male test cut (Kokoro bm_fable: pitch SD 4.5 st; bm_george drops -10 st at line ends)
+  lexicon: {}                      # extra spoken-only respellings: {kokoro: {regex: respelling}, chatterbox: {...}}; CheqUp is built in
+  master:                          # VO stem only; render.mjs then takes the full mix to -14 LUFS / -1 dBTP
+    pitch_st: 0                    # formant-preserving lift; 0.5 only for an all-Kokoro render, never above 1
+    # filters: default = voice.MASTER (80 Hz HPF, -2 dB @250, +2.5 dB @3.5k, +1.5 dB shelf @9k, de-ess, 3:1 comp, -16 LUFS / -1.5 dBTP)
 
 writer_rules:
   - Second person, present tense, no hedging. The reader is "you"; CheqUp is "we".

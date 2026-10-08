@@ -1,16 +1,17 @@
 # chequp-creator
 
 The shorts-factory workflow, rebuilt for **CheqUp's Meta ads**. It turns CheqUp's own account, ad-library and
-search data into storyboards, then into finished 9:16 / 4:5 / 1:1 videos rendered **in the CheqUp Digital
-Design System**. The heavy lifting runs on **mama** (7× RTX 3090), with the PC's 5090 as an option.
+search data into storyboards, then into finished 9:16 / 4:5 / 1:1 / 16:9 videos rendered **in the CheqUp Digital
+Design System**. All media generation (b-roll, voice, music) runs on **Dan's Windows RTX 5090 PC** with local open
+models (see [Running on the PC](#running-on-the-pc)); the cloud VM only writes boards and code. mama is not used.
 
 ```
-data/insights.yaml ──► concepts/*.json ──► cqf plan (Qwen3-235B on mama) ──► concepts/variants/*.json
+data/insights.yaml ──► concepts/*.json ──► cqf plan (claude -p) ──► concepts/variants/*.json
    (account, proof,        (base storyboards,      hook variants, auto-linted, re-asked on failure)
     search, rulings)        one per concept)
                                    │
                                    ▼
-   cqf make:  lint ─► b-roll (Wan 2.2 on mama's ComfyUI farm) ─► voice (Kokoro, British) ─► render ─► QA
+   cqf make:  lint ─► b-roll (Qwen-Image on the PC's ComfyUI) ─► voice (Chatterbox or Kokoro) ─► music ─► render ─► QA
              (FAIL stops)  stills → Claude-vision check → i2v clips      design-system motion graphics
                                                                         (Playwright + ffmpeg)
                                    │
@@ -102,14 +103,15 @@ To clear a HOLD, record the sign-off in the board, e.g. `"approvals": {"price": 
 
 ```bash
 pip install -r requirements.txt          # pyyaml, requests
-# voice: Python ≤3.12, then
+# voice (on the PC only: the cloud VM never installs or runs a voice model): Python ≤3.12, then
 pip install "kokoro>=0.9.4" "transformers>=4.44" soundfile \
   "en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl"
+# upbeat VO engine (Chatterbox, MIT) in its own env: scripts/setup_local.sh or scripts/setup_pc.ps1
 cd render && npm install && npx playwright install chromium && cd ..
 
-python -m cqf doctor                      # tools, LM Studio on mama, ComfyUI farm, Kokoro
+python -m cqf doctor                      # tools, LLM, ComfyUI + b-roll models, voice envs, ACE-Step
 python -m cqf lint concepts/              # compliance only
-python -m cqf plan method-20 -n 4         # 4 hook variants from Qwen on mama
+python -m cqf plan method-20 -n 4         # 4 hook variants (claude -p)
 python -m cqf make method-20              # full pipeline, all formats
 python -m cqf batch --top 5 --variants    # top-5 concepts + their variants
 python -m cqf outbox                      # build today's upload folder
@@ -121,8 +123,57 @@ Useful flags:
 - `--format 9x16`: renders one ratio only.
 - `--use-5090`: also queues b-roll on the PC's ComfyUI, which shorts-factory shares.
 - `--strict`: refuses HOLD boards.
+- `--clips`: every AI b-roll shot becomes a Wan 2.2 image-to-video clip (slow).
+
+`make` carries on past a board that fails: that board's `state.json` says `status: error` with the error, and `make` exits 1 at the end. `python -m cqf report [boards...]` writes `out/REPORT.md` and `out/report.json` from the episodes' `state.json`: per board the verdict, the files (format, seconds, MB), each b-roll shot (Qwen plate or CheqUp still, score, UNVERIFIED), the engine that read each VO line (Chatterbox, or Kokoro with the fallback reason), the music engine (ACE-Step or the procedural bed), AI video clips, errors and the outbox. Runs from before engine recording get their engines guessed.
+
+## Running on the PC
+
+All generation happens on Dan's Windows RTX 5090 PC with local models; the cloud VM only writes boards and code. One command does a whole run there, always with `config.pc.yaml` (mama stays disabled):
+
+```powershell
+cd C:\Users\white\chequp-creator
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\pc_start.ps1 -Boards numan -Formats 9x16   # returns in ~30 s
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\pc_wait.ps1 -Minutes 100                  # waits; never kills
+```
+
+- `scripts\pc_run.ps1` does the run itself (Windows PowerShell 5.1 compatible). Pre-flight checks the tools (prints `winget` commands), `.venv` (runs `setup_pc.ps1` if it's missing), ComfyUI at 127.0.0.1:8188 and its version (0.39.2 or newer; it only prints `scripts\update_comfy_pc.ps1`, because shorts-factory shares that ComfyUI and Dan decides), `cqf doctor` (voice env and reference clips, b-roll models, ACE-Step) and shorts-factory's `data\STOP`. Then `make` (carrying on past a failed board), `outbox` and `report`, all in `out\logs\pc_run_<ts>.log`. It ends with `out\REPORT.md`, a review zip `out\logs\review_<ts>.zip` (REPORT.md, the log, ads sheet, posters, a 12-frame contact sheet per board, b-roll plate thumbnails, state files) and, last of all, the marker `out\logs\pc_run_<ts>.done` holding the exit code.
+- Options: `-Boards` (groups, `all`, ids, paths or globs; default `numan-*`, else `made-simple-*`), `-Formats`, `-Strict`, `-SkipModels` (accept fallbacks), `-Draft` (don't stop on an old ComfyUI or missing Qwen/SeedVR2 files; that b-roll falls back to CheqUp stills, and a board with no `fallback_src`, like the numan ones, fails instead), `-Clips`, `-PauseFactory`.
+- Exit codes: 0 ok, 1 a board failed, 2 tools, 3 ComfyUI down, 4 ComfyUI too old, 5 Python env or config, 6 models, 7 unknown board/format, 8 fallbacks used, 9 run crashed, 10 already running (lock file `out\logs\pc_run.lock`), 11 still running (pc_wait).
+- `scripts\pc_start.ps1` starts pc_run detached in a hidden PowerShell and returns; `scripts\pc_wait.ps1` waits for the done marker. A Claude Code session on the PC follows `PUPPET.md`.
+
+## B-roll (`cqf/farm.py`)
+
+- Each media scene's `broll` prompt becomes a Qwen-Image-2512 still (4 seeds, each upscaled 2x by SeedVR2 7B in the same graph, `cqf/graphs/qwen_still.json`) on the PC's ComfyUI (0.39.2 or newer; `scripts/fetch_models_pc.ps1` fetches the models). `claude -p` vision-checks every candidate and the best passing one wins. With no vision check the plate is UNVERIFIED and the board stays on HOLD.
+- `--clips` (pc_run `-Clips`) turns each chosen still into a Wan 2.2 image-to-video clip (`cqf/graphs/wan_i2v_clip.json`: 30 steps, SeedVR2 1.5x, FILM to 30 fps). Without it every plate is a still with a slow push-in.
+- Every shot carries a people tag (`none`, `hands`, `hands_pair`, `back_view`, `distant`): AI plates never show a recognisable face. 16:9 gets its own plate; 4:5 and 1:1 are crops of the 9:16 one. Plates are cached in `out/broll/` by prompt and aspect, so boards share them.
+- If a plate can't be made, the scene uses its `fallback_src` (CheqUp's own photography). The numan boards have none on purpose (every brand photo shows a face), so there a missing plate fails the board and REPORT.md names the scene.
+
+## Voice (`cqf/voice.py`)
+
+- **Chatterbox** (Resemble AI, original 0.5B English model, MIT) is the default engine (`voice.engine` in `presets/chequp_meta.yaml`). It copies the delivery of a synthetic reference clip in `brand/voice/` (machine-made, so no real person is cloned: see `brand/voice/README.md`). The active "bouncy" profile is exaggeration 0.85, cfg_weight 0.4, temperature 0.9, with inner pauses tightened to 0.15 s.
+- It runs in its own env (`.venv-chatterbox`: Python 3.11, torch 2.7.1 cu128; `voice.chatterbox_python` in the config) as one long-lived worker (`cqf/tts_chatterbox.py`, JSON lines over stdin/stdout, with timeouts). Each line gets 3 takes. Whisper (faster-whisper) picks the take it hears best and supplies the caption word timings, and takes with pitch squeaks lose (praat-parselmouth). All takes stay in `out/episodes/<id>/vo/sNN_J.tN.wav` so one can be swapped by ear, and they're reused while the text, settings and reference are unchanged.
+- **Kokoro** (`bf_emma,bf_alice` blend at 1.05) is the fallback. If the env, a reference clip or the worker is missing or fails, that line is read by Kokoro and a warning names it. Each line's engine goes into `board.audio.voice_engines` for REPORT.md.
+- Dialogue: scene `"vo": [{"voice": "customer"|"chequp"|"announcer"|"male", "text": "..."}]`. A line's settings layer as preset defaults < `voice.cast[role]` < the board's `voices[role]` < `voice.styles[style]` (e.g. `"style": "tagline"`: a beat, then slower) < keys on the line itself.
+- The VO stem goes `vo_raw.wav` → `voice.MASTER` (EQ, de-ess, 3:1 compression, -16 LUFS) → `vo.wav`. `render.mjs` then takes the full mix to -14 LUFS.
+- On the PC, `scripts/setup_pc.ps1` builds both envs and runs `scripts/make_voice_refs.py`, which makes any missing reference clip. It refuses to run without a CUDA GPU (exit 4) unless given `--cpu`, so it can't synthesise on the cloud VM by accident. The cloud VM never runs a voice model.
+
+## Music (`cqf/music.py`)
+
+`music.backend` picks the bed for boards that don't bring their own track (`"audio": {"music": "path.wav"}`):
+
+- **`ace_step`** (`config.pc.yaml`): ACE-Step 1.5 makes an instrumental bed on the PC's own ComfyUI with `cqf/graphs/ace_step_bed.json`. The graph is the Comfy-Org template `audio_ace_step_1_5_checkpoint.json`: `ace_step_1.5_turbo_aio.safetensors`, shift 3.0, 8 steps, cfg 1.0, euler/simple, lyrics `[Instrumental]`, language `unknown`. `scripts/fetch_models_pc.ps1` downloads the checkpoint (9.3 GB) if it's missing.
+  - Design-system boards get the warm style (acoustic, light piano, 90 bpm, D major). `theme: meta-live` boards get the bright one (modern pop, plucked synth, 100 bpm, G major).
+  - Each bed is the board's length plus 1 s, rounded up to whole seconds (10 s minimum). Beds are cached in `out/music/` by style, length, seed and checkpoint. Change `music.seed` for a new take.
+  - It uses the first ComfyUI in `farm.machines` that has the ACE-Step 1.5 nodes (v0.12+) and the checkpoint. mama is off, so on the PC that's 127.0.0.1:8188. On ComfyUI older than v0.21 the language becomes `en`.
+  - If ACE-Step can't run, the board gets the procedural bed and a printed warning.
+- **`procedural`** (default, `config.yaml`): numpy pad chords, a plucked arpeggio and a light pulse. It needs no GPU or model.
+
+The board records `audio.music_engine` (`ace_step`, `procedural`, `file` or `none`) for REPORT.md, and `cqf doctor` says whether ACE-Step is available. `sfx` silence cues work on either bed.
 
 ## mama (7× 3090) — two phases, because both jobs want every card
+
+**Not used for CheqUp.** mama is `enabled: false` in `config.pc.yaml` (Dan, 8 Oct: "not mama, mama is getting hot"), `pc_run.ps1` refuses any config that enables a ComfyUI other than the PC's, and `config.pc.yaml` has no LLM fallback to mama's LM Studio. This section and `config.mama.yaml` are kept only as a record of the earlier setup.
 
 Qwen3-235B in LM Studio takes all 7 cards (~145 GB). Wan 2.2 needs one card per ComfyUI server. Switch between them on mama:
 

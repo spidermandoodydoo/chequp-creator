@@ -3,7 +3,6 @@ shorts-factory uses): a single-frame t2v still, then i2v from the chosen still."
 from __future__ import annotations
 
 import json
-import json
 import random
 import time
 import uuid
@@ -14,7 +13,8 @@ import requests
 GRAPHS = Path(__file__).resolve().parent / "graphs"
 MIN_VERSION = (0, 39, 2)            # SeedVR2 + FrameInterpolate + nested SaveVideo codec keys
 REQUIRED_NODES = ["SeedVR2Conditioning", "SeedVR2TemporalChunk", "FrameInterpolate", "ResizeImageMaskNode", "SaveVideo"]
-_NUM = {"{{SEED}}": "seed", "{{WIDTH}}": "width", "{{HEIGHT}}": "height", "{{FRAMES}}": "frames"}
+_NUM = {"{{SEED}}": "seed", "{{WIDTH}}": "width", "{{HEIGHT}}": "height", "{{FRAMES}}": "frames",
+        "{{SECONDS}}": "seconds", "{{BPM}}": "bpm"}           # SECONDS/BPM: ace_step_bed.json
 
 
 def load_graph(name: str) -> str:
@@ -43,50 +43,28 @@ def fill(graph_json: str, **v) -> dict:
 
 def graph_models(graph: dict) -> list[str]:
     """Every model filename a graph loads (for the per-server model check)."""
-    keys = ("unet_name", "clip_name", "vae_name", "lora_name", "model_name")
+    keys = ("unet_name", "clip_name", "vae_name", "lora_name", "model_name", "ckpt_name")
     return sorted({n["inputs"][k] for n in graph.values() for k in keys
                    if isinstance(n.get("inputs", {}).get(k), str) and "{{" not in n["inputs"][k]})
 
-GRAPHS = Path(__file__).resolve().parent / "graphs"
-MIN_VERSION = (0, 39, 2)            # SeedVR2 + FrameInterpolate + nested SaveVideo codec keys
-REQUIRED_NODES = ["SeedVR2Conditioning", "SeedVR2TemporalChunk", "FrameInterpolate", "ResizeImageMaskNode", "SaveVideo"]
-_NUM = {"{{SEED}}": "seed", "{{WIDTH}}": "width", "{{HEIGHT}}": "height", "{{FRAMES}}": "frames"}
 
-
-def load_graph(name: str) -> str:
-    return (GRAPHS / name).read_text(encoding="utf-8")
-
-
-def fill(graph_json: str, **v) -> dict:
-    """Fill {{PLACEHOLDERS}} after json.loads (never by text-replacing raw JSON).
-    Numeric placeholders are quoted strings in the file and become ints here."""
-    assert v.get("width", 16) % 16 == 0 and v.get("height", 16) % 16 == 0, "sizes must be multiples of 16"
-    assert v.get("frames", 1) % 4 == 1, "frames must be 4n+1"
-
-    def walk(x):
-        if isinstance(x, dict):
-            return {k: walk(y) for k, y in x.items()}
-        if isinstance(x, list):
-            return [walk(y) for y in x]
-        if isinstance(x, str):
-            if x in _NUM:
-                return int(v[_NUM[x]])
-            for k, y in v.items():
-                x = x.replace("{{%s}}" % k.upper(), str(y))
-        return x
-    return walk(json.loads(graph_json))
-
-
-def graph_models(graph: dict) -> list[str]:
-    """Every model filename a graph loads (for the per-server model check)."""
-    keys = ("unet_name", "clip_name", "vae_name", "lora_name", "model_name")
-    return sorted({n["inputs"][k] for n in graph.values() for k in keys
-                   if isinstance(n.get("inputs", {}).get(k), str) and "{{" not in n["inputs"][k]})
+def combo_options(spec) -> list[str]:
+    """The choices of one /object_info input spec: classic [[...], {...}] or V3 ["COMBO", {"options": [...]}]."""
+    if isinstance(spec, list) and spec:
+        if isinstance(spec[0], list):
+            return [str(o) for o in spec[0]]
+        if spec[0] == "COMBO" and len(spec) > 1 and isinstance(spec[1], dict):
+            return [str(o) for o in spec[1].get("options", [])]
+    return []
 
 
 class Comfy:
-    def __init__(self, url: str, timeout: int = 1800):
+    def __init__(self, url: str, timeout: int = 1800, queue_timeout: float | None = None):
+        """timeout bounds one job. queue_timeout (None = no separate bound) is how long a job may wait
+        behind other work on this ComfyUI (e.g. shorts-factory's) before it is taken off the queue;
+        with it set, the job clock starts when ComfyUI picks the job up."""
         self.url, self.timeout, self.client_id = url.rstrip("/"), timeout, uuid.uuid4().hex
+        self.queue_timeout = queue_timeout
 
     def alive(self, t: float = 5) -> bool:
         try:
@@ -94,29 +72,33 @@ class Comfy:
         except requests.RequestException:
             return False
 
+    def node_info(self, node: str) -> dict:
+        """/object_info/<node> for one node class ({} when this ComfyUI doesn't have it)."""
+        return requests.get(f"{self.url}/object_info/{node}", timeout=15).json().get(node, {})
+
     def has_models(self, names: list[str]) -> list[str]:
         """Return the model files this server is missing."""
         info = requests.get(f"{self.url}/object_info", timeout=30).json()
         avail = set()
-        for node in ("UNETLoader", "CLIPLoader", "VAELoader", "LoraLoaderModelOnly", "FrameInterpolationModelLoader"):
+        for node in ("UNETLoader", "CLIPLoader", "VAELoader", "LoraLoaderModelOnly", "FrameInterpolationModelLoader",
+                     "CheckpointLoaderSimple"):
             for spec in info.get(node, {}).get("input", {}).get("required", {}).values():
-                if isinstance(spec, list) and spec and isinstance(spec[0], list):
-                    avail.update(spec[0])
-                elif isinstance(spec, list) and spec and spec[0] == "COMBO" and len(spec) > 1 and isinstance(spec[1], dict):
-                    avail.update(spec[1].get("options", []))   # V3 node schema
+                avail.update(combo_options(spec))          # classic and V3 node schemas
         return [n for n in names if n not in avail]
 
-    def preflight(self) -> list[str]:
-        """Problems that would make the quality graphs fail on this server (empty = good)."""
+    def preflight(self, nodes: list[str] | None = None, min_version: tuple | None = MIN_VERSION) -> list[str]:
+        """Problems that would make a graph fail on this server (empty = good). No arguments = the
+        b-roll quality graphs (REQUIRED_NODES, ComfyUI >= MIN_VERSION); min_version=None skips the version gate."""
         problems = []
-        try:
-            ver = requests.get(f"{self.url}/system_stats", timeout=10).json().get("system", {}).get("comfyui_version", "0")
-            nums = tuple(int(p) for p in str(ver).lstrip("v").split("-")[0].split(".")[:3] if p.isdigit())
-            if nums < MIN_VERSION:
-                problems.append(f"ComfyUI {ver} < {'.'.join(map(str, MIN_VERSION))} (update ComfyUI)")
-        except (requests.RequestException, ValueError) as e:
-            problems.append(f"system_stats: {e}")
-        for node in REQUIRED_NODES:
+        if min_version:
+            try:
+                ver = requests.get(f"{self.url}/system_stats", timeout=10).json().get("system", {}).get("comfyui_version", "0")
+                nums = tuple(int(p) for p in str(ver).lstrip("v").split("-")[0].split(".")[:3] if p.isdigit())
+                if nums < tuple(min_version):
+                    problems.append(f"ComfyUI {ver} < {'.'.join(map(str, min_version))} (update ComfyUI)")
+            except (requests.RequestException, ValueError) as e:
+                problems.append(f"system_stats: {e}")
+        for node in REQUIRED_NODES if nodes is None else nodes:
             try:
                 if node not in requests.get(f"{self.url}/object_info/{node}", timeout=15).json():
                     problems.append(f"missing node {node} (update ComfyUI)")
@@ -124,23 +106,9 @@ class Comfy:
                 problems.append(f"object_info/{node}: {e}")
         return problems
 
-    def preflight(self) -> list[str]:
-        """Problems that would make the quality graphs fail on this server (empty = good)."""
-        problems = []
-        try:
-            ver = requests.get(f"{self.url}/system_stats", timeout=10).json().get("system", {}).get("comfyui_version", "0")
-            nums = tuple(int(p) for p in str(ver).lstrip("v").split("-")[0].split(".")[:3] if p.isdigit())
-            if nums < MIN_VERSION:
-                problems.append(f"ComfyUI {ver} < {'.'.join(map(str, MIN_VERSION))} (update ComfyUI)")
-        except (requests.RequestException, ValueError) as e:
-            problems.append(f"system_stats: {e}")
-        for node in REQUIRED_NODES:
-            try:
-                if node not in requests.get(f"{self.url}/object_info/{node}", timeout=15).json():
-                    problems.append(f"missing node {node} (update ComfyUI)")
-            except requests.RequestException as e:
-                problems.append(f"object_info/{node}: {e}")
-        return problems
+    def _pending(self, pid: str) -> bool:
+        q = requests.get(f"{self.url}/queue", timeout=15).json()
+        return any(len(item) > 1 and item[1] == pid for item in q.get("queue_pending", []))
 
     def upload(self, path: Path) -> str:
         with open(path, "rb") as f:
@@ -153,8 +121,13 @@ class Comfy:
         r = requests.post(f"{self.url}/prompt", json={"prompt": graph, "client_id": self.client_id}, timeout=60)
         if not r.ok:
             raise RuntimeError(f"ComfyUI rejected graph: {r.text[:500]}")
-        pid, t0 = r.json()["prompt_id"], time.time()
-        while time.time() - t0 < limit:
+        j = r.json()
+        pid, t0 = j["prompt_id"], time.time()
+        if j.get("node_errors"):   # ComfyUI queues the outputs that validated and silently drops the rest (e.g. the
+            self._cancel(pid)      # SeedVR2 master of qwen_still.json): a half graph must fail, not pass off its native
+            raise RuntimeError(f"ComfyUI dropped part of the graph: {json.dumps(j['node_errors'])[:500]}")
+        waiting = self.queue_timeout is not None
+        while waiting or time.time() - t0 < limit:
             h = requests.get(f"{self.url}/history/{pid}", timeout=30).json().get(pid)
             if h:
                 status = h.get("status", {})
@@ -162,15 +135,33 @@ class Comfy:
                     raise RuntimeError(f"ComfyUI error: {status.get('messages', [])[-1:]}")
                 if status.get("completed", True):
                     return self._download(h, out_dir, stem)
+            elif waiting and not self._pending(pid):
+                waiting, t0 = False, time.time()           # picked up: the job clock starts now
+            elif waiting and time.time() - t0 > self.queue_timeout:
+                self._cancel(pid)                          # taken off the queue; the other job is never interrupted
+                raise TimeoutError(f"{self.url} job {pid} still queued after {self.queue_timeout} s (another job holds this ComfyUI)")
             time.sleep(2)
-        requests.post(f"{self.url}/interrupt", timeout=10)
+        self._cancel(pid)
         raise TimeoutError(f"{self.url} job {pid} timed out")
+
+    def _cancel(self, pid: str):
+        """Stop only our own job: delete it while it is queued, interrupt it (by prompt_id) only while it is
+        the one running. A bare POST /interrupt stops whatever ComfyUI is running, and the PC's ComfyUI is
+        shared with shorts-factory."""
+        try:
+            q = requests.get(f"{self.url}/queue", timeout=15).json()
+            if any(len(i) > 1 and i[1] == pid for i in q.get("queue_running", [])):
+                requests.post(f"{self.url}/interrupt", json={"prompt_id": pid}, timeout=10)
+            else:
+                requests.post(f"{self.url}/queue", json={"delete": [pid]}, timeout=10)
+        except (requests.RequestException, ValueError):
+            pass
 
     def _download(self, h: dict, out_dir: Path, stem: str) -> list[Path]:
         out_dir.mkdir(parents=True, exist_ok=True)
         files = []
         for node_id, node_out in h.get("outputs", {}).items():
-            for key in ("images", "videos", "gifs", "animated"):
+            for key in ("images", "videos", "gifs", "animated", "audio"):     # audio: SaveAudio (ace_step_bed.json)
                 for f in node_out.get(key, []) if isinstance(node_out.get(key), list) else []:
                     if not isinstance(f, dict) or "filename" not in f:
                         continue
@@ -230,6 +221,6 @@ def clip_graph(m: dict, image_name: str, prompt: str, negative: str, seed: int |
     return g
 
 
-def model_files(m: dict) -> list[str]:   # legacy Wan-still/draft path only   # legacy Wan-still/draft path only
+def model_files(m: dict) -> list[str]:   # legacy Wan-still/draft path only
     return [m[k] for k in ("t2v_high", "t2v_low", "t2v_lora_high", "t2v_lora_low", "i2v_high", "i2v_low",
                            "i2v_lora_high", "i2v_lora_low", "text_encoder", "vae")]

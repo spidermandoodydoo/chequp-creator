@@ -55,12 +55,15 @@ render:
   node: node
 
 voice:
-  backend: kokoro             # kokoro | none
-  lang_code: b                # British English
-  sample_rate: 24000
+  backend: tts                # tts | none  (engine per line: presets/*.yaml voice block)
+  lang_code: b                # British English (Kokoro)
+  sample_rate: 24000          # Kokoro and Chatterbox both output 24 kHz
+  chatterbox_python: .venv-chatterbox/bin/python   # own env: chatterbox-tts pins torch 2.6 (missing = Kokoro fallback)
 
 music:
-  generate: true              # procedural bed (cqf/music.py) when a board has no music file
+  generate: true              # make a bed when a board has no music file
+  backend: procedural         # numpy bed, no model (no GPU here); config.pc.yaml uses ace_step on the PC's ComfyUI
+  seed: 7
   gain_db_under_vo: -21
   gain_db_solo: -6
 

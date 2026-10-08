@@ -1,5 +1,5 @@
 # Download the b-roll quality models into the 5090 PC's ComfyUI (resumable; safe to re-run).
-#   powershell -ExecutionPolicy Bypass -File .\scripts\fetch_models_pc.ps1            # core (~47 GB)
+#   powershell -ExecutionPolicy Bypass -File .\scripts\fetch_models_pc.ps1            # core (~47 GB) + ACE-Step music (9.3 GB, if missing)
 #   powershell -ExecutionPolicy Bypass -File .\scripts\fetch_models_pc.ps1 -ABTest    # + A/B extras (~37 GB)
 # All files are Apache-2.0 (commercial use of outputs OK) — see reference/broll-plan.md.
 param([string]$Comfy = "C:\Users\white\ComfyUI-Installs\ComfyUI\ComfyUI", [switch]$ABTest)
@@ -29,6 +29,11 @@ if ($ABTest) {
   $files += ,@("$hf/Comfy-Org/z_image/resolve/main/split_files/text_encoders/qwen_3_4b.safetensors", "text_encoders")
   $files += ,@("$hf/Comfy-Org/z_image/resolve/main/split_files/vae/ae.safetensors", "vae")
 }
+# Music: ACE-Step 1.5 turbo all-in-one checkpoint (model + text encoder/planner + VAE, 9.3 GB; upstream ACE-Step 1.5
+# is MIT) for cqf/graphs/ace_step_bed.json (music.backend: ace_step). Only fetched if it isn't complete already.
+$ace = Join-Path $m "checkpoints\ace_step_1.5_turbo_aio.safetensors"
+if ((Test-Path $ace) -and ((Get-Item $ace).Length -eq 10025478736)) { Write-Host "ACE-Step 1.5 checkpoint already present: $ace" }
+else { $files += ,@("$hf/Comfy-Org/ace_step_1.5_ComfyUI_files/resolve/main/checkpoints/ace_step_1.5_turbo_aio.safetensors", "checkpoints") }
 foreach ($f in $files) {
   $dir = Join-Path $m $f[1]; New-Item -ItemType Directory -Force $dir | Out-Null
   $out = Join-Path $dir ([IO.Path]::GetFileName($f[0]))
