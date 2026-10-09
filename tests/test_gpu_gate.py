@@ -159,6 +159,36 @@ def closed_port() -> int:
 
 # --------------------------------------------------------------------------------------------- the gate itself
 
+def test_share_kinds_run_alongside_a_busy_factory_when_vram_allows_and_fall_back_without_sticking():
+    fac = Server(queue=lambda n: (1, 3))                                             # busy for the whole test
+    own = Server(held_gb=0)
+    try:
+        cfg = gcfg(fac.url, own.url, share_kinds=["chatterbox", "ace"], share_headroom_gb=4, share_max_wait_s=900)
+        # enough VRAM for chatterbox (6) + headroom (4): starts at once although the factory has 4 jobs queued
+        with gate_env(free_mib=(12000,)) as (clock, smi_calls):
+            w, out = quiet(gpu_gate.wait_for_gpu, cfg, kind="chatterbox", why="the Chatterbox voice worker")
+            assert w == 0.0 and smi_calls() == 1 and fac.posts() == [], out
+        # 8 GB free: under 6 + 4, waits, then gives up after share_max_wait_s for this job only (not sticky)
+        with gate_env(free_mib=(8000,)) as (clock, smi_calls):
+            try:
+                quiet(gpu_gate.wait_for_gpu, cfg, kind="chatterbox")
+                raise AssertionError("expected GpuBusy")
+            except gpu_gate.GpuBusy as e:
+                assert "share_max_wait_s 900" in str(e) and "falling back for this job only" in str(e)
+            assert gpu_gate.gave_up() is None                                        # the run carries on
+            # a still is not a share kind: the busy factory still blocks it (no VRAM check while it is busy)
+            calls = smi_calls()
+            try:
+                quiet(gpu_gate.wait_for_gpu, {**cfg, "gpu_gate": {**cfg["gpu_gate"], "max_wait_s": 60}}, kind="still")
+                raise AssertionError("expected GpuBusy")
+            except gpu_gate.GpuBusy:
+                pass
+            assert smi_calls() == calls and gpu_gate.gave_up()                       # stills: sticky give-up as before
+        assert fac.posts() == []
+    finally:
+        fac.stop(), own.stop()
+
+
 def test_noop_when_disabled_or_missing():
     fac = Server(queue=lambda n: (1, 5))
     try:

@@ -295,6 +295,13 @@ def wait_for_gpu(cfg: dict | None, need_gb: float | None = None, why: str = "", 
         raise GpuBusy(f"gave up earlier in this run: {_gave_up[0]}")
     need = float(need_gb) if need_gb is not None else need_for(cfg, kind)
     poll, every, limit = float(g.get("poll_s", 30)), float(g.get("log_every_s", 300)), float(g.get("max_wait_s", 21600))
+    # Small jobs (gpu_gate.share_kinds, e.g. Chatterbox, ACE beds) don't wait for shorts-factory's queue to empty (it is
+    # busy around the clock): they start as soon as free VRAM covers need + share_headroom_gb, so the factory keeps room
+    # for its next allocation. They give up after share_max_wait_s without making the gate give up for the whole run;
+    # the caller falls back (Kokoro, procedural bed).
+    share = bool(kind) and kind in (g.get("share_kinds") or [])
+    if share:
+        limit = float(g.get("share_max_wait_s", 900))
     what = why or kind or "a CheqUp GPU job"
     own, gpu = own_url(cfg, url), int(g.get("gpu_index", 0))
     t0 = _now()
@@ -313,20 +320,24 @@ def wait_for_gpu(cfg: dict | None, need_gb: float | None = None, why: str = "", 
                 busy.append(f"{y['name']} has {_jobs(r + p)} queued ({r} running)")
             else:
                 idle.append(y)
+        factory_busy = bool(busy)
         if busy:
             _busy_at[0] = _now()
+        if share:
+            busy = []                          # VRAM decides (below), with headroom while the factory works
         elif _busy_at[0] is not None and _now() - _busy_at[0] < float(g.get("quiet_s") or 0):
             # it had work moments ago: likely between two of its jobs (it keeps models loaded, queues the next)
             busy.append(f"{', '.join(y['name'] for y in idle) or 'the other ComfyUI'} had work {_mins(_now() - _busy_at[0])} "
                         f"ago (gpu_gate.quiet_s: waiting for {float(g.get('quiet_s') or 0):g} s without any)")
         free = None if busy else free_vram_gb(gpu)
+        need_now = need + (float(g.get("share_headroom_gb", 4)) if share and (factory_busy or _busy_at[0]) else 0.0)
         if free is not None:
             held = own_held_gb(own)            # fresh: ~0 after a release; if /free failed it is still CheqUp's own
-            if free + held < need:             # name an idle yield_to ComfyUI that keeps models loaded (GET only)
+            if free + held < need_now:             # name an idle yield_to ComfyUI that keeps models loaded (GET only)
                 kept = [f"{y['name']}'s ComfyUI is idle but keeps {h:.1f} GB loaded" for y in idle
                         for h in [own_held_gb(y["url"])] if h >= 0.5]
                 busy.append(f"{free:.1f} GB VRAM free" + (f" (+{held:.1f} GB held by CheqUp's ComfyUI)" if held else "")
-                            + f", {what} needs {need:g} GB ({'; '.join(kept) or 'another program holds the rest'})")
+                            + f", {what} needs {need_now:g} GB ({'; '.join(kept) or 'another program holds the rest'})")
         if busy and not released:
             released = True        # once per wait: give back what CheqUp itself holds (it is idle between its jobs)
             done = release_own(cfg, url)
@@ -341,6 +352,12 @@ def wait_for_gpu(cfg: dict | None, need_gb: float | None = None, why: str = "", 
                 print(f"  gpu_gate: GPU free after {_mins(spent)}; starting {what}")
             return spent
         reason = "; ".join(busy)
+        if spent >= limit and share:
+            _waited[0] += spent
+            msg = (f"GPU still short after {_mins(spent)} for {what}: {reason} (gpu_gate.share_max_wait_s {limit:g}); "
+                   f"falling back for this job only")
+            print(f"  gpu_gate: {msg}")
+            raise GpuBusy(msg)
         if spent >= limit:
             _waited[0] += spent
             _gave_up[0] = (f"GPU still busy after {_mins(spent)} waiting to start {what}: {reason}. CheqUp gave up "

@@ -118,5 +118,8 @@ gpu_gate:                     # cqf/gpu_gate.py: wait before each CheqUp GPU job
   need_gb: {still: 22, clip: 26, ace: 12, chatterbox: 6}
   poll_s: 30
   quiet_s: 60                 # once shorts-factory had work, start only after 60 s without any (not between its jobs)
+  share_kinds: [chatterbox, ace]   # small jobs don't wait for the factory's queue (busy 24/7): they start when free VRAM
+  share_headroom_gb: 4             # covers need_gb + this headroom, and fall back (Kokoro / procedural bed) after
+  share_max_wait_s: 900            # 15 min instead of stopping the run. Stills and clips still wait for a real gap.
   log_every_s: 300
   max_wait_s: 21600           # 6 h, then GpuBusy: the rest of the run is skipped (pc_run exit 12)

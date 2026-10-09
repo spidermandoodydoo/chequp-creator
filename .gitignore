@@ -6,3 +6,4 @@ concepts/variants/*.json
 !concepts/variants/.gitkeep
 .venv/
 .venv-chatterbox/
+.claude/worktrees/
