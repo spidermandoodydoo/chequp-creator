@@ -14,7 +14,8 @@
     0   started and still running: wait with pc_wait.ps1
     10  a run is already going: start nothing, wait for that one
     9   pc_run died at start without writing its done marker
-    other: the run already ended during pre-flight with that code (pc_run.ps1 table: 2-7, ...)
+    other: the run already ended during pre-flight with that code (pc_run.ps1 table: 2-7, ...; 4 = CheqUp's
+           ComfyUI missing or too old: scripts/install_comfy_cheq_pc.ps1)
 
 .EXAMPLE
   powershell -NoProfile -ExecutionPolicy Bypass -File scripts/pc_start.ps1 -Boards numan -Formats 9x16
@@ -38,9 +39,9 @@ $OnWindows = ($env:OS -eq 'Windows_NT')
 $Logs = Join-Path (Join-Path $Root 'out') 'logs'
 New-Item -ItemType Directory -Force -Path $Logs | Out-Null
 $LockPath = Join-Path $Logs 'pc_run.lock'
-$ExitMeaning = @{ 0 = 'ok'; 1 = 'a board failed'; 2 = 'tools missing'; 3 = 'ComfyUI down'; 4 = 'ComfyUI too old';
+$ExitMeaning = @{ 0 = 'ok'; 1 = 'a board failed'; 2 = 'tools missing'; 3 = 'ComfyUI down'; 4 = 'CheqUp ComfyUI missing or too old';
                   5 = 'Python env or config'; 6 = 'models missing'; 7 = 'unknown board or format'; 8 = 'fallbacks used';
-                  9 = 'run crashed'; 10 = 'already running'; 11 = 'still running' }
+                  9 = 'run crashed'; 10 = 'already running'; 11 = 'still running'; 12 = 'GPU busy (gate gave up)' }
 
 function Read-Lock {
   if (-not (Test-Path -LiteralPath $LockPath)) { return $null }

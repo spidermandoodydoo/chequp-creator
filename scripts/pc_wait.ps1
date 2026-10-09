@@ -29,9 +29,9 @@ $ErrorActionPreference = 'Stop'
 $Root = Split-Path -Parent $PSScriptRoot
 $Logs = Join-Path (Join-Path $Root 'out') 'logs'
 $LockPath = Join-Path $Logs 'pc_run.lock'
-$ExitMeaning = @{ 0 = 'ok'; 1 = 'a board failed'; 2 = 'tools missing'; 3 = 'ComfyUI down'; 4 = 'ComfyUI too old';
+$ExitMeaning = @{ 0 = 'ok'; 1 = 'a board failed'; 2 = 'tools missing'; 3 = 'ComfyUI down'; 4 = 'CheqUp ComfyUI missing or too old';
                   5 = 'Python env or config'; 6 = 'models missing'; 7 = 'unknown board or format'; 8 = 'fallbacks used';
-                  9 = 'run crashed'; 10 = 'already running'; 11 = 'still running' }
+                  9 = 'run crashed'; 10 = 'already running'; 11 = 'still running'; 12 = 'GPU busy (gate gave up)' }
 
 function Read-Lock {
   if (-not (Test-Path -LiteralPath $LockPath)) { return $null }

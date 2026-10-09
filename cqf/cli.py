@@ -1,6 +1,6 @@
 """python -m cqf <command>
 
-  doctor                 check node/ffmpeg/playwright, LLM, ComfyUI (b-roll models), Kokoro/Chatterbox, ACE-Step
+  doctor                 check node/ffmpeg/playwright, LLM, CheqUp's ComfyUI + GPU gate, b-roll models, Kokoro/Chatterbox, ACE-Step
   lint <board.json>...   compliance + brand-voice check (no rendering)
   plan <concept> [-n 3]  hook variants via the configured LLM (claude -p) → concepts/variants/
   make <board.json>...   lint → b-roll → voice → music → sfx → render all formats
@@ -18,7 +18,7 @@ from pathlib import Path
 
 import requests
 
-from . import compliance, config, farm, pipeline, planner
+from . import compliance, config, farm, gpu_gate, pipeline, planner
 from .config import ROOT
 
 
@@ -30,6 +30,34 @@ def _boards(paths: list[str]) -> list[Path]:
             p = ROOT / "concepts" / f"{p}.json"
         out += sorted(p.glob("*.json")) if p.is_dir() else [p]
     return out
+
+
+def _comfy_cheq(cfg: dict):
+    """CheqUp's own ComfyUI (url, version) and the GPU gate (doctor). Read-only: GETs only, never waits."""
+    url, cc = gpu_gate.cheq_url(cfg), cfg.get("comfy_cheq") or {}
+    if url:
+        try:
+            ver = requests.get(f"{url}/system_stats", timeout=5).json().get("system", {}).get("comfyui_version", "?")
+            print(f"ok   CheqUp ComfyUI {url} v{str(ver).lstrip('v')} ({cc.get('dir') or 'comfy_cheq.dir not set'})")
+        except (requests.RequestException, ValueError, AttributeError):
+            print(f"DOWN CheqUp ComfyUI {url} ({cc.get('dir') or '?'}): powershell -NoProfile -ExecutionPolicy Bypass -File "
+                  "scripts/comfy_cheq_start.ps1 (first time: scripts/install_comfy_cheq_pc.ps1)")
+    st = gpu_gate.status(cfg)
+    if not st["enabled"]:
+        print("off  gpu_gate: disabled (CheqUp does not wait for other GPU users)" + (
+            f"; never sends jobs to {', '.join(y['url'] for y in st['yield_to'])}" if st["yield_to"] else ""))
+        return
+    ys = []
+    for y in st["yield_to"]:
+        q = y["state"]
+        ys.append(f"{y['name']} {y['url']} (" + ("not answering" if q is None else "stalled: no reply to GET /queue, the gate waits"
+                                                 if q == gpu_gate.SLOW else f"{q[0]} running, {q[1]} queued") + ")")
+    g = gpu_gate.settings(cfg)
+    need = {k: gpu_gate.need_for(cfg, k) for k in gpu_gate.DEFAULT_NEED}
+    free = "no nvidia-smi" if st["free_gb"] is None else f"{st['free_gb']:.1f} GB free now"
+    print(f"ok   gpu_gate: yields to {', '.join(ys) or 'nothing'}; needs VRAM GB {need} ({free}"
+          + (f", CheqUp's ComfyUI holds {st['own_held_gb']:.1f} GB" if st.get("own_held_gb") else "") + "); "
+          f"polls every {g.get('poll_s', 30)} s, gives up after {float(g.get('max_wait_s', 21600)) / 3600:g} h")
 
 
 def doctor(cfg: dict, a):
@@ -73,6 +101,7 @@ def doctor(cfg: dict, a):
         print(f"{'ok  ' if cfg['llm']['model'] in ids else 'IDLE'} LM Studio on mama: {ids or 'no model loaded'}")
       except requests.RequestException:
         print("DOWN LM Studio on mama (render phase, or mama offline) — planning falls back to claude -p")
+    _comfy_cheq(cfg)
     live = farm.servers(cfg, use_5090=a.use_5090, need_clips=getattr(a, "clips", False))
     print(f"{'ok  ' if live else 'DOWN'} ComfyUI farm: {len(live)} servers {[s.url for s in live]}")
     mbk = (cfg.get("music") or {}).get("backend") or "procedural"
@@ -100,7 +129,7 @@ def main(argv: list[str] | None = None):
     ba = sub.add_parser("batch"); ba.add_argument("--top", type=int, default=5); ba.add_argument("--variants", action="store_true")
     for p in (mk, ba):
         p.add_argument("--format", action="append", dest="formats", help="9x16 | 4x5 | 1x1 | 16x9 (repeatable; default: the board's formats)")
-        p.add_argument("--use-5090", action="store_true", help="also queue b-roll on the PC 5090 (shared with shorts-factory)")
+        p.add_argument("--use-5090", action="store_true", help="also queue b-roll on the PC 5090 (CheqUp's own ComfyUI; gpu_gate yields to shorts-factory)")
         p.add_argument("--no-broll", action="store_true", help="skip GPU b-roll; use each scene's fallback_src")
         p.add_argument("--no-voice", action="store_true")
         p.add_argument("--strict", action="store_true", help="refuse HOLD boards instead of rendering drafts")
@@ -136,6 +165,10 @@ def main(argv: list[str] | None = None):
                 boards += [p for c in top for p in sorted((ROOT / "concepts" / "variants").glob(f"{c['id']}-*.json"))]
         results = []
         for b in boards:          # one failed board must not cost the rest: its state.json says status "error"
+            if gpu_gate.gave_up():    # the GPU gate already waited max_wait_s for shorts-factory: start nothing more
+                print(f"SKIP {Path(b).stem}: not started (GPU gate gave up earlier in this run)")
+                results.append(pipeline.skip_board(cfg, b, gpu_gate.gave_up()))
+                continue
             try:
                 results.append(pipeline.produce(cfg, b, a.formats, use_5090=a.use_5090, skip_broll=a.no_broll,
                                                 skip_voice=a.no_voice, allow_hold=not a.strict, clips=a.clips))
@@ -147,8 +180,8 @@ def main(argv: list[str] | None = None):
         print("\nsummary")
         for r in results:
             print(f"  {r['verdict']:5} {r['id']}: " + ", ".join(f"{f['format']} {f['dur']}s {f['mb']}MB" for f in r["files"]))
-        if any(r["verdict"] in ("ERROR", "FAIL") for r in results):
-            sys.exit(1)       # a board failed (pc_run.ps1 reads out/REPORT.md / report.json for which)
+        if any(r["verdict"] in ("ERROR", "FAIL", "SKIP") for r in results) or gpu_gate.gave_up():
+            sys.exit(1)       # a board failed or was skipped (pc_run.ps1 reads out/REPORT.md / report.json for which)
         return
     if a.cmd == "report":
         sys.exit(report.run(cfg, a))

@@ -4,12 +4,19 @@
 import copy, json, sys, yaml
 sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parents[1]))
 from pathlib import Path
-from cqf import comfy as cq
+from cqf import comfy as cq, gpu_gate
 G = Path("cqf/graphs"); OUT = Path("out/ab")
-SRV = cq.Comfy("http://127.0.0.1:8188", timeout=10800)          # clip-sized ceiling for every job
+PC = yaml.safe_load(open("config.pc.yaml", encoding="utf-8"))
+# CheqUp's own ComfyUI (comfy_cheq.port, 8288), never shorts-factory's (gpu_gate.yield_to, 8188)
+PORT = int((PC.get("comfy_cheq") or {}).get("port") or next((m["first_port"] for m in PC["farm"]["machines"] if m.get("name") == "pc-5090"), 8288))
+URL = gpu_gate.cheq_url(PC) or f"http://127.0.0.1:{PORT}"
+if gpu_gate.is_protected(PC, URL):
+    sys.exit(f"{URL} is shorts-factory's ComfyUI (gpu_gate.yield_to): ab_grid only runs on CheqUp's own (comfy_cheq.port)")
+SRV = cq.Comfy(URL, timeout=10800)                               # clip-sized ceiling for every job
+SRV.yield_check = gpu_gate.yield_check(PC, SRV.url)              # cancels OUR job if shorts-factory starts one
 STILL, CLIP, UP = (json.loads((G / f).read_text(encoding="utf-8")) for f in ("qwen_still.json", "wan_i2v_clip.json", "seedvr2_upscale.json"))
 P = yaml.safe_load(open("presets/chequp_meta.yaml", encoding="utf-8"))["broll"]
-m = yaml.safe_load(open("config.pc.yaml", encoding="utf-8"))["models"]["wan22"]
+m = PC["models"]["wan22"]
 BRIEF = "hands preparing a packed lunch of fresh vegetables in a calm kitchen at dawn"
 PROMPT1 = "Close, high-angle view of a woman's hands packing a lunch into a clear glass container on a pale oak worktop in a home kitchen on a bright morning. Her right hand lays sugar snap peas beside a row of six halved cherry tomatoes, a handful of sliced cucumber rounds, two halved boiled eggs and a scoop of green lentil salad; her left hand steadies the container. Beside it: a small wooden board with a halved lemon and a few sprigs of flat-leaf parsley. Only her hands and forearms are in frame, a grey sweatshirt cuff pushed back, short unpainted nails, a woman in her fifties. Low sun from a sash window on the left throws crisp shadows across the worktop. Vertical frame: the upper half is plain sunlit white tiled wall, the hands and container sit just below the centre, the oak worktop fills the bottom. 50mm lens at f/5.6."
 MOTION1 = "Her right hand slowly sets one more sugar snap pea into the container, then both hands rest still on the worktop. The sunlight stays steady. Fixed camera."
@@ -30,7 +37,12 @@ def fill(g, **v):
     return walk(copy.deepcopy(g))
 def png_w(p): return int.from_bytes(p.read_bytes()[16:20], "big")
 def run(name, g):
-    fs = SRV.run(g, OUT, name)
+    while True:                            # shorts-factory first, before and during each job (GpuBusy ends it)
+        gpu_gate.wait_for_gpu(PC, kind="clip" if name.startswith("F") else "still", why=f"A/B {name}", url=SRV.url)
+        try:
+            fs = SRV.run(g, OUT, name); break
+        except gpu_gate.Yielded as e:
+            print(name, e); gpu_gate.release_own(PC, SRV.url)
     if len(fs) == 2 and all(f.suffix == ".png" for f in fs):      # still graph: native + 2x master
         fs = [f.replace(f.with_name(f"{name}_{t}.png")) for f, t in zip(sorted(fs, key=png_w), ("native", "master"))]
     if len(fs) == 2 and all(f.suffix == ".mp4" for f in fs):      # clip + raw: raw 720p/16 fps file is the smaller one

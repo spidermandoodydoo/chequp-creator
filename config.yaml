@@ -69,3 +69,6 @@ music:
 
 publish:
   mode: outbox                # outbox only — nothing is pushed to Meta automatically
+
+# No gpu_gate / comfy_cheq here: this machine has no GPU (cqf/gpu_gate.py is a no-op without an enabled gpu_gate
+# block). The PC's config.pc.yaml has both.

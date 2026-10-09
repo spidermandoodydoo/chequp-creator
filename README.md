@@ -11,7 +11,7 @@ data/insights.yaml ──► concepts/*.json ──► cqf plan (claude -p) ─�
     search, rulings)        one per concept)
                                    │
                                    ▼
-   cqf make:  lint ─► b-roll (Qwen-Image on the PC's ComfyUI) ─► voice (Chatterbox or Kokoro) ─► music ─► render ─► QA
+   cqf make:  lint ─► b-roll (Qwen-Image on CheqUp's ComfyUI) ─► voice (Chatterbox or Kokoro) ─► music ─► render ─► QA
              (FAIL stops)  stills → Claude-vision check → i2v clips      design-system motion graphics
                                                                         (Playwright + ffmpeg)
                                    │
@@ -121,7 +121,7 @@ Useful flags:
 - `--no-broll`: uses each scene's `fallback_src` (CheqUp's own photography) instead of GPU clips.
 - `--no-voice`: renders silently.
 - `--format 9x16`: renders one ratio only.
-- `--use-5090`: also queues b-roll on the PC's ComfyUI, which shorts-factory shares.
+- `--use-5090`: also queues b-roll on the PC's 5090 (CheqUp's own ComfyUI; the GPU gate yields to shorts-factory).
 - `--strict`: refuses HOLD boards.
 - `--clips`: every AI b-roll shot becomes a Wan 2.2 image-to-video clip (slow).
 
@@ -137,14 +137,30 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts\pc_start.ps1 -Boards
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts\pc_wait.ps1 -Minutes 100                  # waits; never kills
 ```
 
-- `scripts\pc_run.ps1` does the run itself (Windows PowerShell 5.1 compatible). Pre-flight checks the tools (prints `winget` commands), `.venv` (runs `setup_pc.ps1` if it's missing), ComfyUI at 127.0.0.1:8188 and its version (0.39.2 or newer; it only prints `scripts\update_comfy_pc.ps1`, because shorts-factory shares that ComfyUI and Dan decides), `cqf doctor` (voice env and reference clips, b-roll models, ACE-Step) and shorts-factory's `data\STOP`. Then `make` (carrying on past a failed board), `outbox` and `report`, all in `out\logs\pc_run_<ts>.log`. It ends with `out\REPORT.md`, a review zip `out\logs\review_<ts>.zip` (REPORT.md, the log, ads sheet, posters, a 12-frame contact sheet per board, b-roll plate thumbnails, state files) and, last of all, the marker `out\logs\pc_run_<ts>.done` holding the exit code.
-- Options: `-Boards` (groups, `all`, ids, paths or globs; default `numan-*`, else `made-simple-*`), `-Formats`, `-Strict`, `-SkipModels` (accept fallbacks), `-Draft` (don't stop on an old ComfyUI or missing Qwen/SeedVR2 files; that b-roll falls back to CheqUp stills, and a board with no `fallback_src`, like the numan ones, fails instead), `-Clips`, `-PauseFactory`.
-- Exit codes: 0 ok, 1 a board failed, 2 tools, 3 ComfyUI down, 4 ComfyUI too old, 5 Python env or config, 6 models, 7 unknown board/format, 8 fallbacks used, 9 run crashed, 10 already running (lock file `out\logs\pc_run.lock`), 11 still running (pc_wait).
+- `scripts\pc_run.ps1` does the run itself (Windows PowerShell 5.1 compatible). Pre-flight checks the tools (prints `winget` commands), `.venv` (runs `setup_pc.ps1` if it's missing), CheqUp's own ComfyUI at 127.0.0.1:8288 (starts it with `scripts\comfy_cheq_start.ps1` if it isn't answering; exit 4 with the install command if it isn't installed) and its version (0.39.2 or newer), `cqf doctor` (voice env and reference clips, b-roll models, ACE-Step, the GPU gate) and, read-only, shorts-factory's queue (`GET /queue` on 8188). shorts-factory doesn't need pausing. After the run it frees the VRAM of CheqUp's ComfyUI only (`POST /free` to 8288). Then `make` (carrying on past a failed board), `outbox` and `report`, all in `out\logs\pc_run_<ts>.log`. It ends with `out\REPORT.md`, a review zip `out\logs\review_<ts>.zip` (REPORT.md, the log, ads sheet, posters, a 12-frame contact sheet per board, b-roll plate thumbnails, state files) and, last of all, the marker `out\logs\pc_run_<ts>.done` holding the exit code.
+- Options: `-Boards` (groups, `all`, ids, paths or globs; default `numan-*`, else `made-simple-*`), `-Formats`, `-Strict`, `-SkipModels` (accept fallbacks), `-Draft` (don't stop on an old CheqUp ComfyUI or missing Qwen/SeedVR2 files; that b-roll falls back to CheqUp stills, and a board with no `fallback_src`, like the numan ones, fails instead), `-Clips`, `-PauseFactory` (optional now, off by default).
+- Exit codes: 0 ok, 1 a board failed, 2 tools, 3 ComfyUI down, 4 CheqUp ComfyUI missing or too old, 5 Python env or config, 6 models, 7 unknown board/format, 8 fallbacks used, 9 run crashed, 10 already running (lock file `out\logs\pc_run.lock`), 11 still running (pc_wait), 12 GPU busy (the GPU gate waited `gpu_gate.max_wait_s` for shorts-factory and gave up; later boards skipped).
 - `scripts\pc_start.ps1` starts pc_run detached in a hidden PowerShell and returns; `scripts\pc_wait.ps1` waits for the done marker. A Claude Code session on the PC follows `PUPPET.md`.
+
+### CheqUp's own ComfyUI, next to shorts-factory's
+
+shorts-factory renders on the same 5090 with its own ComfyUI (`C:\Users\white\ComfyUI-Installs\ComfyUI\ComfyUI`, venv `C:\Users\white\ComfyUI-Factory-venv`, port 8188), which is older than the v0.39.2 CheqUp's graphs need (SeedVR2, FrameInterpolate, the nested SaveVideo codec, ACE-Step 1.5). Updating it would restart it and change its packages, so CheqUp has its own install side by side, and shorts-factory's is never modified, restarted, stopped or sent anything but `GET /queue` and `GET /system_stats`:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install_comfy_cheq_pc.ps1   # once; safe to re-run
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/comfy_cheq_start.ps1        # pc_run does this itself
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/comfy_cheq_stop.ps1         # only CheqUp's; refuses during a run
+```
+
+- `install_comfy_cheq_pc.ps1` (`-Dest C:\Users\white\ComfyUI-CheqUp -Tag v0.39.2 -Models <shared models> -Port 8288`) clones ComfyUI at the tag, makes `<Dest>\.venv` with uv (Python 3.12, torch/torchvision from the cu130 index when the driver already supports CUDA 13, which v0.39.2 wants for its fast fp8 kernels, else cu128; a re-run keeps the installed build, then `requirements.txt` with torch pinned), and writes `<Dest>\extra_model_paths.yaml` (`scripts/comfy_cheq_paths.py`). That file points every model folder type v0.39.2 knows (read from its `folder_paths.py`: checkpoints, diffusion_models/unet, text_encoders/clip, vae, loras, clip_vision, upscale_models, frame_interpolation, controlnet, embeddings, audio_encoders, model_patches and the rest) at shorts-factory's models folder, read-only (`is_default: false`, so nothing is ever saved there), and ComfyUI's own loader checks it. No model is copied or downloaded twice. It refuses a `-Dest` inside the factory's install or venv and port 8188.
+- `comfy_cheq_start.ps1` starts `<Dest>\.venv\Scripts\python.exe main.py --listen 127.0.0.1 --port 8288 --extra-model-paths-config <Dest>\extra_model_paths.yaml` with its own `--output-directory`, `--input-directory`, `--temp-directory` and `--user-directory` under `<Dest>` and `--disable-auto-launch`, hidden, logging to `out\logs\comfy_cheq_<ts>.log`, and waits up to 180 s for `/system_stats`.
+- `config.pc.yaml`: `comfy_cheq: {dir, port: 8288}`; the `pc-5090` farm machine points at 8288; cqf refuses to send a job to a `gpu_gate.yield_to` server.
+- **GPU gate** (`cqf/gpu_gate.py`, `gpu_gate` in `config.pc.yaml`): before each b-roll still or clip prompt, each ACE-Step bed and before each board's Chatterbox lines, cqf waits while shorts-factory's ComfyUI has jobs running or queued (a ComfyUI that takes the connection but doesn't answer `GET /queue` within 5 s counts as busy; a refused connection as idle), had any in the last `quiet_s` (60 s, so CheqUp doesn't start in the gap between two of its jobs), or while nvidia-smi shows less free VRAM than the job needs (`need_gb`: still 22, clip 26, ace 12, chatterbox 6; what CheqUp's own ComfyUI holds counts as free). The first time it finds the GPU busy it gives back what CheqUp itself holds (`POST /free` to 8288, and it stops an idle Chatterbox worker). It polls every `poll_s` (30 s), prints `GPU busy: shorts-factory has 2 jobs queued (1 running); waiting (12 min so far)` every `log_every_s` (5 min), and after `max_wait_s` (6 h) raises `GpuBusy`: the rest of the run is skipped and pc_run exits 12. Each board's wait is in `state.json` (`gpu_wait_s`) and REPORT.md. While a b-roll still or clip runs, cqf keeps reading shorts-factory's queue (every `preempt_poll_s`, 10 s): if shorts-factory starts a job, CheqUp cancels its own job (on 8288, by prompt_id), frees its VRAM and retries it after the gate (up to 3 times, then the shot falls back; `preempt: false` turns this off). `config.yaml` (the cloud VM) has no gate: it's a no-op there.
+- `scripts/update_comfy_pc.ps1` updates the shared install and is **not** for CheqUp (it refuses without `-ConfirmSharedInstall`).
 
 ## B-roll (`cqf/farm.py`)
 
-- Each media scene's `broll` prompt becomes a Qwen-Image-2512 still (4 seeds, each upscaled 2x by SeedVR2 7B in the same graph, `cqf/graphs/qwen_still.json`) on the PC's ComfyUI (0.39.2 or newer; `scripts/fetch_models_pc.ps1` fetches the models). `claude -p` vision-checks every candidate and the best passing one wins. With no vision check the plate is UNVERIFIED and the board stays on HOLD.
+- Each media scene's `broll` prompt becomes a Qwen-Image-2512 still (4 seeds, each upscaled 2x by SeedVR2 7B in the same graph, `cqf/graphs/qwen_still.json`) on CheqUp's own ComfyUI (port 8288, v0.39.2; `scripts/fetch_models_pc.ps1` fetches the models into the shared models folder). The GPU gate waits for shorts-factory before each one. `claude -p` vision-checks every candidate and the best passing one wins. With no vision check the plate is UNVERIFIED and the board stays on HOLD.
 - `--clips` (pc_run `-Clips`) turns each chosen still into a Wan 2.2 image-to-video clip (`cqf/graphs/wan_i2v_clip.json`: 30 steps, SeedVR2 1.5x, FILM to 30 fps). Without it every plate is a still with a slow push-in.
 - Every shot carries a people tag (`none`, `hands`, `hands_pair`, `back_view`, `distant`): AI plates never show a recognisable face. 16:9 gets its own plate; 4:5 and 1:1 are crops of the 9:16 one. Plates are cached in `out/broll/` by prompt and aspect, so boards share them.
 - If a plate can't be made, the scene uses its `fallback_src` (CheqUp's own photography). The numan boards have none on purpose (every brand photo shows a face), so there a missing plate fails the board and REPORT.md names the scene.
@@ -162,10 +178,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts\pc_wait.ps1 -Minutes
 
 `music.backend` picks the bed for boards that don't bring their own track (`"audio": {"music": "path.wav"}`):
 
-- **`ace_step`** (`config.pc.yaml`): ACE-Step 1.5 makes an instrumental bed on the PC's own ComfyUI with `cqf/graphs/ace_step_bed.json`. The graph is the Comfy-Org template `audio_ace_step_1_5_checkpoint.json`: `ace_step_1.5_turbo_aio.safetensors`, shift 3.0, 8 steps, cfg 1.0, euler/simple, lyrics `[Instrumental]`, language `unknown`. `scripts/fetch_models_pc.ps1` downloads the checkpoint (9.3 GB) if it's missing.
+- **`ace_step`** (`config.pc.yaml`): ACE-Step 1.5 makes an instrumental bed on CheqUp's own ComfyUI (port 8288; the GPU gate waits for shorts-factory first) with `cqf/graphs/ace_step_bed.json`. The graph is the Comfy-Org template `audio_ace_step_1_5_checkpoint.json`: `ace_step_1.5_turbo_aio.safetensors`, shift 3.0, 8 steps, cfg 1.0, euler/simple, lyrics `[Instrumental]`, language `unknown`. `scripts/fetch_models_pc.ps1` downloads the checkpoint (9.3 GB) if it's missing.
   - Design-system boards get the warm style (acoustic, light piano, 90 bpm, D major). `theme: meta-live` boards get the bright one (modern pop, plucked synth, 100 bpm, G major).
   - Each bed is the board's length plus 1 s, rounded up to whole seconds (10 s minimum). Beds are cached in `out/music/` by style, length, seed and checkpoint. Change `music.seed` for a new take.
-  - It uses the first ComfyUI in `farm.machines` that has the ACE-Step 1.5 nodes (v0.12+) and the checkpoint. mama is off, so on the PC that's 127.0.0.1:8188. On ComfyUI older than v0.21 the language becomes `en`.
+  - It uses the first ComfyUI in `farm.machines` that has the ACE-Step 1.5 nodes (v0.12+) and the checkpoint, never a `gpu_gate.yield_to` one. mama is off, so on the PC that's CheqUp's 127.0.0.1:8288. On ComfyUI older than v0.21 the language becomes `en`.
   - If ACE-Step can't run, the board gets the procedural bed and a printed warning.
 - **`procedural`** (default, `config.yaml`): numpy pad chords, a plucked arpeggio and a light pulse. It needs no GPU or model.
 

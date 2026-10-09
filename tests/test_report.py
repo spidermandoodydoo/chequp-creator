@@ -373,7 +373,8 @@ def test_pack_never_ships_a_stale_report():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
-PS1 = [ROOT / "scripts" / n for n in ("pc_run.ps1", "pc_start.ps1", "pc_wait.ps1")]
+PS1 = [ROOT / "scripts" / n for n in ("pc_run.ps1", "pc_start.ps1", "pc_wait.ps1", "install_comfy_cheq_pc.ps1",
+                                      "comfy_cheq_start.ps1", "comfy_cheq_stop.ps1")]
 
 
 def test_ps1_windows_powershell_51_safe():
@@ -386,8 +387,9 @@ def test_ps1_windows_powershell_51_safe():
             assert bad not in code, f"{p.name}: {bad}"
     run = PS1[0].read_text()
     assert "'config.pc.yaml'" in run and "config.mama" not in run.replace("never config.mama.yaml", "")
-    assert "update_comfy_pc.ps1" in run and not re.search(r"&\s*[^\n]*update_comfy_pc", run)       # printed, never run
-    for code in range(0, 11):
+    # CheqUp has its own ComfyUI: pc_run points at the side-by-side install, never runs the shared-install updater
+    assert "install_comfy_cheq_pc.ps1" in run and "comfy_cheq_start.ps1" in run and "update_comfy_pc" not in run
+    for code in list(range(0, 11)) + [12]:
         assert f"{code} = '" in run, code
     assert "Start-Transcript" in run and "LASTEXITCODE" in run and ".done" in run
     start, wait = PS1[1].read_text(), PS1[2].read_text()
@@ -395,7 +397,7 @@ def test_ps1_windows_powershell_51_safe():
     assert "exit 11" in wait and "Stop-Process" not in wait + start + run and "taskkill" not in (wait + start + run).lower()
     # Claude Code on Windows runs commands in Git Bash, which eats unquoted backslashes: every command it may copy
     # (script hints, PUPPET.md) must use forward slashes.
-    for t in (run, start, wait, (ROOT / "PUPPET.md").read_text(encoding="utf-8")):
+    for t in [p.read_text() for p in PS1] + [(ROOT / "PUPPET.md").read_text(encoding="utf-8")]:
         assert "-File scripts\\" not in t and "python.exe scripts\\" not in t
 
 

@@ -3,10 +3,17 @@
   One-command CheqUp render on Dan's Windows RTX 5090 PC: pre-flight, make, outbox, REPORT.md, review zip.
 
 .DESCRIPTION
-  Every model runs on this PC: b-roll and ACE-Step music on the PC's own ComfyUI (127.0.0.1:8188), voice with
-  Chatterbox (Kokoro as a reported fallback), render with Playwright + ffmpeg. Always uses config.pc.yaml, where
-  mama is disabled; a config that enables any non-local ComfyUI is refused. Never updates ComfyUI (it only prints
-  the update command: shorts-factory shares that ComfyUI, so Dan decides), never touches Meta.
+  Every model runs on this PC: b-roll and ACE-Step music on CheqUp's OWN ComfyUI (C:\Users\white\ComfyUI-CheqUp,
+  127.0.0.1:8288, v0.39.2, model files shared read-only with shorts-factory), voice with Chatterbox (Kokoro as a
+  reported fallback), render with Playwright + ffmpeg. Always uses config.pc.yaml, where mama is disabled; a config
+  that enables any non-local ComfyUI, or sends CheqUp jobs to shorts-factory's ComfyUI, is refused. Never touches Meta.
+
+  shorts-factory keeps its own ComfyUI (127.0.0.1:8188) and keeps rendering: pc_run never modifies, restarts,
+  stops or POSTs to it (only reads GET /queue to report its state), and cqf's GPU gate (config gpu_gate) waits
+  before every CheqUp GPU job while shorts-factory has work. If CheqUp's ComfyUI isn't answering, pc_run starts
+  it (scripts/comfy_cheq_start.ps1); if it isn't installed, it stops with exit 4 and the install command
+  (scripts/install_comfy_cheq_pc.ps1, which also never touches shorts-factory's install). After the run it frees
+  the VRAM of CheqUp's ComfyUI only (POST /free to 8288), so shorts-factory gets the memory back.
 
   A run takes hours: start it detached with scripts/pc_start.ps1 and wait with scripts/pc_wait.ps1 (PUPPET.md).
 
@@ -18,8 +25,9 @@
     1 a board failed          7 unknown board or format
     2 tools missing           8 fallbacks used (expected with -SkipModels / -Draft)
     3 ComfyUI down            9 run crashed
-    4 ComfyUI too old         10 another run is already going
-    5 Python env or config
+    4 CheqUp ComfyUI missing  10 another run is already going
+      or too old              12 GPU busy: the GPU gate waited gpu_gate.max_wait_s for shorts-factory (or for
+    5 Python env or config       free VRAM) and gave up; the boards after that were skipped
 
 .PARAMETER Boards
   Groups (concepts\<group>-*.json), "all", board ids, paths or globs; commas allowed. Default: concepts\numan-*.json
@@ -32,12 +40,13 @@
   Accept fallbacks instead of stopping (brand stills for b-roll, the procedural music bed, Kokoro for Chatterbox
   lines). The run then ends with exit 8 if anything fell back.
 .PARAMETER Draft
-  Don't stop on an old ComfyUI or on missing Qwen/SeedVR2 files. cqf has no Wan-only still path today, so b-roll
+  Don't stop on an old CheqUp ComfyUI or on missing Qwen/SeedVR2 files. cqf has no Wan-only still path today, so b-roll
   the quality graphs can't make uses CheqUp's own stills (REPORT.md says so; exit 8).
 .PARAMETER Clips
   Every AI b-roll shot becomes a Wan 2.2 image-to-video clip made from its chosen still. Slower.
 .PARAMETER PauseFactory
-  Pause shorts-factory by creating <shorts_factory.dir>\data\STOP. pc_run never deletes it (only Dan resumes).
+  Pause shorts-factory by creating <shorts_factory.dir>\data\STOP. Not needed any more (CheqUp has its own ComfyUI
+  and the GPU gate yields to shorts-factory); off by default. pc_run never deletes it (only Dan resumes).
 .PARAMETER RunId
   Set by pc_start.ps1. Default: a timestamp.
 
@@ -62,12 +71,15 @@ $Root = Split-Path -Parent $PSScriptRoot
 Set-Location -LiteralPath $Root
 $OnWindows = ($env:OS -eq 'Windows_NT')
 $Config = 'config.pc.yaml'                       # never config.mama.yaml: mama is off-limits for CheqUp
-$ComfyUrl = 'http://127.0.0.1:8188'
+$CheqDir = 'C:\Users\white\ComfyUI-CheqUp'          # CheqUp's own ComfyUI (config comfy_cheq overrides these)
+$CheqPort = 8288
+$script:CheqUrl = 'http://127.0.0.1:' + $CheqPort
+$script:FactoryPorts = @(8188)                   # shorts-factory's ComfyUI: GET /queue only, never a POST
 $MinComfy = New-Object System.Version(0, 39, 2)
 $FactoryDefault = 'C:\Users\white\heatmap\shorts-factory'
-$ExitMeaning = @{ 0 = 'ok'; 1 = 'a board failed'; 2 = 'tools missing'; 3 = 'ComfyUI down'; 4 = 'ComfyUI too old';
+$ExitMeaning = @{ 0 = 'ok'; 1 = 'a board failed'; 2 = 'tools missing'; 3 = 'ComfyUI down'; 4 = 'CheqUp ComfyUI missing or too old';
                   5 = 'Python env or config'; 6 = 'models missing'; 7 = 'unknown board or format'; 8 = 'fallbacks used';
-                  9 = 'run crashed'; 10 = 'already running' }
+                  9 = 'run crashed'; 10 = 'already running'; 12 = 'GPU busy (gate gave up)' }
 
 if (-not $RunId) { $RunId = Get-Date -Format 'yyyyMMdd-HHmmss' }
 $Logs = Join-Path (Join-Path $Root 'out') 'logs'
@@ -87,6 +99,7 @@ $script:ReportOk = $false
 $script:BoardFiles = @()
 $script:Py = $null
 $script:PyLines = New-Object System.Collections.Generic.List[string]
+$script:FreeCheq = $false
 
 $FlagParts = @()
 foreach ($k in $PSBoundParameters.Keys) {
@@ -200,6 +213,24 @@ function Get-JsonLine {
   return $null
 }
 
+function Get-ComfyStats([string]$Url) {
+  try { return (Invoke-RestMethod -Uri ($Url + '/system_stats') -Method Get -TimeoutSec 10 -UseBasicParsing) } catch { return $null }
+}
+
+function Free-CheqVram {
+  # After a run: give back the VRAM held by CheqUp's OWN ComfyUI, so shorts-factory gets it. Only ever
+  # $script:CheqUrl, and never a shorts-factory (gpu_gate.yield_to) port.
+  try {
+    $port = ([System.Uri]$script:CheqUrl).Port
+    if ($script:FactoryPorts -contains $port) { Write-Host ('not freeing ' + $script:CheqUrl + ": that is shorts-factory's port"); return }
+    $body = '{"unload_models": true, "free_memory": true}'
+    Invoke-RestMethod -Uri ($script:CheqUrl + '/free') -Method Post -Body $body -ContentType 'application/json' -TimeoutSec 10 -UseBasicParsing | Out-Null
+    Write-Host ("freed CheqUp's ComfyUI VRAM (" + $script:CheqUrl + '/free, unload_models)')
+  } catch {
+    Write-Host ("could not free CheqUp's ComfyUI VRAM (" + $script:CheqUrl + '): ' + $_)
+  }
+}
+
 function Clean-Note([string]$Text) {
   # Notes go to python as arguments: Windows PowerShell 5.1 mangles embedded double quotes and a trailing backslash.
   $t = $Text.Replace('"', "'").Trim()
@@ -219,6 +250,7 @@ function Finish([int]$Code, [string]$Why = '') {
   $meaning = $ExitMeaning[$Code]
   try {
     if ($Why) { Write-Host $Why }
+    if ($script:FreeCheq) { $script:FreeCheq = $false; Free-CheqVram }
     Write-Host ('pc_run ' + $RunId + ': exit ' + $Code + ' (' + $meaning + ')')
   } catch { }
   if ($script:Transcribing) {
@@ -323,6 +355,21 @@ try {
     Finish 5 ($Config + ' enables a ComfyUI that is not this PC (' + (@($CfgInfo.remote_enabled) -join ', ') +
               '). CheqUp renders only on this 5090; mama must stay "enabled: false". Fix the config; nothing was run.')
   }
+  if ((Get-Count $CfgInfo.farm_conflicts) -gt 0) {
+    Finish 5 ($Config + " sends CheqUp jobs to shorts-factory's ComfyUI (" + (@($CfgInfo.farm_conflicts) -join ', ') +
+              '). CheqUp renders only on its own ComfyUI (comfy_cheq.port, 8288); fix the config. Nothing was run.')
+  }
+  if ($CfgInfo.comfy_cheq) {
+    if ($CfgInfo.comfy_cheq.dir) { $CheqDir = [string]$CfgInfo.comfy_cheq.dir }
+    if ($CfgInfo.comfy_cheq.port) { $CheqPort = [int]$CfgInfo.comfy_cheq.port }
+  }
+  $script:CheqUrl = 'http://127.0.0.1:' + $CheqPort
+  $Factory = @()
+  if ($CfgInfo.gpu_gate) { foreach ($y in @($CfgInfo.gpu_gate.yield_to)) { if ($y -and $y.url) { $Factory += $y } } }
+  foreach ($y in $Factory) { try { $script:FactoryPorts += ([System.Uri][string]$y.url).Port } catch { } }
+  if ($script:FactoryPorts -contains $CheqPort) {
+    Finish 5 ('comfy_cheq.port ' + $CheqPort + " in " + $Config + " is shorts-factory's ComfyUI port. Use 8288. Nothing was run.")
+  }
   Write-Host ('ok   Python env ' + $script:Py + ' (voice backend ' + $CfgInfo.voice_backend + ', music backend ' + $CfgInfo.music_backend + ')')
 
   # --- 3. boards and formats ---------------------------------------------------------------------------------
@@ -346,34 +393,80 @@ try {
   Write-Host ('ok   ' + $script:BoardFiles.Count + ' board(s): ' + ((@($script:BoardFiles) | ForEach-Object { [System.IO.Path]::GetFileNameWithoutExtension($_) }) -join ', '))
   if ($FormatTokens.Count -gt 0) { Write-Host ('     formats: ' + ($FormatTokens -join ', ')) }
 
-  # --- 4. ComfyUI (this PC only) -----------------------------------------------------------------------------
-  $stats = $null
-  try { $stats = Invoke-RestMethod -Uri ($ComfyUrl + '/system_stats') -TimeoutSec 10 -UseBasicParsing } catch { $stats = $null }
-  $UpdateFix = ("Updating ComfyUI is Dan's call (shorts-factory shares it). Once he says OK and shorts-factory is paused:`n" +
-                "  powershell -NoProfile -ExecutionPolicy Bypass -File scripts/update_comfy_pc.ps1`n" +
-                "then restart ComfyUI. pc_run never runs it itself.")
+  # --- 4. CheqUp's own ComfyUI (this PC; never shorts-factory's) ----------------------------------------------
+  $InstallCmd = 'powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install_comfy_cheq_pc.ps1'
+  $UpdateFix = ("Re-run the CheqUp install (it only changes " + $CheqDir + ", never shorts-factory's ComfyUI; the PC session may run it):`n" +
+                "  powershell -NoProfile -ExecutionPolicy Bypass -File scripts/comfy_cheq_stop.ps1`n  " + $InstallCmd +
+                "`nthen run again (pc_run starts CheqUp's ComfyUI itself).")
+  $stats = Get-ComfyStats $script:CheqUrl
   if ($null -eq $stats) {
-    if ($SkipModels) { Add-Note ('ComfyUI is not responding at ' + $ComfyUrl + ': -SkipModels, so b-roll uses CheqUp stills and music the procedural bed.') }
-    else { Finish 3 ('ComfyUI is not responding at ' + $ComfyUrl + '. Start ComfyUI on this PC and run again (or -SkipModels to accept fallbacks). Nothing was rendered.') }
-  } else {
+    $installed = $false
+    try {                                                # (a missing drive throws instead of returning false)
+      $installed = (Test-Path -LiteralPath (Join-Path $CheqDir 'main.py')) -and
+                   (Test-Path -LiteralPath (Join-Path (Join-Path (Join-Path $CheqDir '.venv') 'Scripts') 'python.exe')) -and
+                   (Test-Path -LiteralPath (Join-Path $CheqDir 'extra_model_paths.yaml'))
+    } catch { $installed = $false }
+    if (-not $installed) {
+      $msg = ("CheqUp's own ComfyUI is not installed at " + $CheqDir + ". Install it (it never touches shorts-factory's ComfyUI, " +
+              "its venv or port 8188, so the PC session may run it itself):`n  " + $InstallCmd + "`nthen run again.")
+      if ($SkipModels) { Add-Note ("CheqUp's ComfyUI is not installed (" + $CheqDir + '): -SkipModels, so b-roll uses CheqUp stills and music the procedural bed.') }
+      else { Finish 4 $msg }
+    } else {
+      Write-Host ("CheqUp's ComfyUI is not answering at " + $script:CheqUrl + ': starting it (scripts/comfy_cheq_start.ps1)')
+      $psExe = (Get-Process -Id $PID).Path
+      $prev = $ErrorActionPreference
+      $ErrorActionPreference = 'Continue'
+      & $psExe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'comfy_cheq_start.ps1') -Dest $CheqDir -Port $CheqPort 2>&1 |
+        ForEach-Object { Write-Host ([string]$_) }
+      $startExit = $LASTEXITCODE
+      $ErrorActionPreference = $prev
+      $stats = Get-ComfyStats $script:CheqUrl
+      if ($null -eq $stats) {
+        $msg = ("CheqUp's ComfyUI did not come up at " + $script:CheqUrl + ' (comfy_cheq_start.ps1 exit ' + $startExit +
+                '; its log is out\logs\comfy_cheq_<ts>.log). Nothing was rendered.')
+        if ($SkipModels) { Add-Note ($msg.Replace(' Nothing was rendered.', '') + ' -SkipModels, so b-roll uses CheqUp stills and music the procedural bed.') }
+        elseif ($startExit -eq 4) { Finish 4 ($msg + "`n" + $UpdateFix) }
+        else { Finish 3 $msg }
+      }
+    }
+  }
+  if ($null -ne $stats) {
     $verText = [string]$stats.system.comfyui_version
     $ver = ConvertTo-ComfyVersion $verText
     if ($null -eq $ver -or $ver -lt $MinComfy) {
-      $msg = 'ComfyUI ' + $(if ($verText) { $verText } else { '(no version reported)' }) + ' is older than ' + $MinComfy + ', which the Qwen-Image + SeedVR2 b-roll graphs need.'
+      $msg = "CheqUp's ComfyUI " + $(if ($verText) { $verText } else { '(no version reported)' }) + ' at ' + $script:CheqUrl + ' is older than ' + $MinComfy + ', which the Qwen-Image + SeedVR2 b-roll graphs need.'
       if ($Draft -or $SkipModels) { Add-Note ($msg + ' Not enforced (-Draft/-SkipModels): b-roll the quality graphs cannot make uses CheqUp stills.') }
       else { Finish 4 ($msg + "`n" + $UpdateFix + "`nOr run with -Draft (b-roll then falls back to CheqUp stills).") }
     } else {
-      Write-Host ('ok   ComfyUI ' + $verText + ' at ' + $ComfyUrl)
+      Write-Host ("ok   CheqUp's ComfyUI " + $verText + ' at ' + $script:CheqUrl + ' (' + $CheqDir + ')')
     }
-    try {
-      $q = Invoke-RestMethod -Uri ($ComfyUrl + '/queue') -TimeoutSec 10 -UseBasicParsing
-      $nr = Get-Count $q.queue_running
-      $np = Get-Count $q.queue_pending
-      if (($nr + $np) -gt 0) { Add-Note ('ComfyUI already had ' + $nr + ' running and ' + $np + ' queued job(s) at the start; CheqUp jobs wait behind them.') }
-    } catch { }
   }
 
-  # --- 5. shorts-factory (shares this ComfyUI and GPU) -------------------------------------------------------
+  # --- 5. shorts-factory: read-only look (its own ComfyUI; the GPU gate waits for it, no pause needed) ---------
+  foreach ($y in $Factory) {
+    $fq = $null
+    try { $fq = Invoke-RestMethod -Uri ([string]$y.url + '/queue') -Method Get -TimeoutSec 10 -UseBasicParsing } catch { $fq = $null }
+    if ($null -eq $fq) { Write-Host ('note: ' + $y.name + "'s ComfyUI (" + $y.url + ') is not answering (read-only check): the GPU gate treats a refused connection as idle and a stalled one as busy.') }
+    else {
+      $nr = Get-Count $fq.queue_running
+      $np = Get-Count $fq.queue_pending
+      if (($nr + $np) -gt 0) {
+        Add-Note ($y.name + "'s ComfyUI (" + $y.url + ') had ' + $nr + ' running and ' + $np + " queued job(s) at the start: CheqUp's GPU jobs wait for it (gpu_gate).")
+      } else { Write-Host ('ok   ' + $y.name + "'s ComfyUI " + $y.url + ': idle now (read-only check; the GPU gate waits whenever it has work)') }
+    }
+  }
+  if (-not ($CfgInfo.gpu_gate -and $CfgInfo.gpu_gate.enabled)) {
+    Add-Note ('gpu_gate is disabled in ' + $Config + ": CheqUp does NOT wait for shorts-factory's jobs on the shared GPU.")
+  } else {
+    Write-Host ('ok   GPU gate on: waits for ' + ((@($Factory) | ForEach-Object { $_.name }) -join ', ') + ' and for free VRAM (gives up after ' +
+                ([double]$CfgInfo.gpu_gate.max_wait_s / 3600) + ' h: exit 12)')
+  }
+  if (Get-Command nvidia-smi -ErrorAction SilentlyContinue) {
+    try {
+      $mem = (& nvidia-smi '--query-gpu=memory.used,memory.total' '--format=csv,noheader,nounits' | Select-Object -First 1)
+      if ($mem) { $mm = ([string]$mem).Split(','); Write-Host ('     GPU memory now: ' + $mm[0].Trim() + ' of ' + $mm[1].Trim() + ' MiB in use') }
+    } catch { }
+  }
   $factory = [string]$CfgInfo.factory_dir
   if (-not $factory) { $factory = $FactoryDefault }
   $stop = Join-Path (Join-Path $factory 'data') 'STOP'
@@ -383,10 +476,10 @@ try {
       New-Item -ItemType File -Force -Path $stop | Out-Null
       Add-Note ('Paused shorts-factory: created ' + $stop + '. Only Dan resumes it (delete that file when he says).')
     } else {
-      Add-Note ('shorts-factory is not paused (' + $stop + ' missing): CheqUp jobs share the GPU queue with it. -PauseFactory pauses it.')
+      Write-Host 'ok   shorts-factory not paused (not needed: CheqUp has its own ComfyUI and the GPU gate yields to it)'
     }
   } else {
-    Add-Note ('shorts-factory not found at ' + $factory + ' (shorts_factory.dir in ' + $Config + '): its pause file was not checked.')
+    Write-Host ('note: shorts-factory not found at ' + $factory + ' (shorts_factory.dir in ' + $Config + '): its pause file was not checked.')
   }
   if ($OnWindows) {
     try {
@@ -457,17 +550,19 @@ try {
     if ($SkipModels) { foreach ($m in $models) { Add-Note ('-SkipModels: ' + $m + ': that piece falls back.') } }
     else {
       Finish 6 ("Missing models/files (nothing was rendered):`n  " + ($models -join "`n  ") +
-                "`nscripts/fetch_models_pc.ps1 downloads the ComfyUI models (~47 GB + ACE-Step 9.3 GB, resumable; restart ComfyUI after)." +
+                "`nscripts/fetch_models_pc.ps1 downloads the ComfyUI models into the shared models folder (~47 GB + ACE-Step 9.3 GB," +
+                " resumable; then restart CheqUp's ComfyUI: comfy_cheq_stop.ps1, and pc_run starts it again)." +
                 "`nOr run with -SkipModels to accept fallbacks (exit 8).")
     }
   }
   if ($farmDown -and -not $farmSkip -and -not $SkipModels -and -not $Draft) {
-    Finish 3 ('cqf found no live ComfyUI for b-roll (ComfyUI stopped during pre-flight?). Start it and run again.')
+    Finish 3 ("cqf found no live ComfyUI for b-roll (CheqUp's ComfyUI stopped during pre-flight?). Run again: pc_run starts it.")
   }
   Write-Host 'ok   pre-flight done'
 
   # --- 7. make -> outbox -> report ---------------------------------------------------------------------------
   $script:WantPack = $true
+  if ($null -ne (Get-ComfyStats $script:CheqUrl)) { $script:FreeCheq = $true }    # Finish frees its VRAM afterwards
   $margs = @('-m', 'cqf', '--config', $Config, 'make') + $script:BoardFiles
   foreach ($f in $FormatTokens) { $margs += @('--format', $f) }
   if ($Strict) { $margs += '--strict' }

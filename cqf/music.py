@@ -1,7 +1,8 @@
 """Music beds. Two backends (config music.backend):
 
-  ace_step    ACE-Step 1.5 (ace_step_1.5_turbo_aio.safetensors) on the PC's own ComfyUI: an
-              instrumental bed per board look, cached in out/music/ by its inputs (ace_bed).
+  ace_step    ACE-Step 1.5 (ace_step_1.5_turbo_aio.safetensors) on CheqUp's own ComfyUI on the PC (port
+              8288; cqf.gpu_gate waits for shorts-factory first): an instrumental bed per board look,
+              cached in out/music/ by its inputs (ace_bed).
   procedural  numpy pad chords + a soft plucked arpeggio + a light pulse (bed): no GPU, no model,
               so the cloud VM and drafts are never silent. Also the fallback when ACE-Step can't run.
 
@@ -127,7 +128,7 @@ def ace_server(cfg: dict, graph: dict):
     Same machine rules as farm.servers() without --use-5090: enabled: false is skipped, and a hero
     only counts when enabled: true. No version gate: any ComfyUI with the ACE-Step 1.5 nodes
     (v0.12.0+) runs the graph; ace_bed() swaps language 'unknown' for 'en' on builds before v0.21.0."""
-    from . import comfy
+    from . import comfy, gpu_gate
     f = cfg.get("farm") or {}
     nodes = sorted({n["class_type"] for n in graph.values()})
     why = "no ComfyUI in farm.machines"
@@ -136,6 +137,9 @@ def ace_server(cfg: dict, graph: dict):
             continue
         for i in range(mc.get("gpus", 1)):
             c = comfy.Comfy(f"http://{mc['host']}:{mc['first_port'] + i}", f.get("job_timeout_s", 1800), f.get("queue_timeout_s"))
+            if gpu_gate.is_protected(cfg, c.url):      # shorts-factory's ComfyUI: never sent a job
+                why = f"{c.url} is shorts-factory's ComfyUI (gpu_gate.yield_to), not used"
+                continue
             if not c.alive(f.get("probe_timeout_s", 5)):
                 why = f"{c.url} not responding"
                 continue
@@ -160,7 +164,7 @@ def ace_bed(cfg: dict, seconds: float, out: Path, mood: str = "warm", seed: int 
     in place). Cached in <out_dir>/music/ by (style, seconds, seed, checkpoint), so boards with the
     same look and length share one bed. None (after a printed warning) when it can't be made: the
     caller then uses the procedural bed(). At least ACE_MIN_SECONDS long."""
-    from . import comfy
+    from . import comfy, gpu_gate
     from .config import path
     secs = max(ACE_MIN_SECONDS, math.ceil(seconds))
     style = ACE_STYLES.get(mood, ACE_STYLES["warm"])
@@ -179,6 +183,7 @@ def ace_bed(cfg: dict, seconds: float, out: Path, mood: str = "warm", seed: int 
                 for n in g.values():
                     if n["class_type"] == "TextEncodeAceStepAudio1.5":
                         n["inputs"]["language"] = "en"
+            gpu_gate.wait_for_gpu(cfg, kind="ace", why=f"the ACE-Step {secs}s music bed", url=srv.url)   # shorts-factory first
             print(f"  music: ACE-Step 1.5 {secs}s {mood} bed on {srv.url}")
             raw = srv.run(g, cache.parent / "raw", f"ace_{key}")[0]
             tmp = cache.with_name(cache.stem + ".tmp.wav")

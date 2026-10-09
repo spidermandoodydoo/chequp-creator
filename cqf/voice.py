@@ -156,7 +156,26 @@ def _worker(python: str, timeout: float = START_TIMEOUT_S):
             print(f"  WARNING chatterbox worker is on the CPU (its torch sees no CUDA GPU: {python}); takes will be slow")
         _workers[python] = w
         atexit.register(w.terminate)
+        from . import gpu_gate                        # the gate may stop it to give its VRAM back (restarts on the next line)
+        gpu_gate.register_releaser("the Chatterbox worker", release_gpu)
     return w
+
+
+def release_gpu() -> bool:
+    """For cqf.gpu_gate: stop idle Chatterbox workers and drop Whisper models, so the VRAM they hold goes back
+    (to shorts-factory, or to CheqUp's next ComfyUI job). Never while a take is rendering. True if anything went."""
+    if not _lock.acquire(blocking=False):             # a job is running: leave it
+        return False
+    try:
+        live = [w for w in _workers.values() if w.poll() is None]
+        for w in live:
+            w.terminate()
+        _workers.clear()                              # not _dead/_crashes: the next line simply starts a fresh worker
+        had_asr = bool(_asr)
+        _asr.clear()
+        return bool(live) or had_asr
+    finally:
+        _lock.release()
 
 
 def chatterbox_job(job: dict, python: str, timeout: float | None = None, start_timeout: float | None = None) -> dict:
@@ -186,18 +205,21 @@ def chatterbox_job(job: dict, python: str, timeout: float | None = None, start_t
     return res
 
 
-def free_comfy_vram(machines) -> list[str]:
-    """Once per run, before the Chatterbox worker first loads: ask this PC's own ComfyUI (enabled farm machines on
-    127.0.0.1/localhost) to unload its models. Otherwise the b-roll models it keeps in VRAM can leave Chatterbox a
-    CUDA out-of-memory at load, and every line goes to Kokoro. Best effort (POST /free, the same as ComfyUI's
-    "Unload models" button); ComfyUI reloads what its next job needs. It never updates or restarts anything."""
+def free_comfy_vram(machines, never=()) -> list[str]:
+    """Once per run, before the Chatterbox worker first loads: ask CheqUp's own ComfyUI on this PC (enabled farm
+    machines on 127.0.0.1/localhost) to unload its models. Otherwise the b-roll models it keeps in VRAM can leave
+    Chatterbox a CUDA out-of-memory at load, and every line goes to Kokoro. Best effort (POST /free, the same as
+    ComfyUI's "Unload models" button); ComfyUI reloads what its next job needs. It never updates or restarts
+    anything, and never POSTs to a URL in `never` (gpu_gate.protected: shorts-factory's ComfyUI)."""
+    from .gpu_gate import _norm, protected
+    skip = {_norm(u) for u in never or ()} | protected(None)      # + 127.0.0.1:8188 (shorts-factory's) always
     done = []
     for m in machines or []:
         if m.get("enabled") is False or str(m.get("host")) not in ("127.0.0.1", "localhost"):
             continue
         for k in range(max(1, int(m.get("gpus") or 1))):
-            url = f"http://{m['host']}:{int(m.get('first_port') or 8188) + k}"
-            if url in _freed:
+            url = f"http://{m['host']}:{int(m.get('first_port') or 8288) + k}"
+            if url in _freed or _norm(url) in skip:
                 continue
             _freed.add(url)
             try:

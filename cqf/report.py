@@ -11,7 +11,8 @@ qwen | fallback | mixed}, the b-roll `shots` and `errors`. Episodes from before 
 get them guessed from the episode folder, marked "guessed".
 
 report.json (next to REPORT.md) carries the same facts plus the run's exit code, which pc_run.ps1 uses:
-0 ok, 1 a board failed, 8 fallbacks used, 9 the run crashed (pre-flight codes 2-7 are pc_run's own).
+0 ok, 1 a board failed, 8 fallbacks used, 9 the run crashed, 12 the GPU gate gave up waiting for shorts-factory
+(pre-flight codes 2-7 are pc_run's own). Each board's gpu_wait_s (time spent waiting for the 5090) is shown too.
 Nothing here makes media; ffmpeg only cuts contact sheets and thumbnails for the review zip."""
 from __future__ import annotations
 
@@ -32,9 +33,9 @@ from pathlib import Path
 
 from .config import ROOT
 
-EXIT = {0: "ok", 1: "a board failed", 2: "tools missing", 3: "ComfyUI down", 4: "ComfyUI too old",
+EXIT = {0: "ok", 1: "a board failed", 2: "tools missing", 3: "ComfyUI down", 4: "CheqUp ComfyUI missing or too old",
         5: "Python env or config", 6: "models missing", 7: "unknown board or format", 8: "fallbacks used",
-        9: "run crashed", 10: "already running", 11: "still running"}
+        9: "run crashed", 10: "already running", 11: "still running", 12: "GPU busy (gate gave up)"}
 VIDEO = (".mp4", ".mov", ".webm")
 FORMATS = ("9x16", "4x5", "1x1", "16x9")
 _BROLL_TYPES = ("media", "glass", "logo")
@@ -134,7 +135,7 @@ def board_info(cfg: dict, ep: Path, since: dt.datetime | None = None, want: str 
     bid = board.get("id") or ep.name
     if st is None:
         return {"id": want or bid, "status": "missing", "verdict": None, "missing": True, "stale": False, "failed": False,
-                "incomplete": False,
+                "incomplete": False, "gpu_wait_s": 0, "gpu_busy": None,
                 "fallback": False, "fallbacks": [], "files": [], "shots": [], "voice": [], "music": None, "broll": None,
                 "clips": 0, "errors": ["no state.json: make never reached this board"], "approvals_needed": [], "guessed": False}
     if "engines" in st:                                 # produce() always writes it; older states lack the key
@@ -172,7 +173,8 @@ def board_info(cfg: dict, ep: Path, since: dt.datetime | None = None, want: str 
         fb.append({"what": "b-roll", "detail": f"{n_fb}/{len(shots)} shots used CheqUp's own stills"
                    + (f" ({why['broll']})" if why.get("broll") else "")})
     return {"id": bid, "status": status, "verdict": verdict, "missing": False, "stale": stale, "failed": failed,
-            "incomplete": incomplete,
+            "incomplete": incomplete, "gpu_wait_s": float(st.get("gpu_wait_s") or 0),
+            "gpu_busy": None if stale else st.get("gpu_busy"),
             "fallback": bool(fb), "fallbacks": fb, "files": st.get("files") or [], "shots": shots, "voice": voice,
             "music": music, "broll": broll, "broll_skipped": bool(st.get("broll_skipped")),
             "clips": sum(1 for s in shots if s.get("clip")), "errors": st.get("errors") or [],
@@ -184,6 +186,8 @@ def exit_code(boards: list[dict], make_exit: int | None = None, outbox_exit: int
     """The run's exit code from what the boards' states say (pc_run.ps1 returns it)."""
     if make_exit not in (None, 0, 1):
         return 9                                        # make itself died (killed, crashed before a board)
+    if any(b.get("gpu_busy") and not b.get("stale") for b in boards):
+        return 12                                       # the GPU gate waited max_wait_s for shorts-factory and gave up
     if any(b["failed"] for b in boards):
         return 1
     if any(b["missing"] or b["stale"] or b.get("incomplete") for b in boards):
@@ -238,13 +242,19 @@ def collect(cfg: dict, boards: list[str] | None = None, since: str | None = None
             "config": cfg.get("_config_name"), "run": run or {}, "since": since, "make_exit": make_exit,
             "outbox_exit": outbox_exit, "exit": code, "meaning": EXIT.get(code, "?"), "boards": infos,
             "outbox": _outbox(cfg, outbox), "music_backend": (cfg.get("music") or {}).get("backend", "procedural"),
-            "farm_enabled": farm_enabled(cfg)}
+            "farm_enabled": farm_enabled(cfg), "gpu_gate": bool(((cfg.get("gpu_gate") or {}).get("enabled"))),
+            "gpu_wait_s": round(sum(b.get("gpu_wait_s") or 0 for b in infos if not b.get("stale")), 1)}
 
 
 # --- REPORT.md ------------------------------------------------------------------------------------------
 
 def _not_reached(b: dict) -> bool:
-    return b["status"] in ("error", "blocked", "missing", "started", "linted")
+    return b["status"] in ("error", "blocked", "missing", "started", "linted", "skipped")
+
+
+def _mins(s) -> str:
+    s = float(s or 0)
+    return f"{s / 60:.0f} min" if s >= 60 else f"{s:.0f} s"
 
 
 def _voice_cell(b: dict) -> str:
@@ -300,7 +310,7 @@ def render_md(data: dict) -> str:
     n_f = sum(1 for b in bs if b["failed"])
     n_o = len(bs) - n_r - n_f
     head.append(f"- **Result:** exit {data['exit']} ({data['meaning']}). {len(bs)} board{'' if len(bs) == 1 else 's'}: {n_r} rendered, {n_f} failed"
-                + (f", {n_o} other (blocked, missing or not run this time)" if n_o else ""))
+                + (f", {n_o} other (blocked, skipped, missing or not run this time)" if n_o else ""))
     ob = data.get("outbox")
     head.append(f"- **Outbox:** `{_rel(ob['path'])}` ({ob['files']} file{'' if ob['files'] == 1 else 's'}: {ob['hold']} HOLD, {ob['ready']} READY; "
                 f"`ads_sheet.csv`, `index.html`)" if ob else "- **Outbox:** none built")
@@ -316,6 +326,10 @@ def render_md(data: dict) -> str:
            f"b-roll Qwen plates {sum(1 for s in shots if s.get('ok'))}/{len(shots)} shots",
            f"AI video clips: {sum(1 for s in shots if s.get('clip'))}"]
     head.append("- **Engines:** " + " · ".join(eng))
+    busy = next((b["gpu_busy"] for b in bs if b.get("gpu_busy")), None)
+    if data.get("gpu_gate") or data.get("gpu_wait_s") or busy:
+        head.append(f"- **GPU gate:** waited {_mins(data.get('gpu_wait_s'))} in total for shorts-factory / free VRAM"
+                    + (f". **Gave up:** {_cell(busy)[:400]}" if busy else ""))
     if any(b.get("guessed") for b in bs):
         head.append("- Some engines were not recorded (a run from before engine recording, or a step that didn't record it): "
                     "those are guessed from the episode folder and marked guessed.")
@@ -337,7 +351,11 @@ def render_md(data: dict) -> str:
         if b.get("incomplete"):
             L.append(f"**Did not finish:** make stopped during this board (at status {b['status']}): killed or crashed.")
         if b.get("blocked_reason"):
-            L.append(f"Blocked: {b['blocked_reason']}")
+            L.append(f"{'Skipped' if b['status'] == 'skipped' else 'Blocked'}: {b['blocked_reason']}")
+        if b.get("gpu_wait_s"):
+            L.append(f"GPU wait: {_mins(b['gpu_wait_s'])} (gpu_gate: shorts-factory busy or VRAM short)")
+        if b.get("gpu_busy") and b["status"] != "skipped":
+            L.append(f"**GPU gate gave up during this board:** {_cell(b['gpu_busy'])[:400]}")
         if b["approvals_needed"]:
             L.append("Approvals needed: " + "; ".join(b["approvals_needed"]))
         if b["files"]:
@@ -522,10 +540,20 @@ def groups(concepts: Path | None = None) -> list[str]:
 
 def info(cfg: dict) -> dict:
     """The config facts pc_run.ps1 checks before a run."""
+    from . import gpu_gate
     machines = (cfg.get("farm") or {}).get("machines") or []
     on = [m for m in machines if m.get("enabled") is True or (m.get("enabled") is not False and m.get("role") != "hero")]
     local = ("127.0.0.1", "localhost", "::1")
-    return {"voice_backend": (cfg.get("voice") or {}).get("backend", "tts"),
+    g, cc = cfg.get("gpu_gate") or {}, cfg.get("comfy_cheq") or {}
+    urls = [f"http://{m.get('host')}:{int(m.get('first_port') or 0) + k}" for m in on for k in range(int(m.get("gpus") or 1))]
+    return {"comfy_cheq": {"dir": cc.get("dir"), "port": cc.get("port"), "url": gpu_gate.cheq_url(cfg)},
+            "gpu_gate": {"enabled": bool(g.get("enabled")), "yield_to": gpu_gate.yield_to(cfg),
+                         "need_gb": {k: gpu_gate.need_for(cfg, k) for k in gpu_gate.DEFAULT_NEED},
+                         "poll_s": g.get("poll_s", 30), "max_wait_s": g.get("max_wait_s", 21600)},
+            # enabled farm servers that are a yield_to (shorts-factory's) ComfyUI: pc_run refuses the config (exit 5)
+            "farm_conflicts": [u for u in urls if gpu_gate.is_protected(cfg, u)]
+                              + ([gpu_gate.cheq_url(cfg)] if gpu_gate.cheq_url(cfg) and gpu_gate.is_protected(cfg, gpu_gate.cheq_url(cfg)) else []),
+            "voice_backend": (cfg.get("voice") or {}).get("backend", "tts"),
             "chatterbox_python": (cfg.get("voice") or {}).get("chatterbox_python"),
             "music_backend": (cfg.get("music") or {}).get("backend", "procedural"),
             "music_generate": bool((cfg.get("music") or {}).get("generate")),

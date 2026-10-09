@@ -1,8 +1,19 @@
 # One-time setup on the Windows 5090 PC (PowerShell, from the chequp-creator folder).
-# Uses CUDA torch so Kokoro voice runs on the GPU; b-roll goes to the PC's own ComfyUI (:8188).
+# Uses CUDA torch so Kokoro voice runs on the GPU; b-roll goes to CheqUp's own ComfyUI (:8288), installed
+# separately by scripts/install_comfy_cheq_pc.ps1 (never shorts-factory's ComfyUI on :8188).
 $ErrorActionPreference = "Stop"
 Set-Location (Split-Path $PSScriptRoot -Parent)
-if (-not (Get-Command uv -ErrorAction SilentlyContinue)) { pip install uv }
+if (-not (Get-Command uv -ErrorAction SilentlyContinue)) {
+  # Never into a venv (an activated or PATH'd venv's pip could be shorts-factory's ComfyUI-Factory-venv): base Python only.
+  $pipCmd = Get-Command pip -ErrorAction SilentlyContinue
+  $pipHome = $null
+  if ($pipCmd -and $pipCmd.Source) { $pipHome = Split-Path -Parent (Split-Path -Parent $pipCmd.Source) }
+  if ($env:VIRTUAL_ENV -or -not $pipHome -or (Test-Path -LiteralPath (Join-Path $pipHome 'pyvenv.cfg')) -or ($pipHome -like '*ComfyUI*')) {
+    throw ("uv is not installed, and pip (" + $pipHome + ") is missing or belongs to a venv, which this never installs into. " +
+           "Install uv: winget install -e --id astral-sh.uv  then open a new PowerShell and run this again.")
+  }
+  pip install uv
+}
 if (-not (Test-Path .venv\Scripts\python.exe)) { uv venv -q -p 3.12 .venv }   # uv 0.11 exits 2 if it exists (re-runs)
 $env:VIRTUAL_ENV = ".venv"
 uv pip install -q --index-url https://download.pytorch.org/whl/cu128 `

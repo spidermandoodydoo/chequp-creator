@@ -12,7 +12,7 @@ import subprocess
 import wave
 from pathlib import Path
 
-from . import compliance, farm
+from . import compliance, farm, gpu_gate
 from .config import ROOT, path
 
 VIDEO = (".mp4", ".mov", ".webm")
@@ -162,10 +162,16 @@ def _voice(cfg: dict, board: dict, ep: Path, skip: bool):
     cb_py = vcfg.get("chatterbox_python")
     cb_py = str(ROOT / cb_py) if cb_py and not Path(cb_py).is_absolute() else cb_py
     sr, lang, lex = int(vcfg.get("sample_rate", 24000)), vcfg.get("lang_code", "b"), pv.get("lexicon") or {}
-    if use_tts and cb_py and Path(cb_py).exists() and not voice.worker_ready(cb_py) and any(
+    if use_tts and cb_py and Path(cb_py).exists() and cb_py not in voice._dead and any(
             sp.get("engine") == "chatterbox" and sp.get("ref") and (ROOT / sp["ref"]).is_file()
             for s in board["scenes"] for sp in (_cast(board, pv, ln) for ln in _lines(s))):
-        voice.free_comfy_vram((cfg.get("farm") or {}).get("machines"))   # b-roll models still in VRAM would starve it
+        try:                         # every board's takes run on the 5090 (a worker left from the last board too):
+            # wait for shorts-factory first; if it is busy the gate stops that worker, and the next line restarts it
+            gpu_gate.wait_for_gpu(cfg, kind="chatterbox", why="the Chatterbox voice worker")
+        except gpu_gate.GpuBusy as e:      # every Chatterbox line of the run goes to Kokoro, with this reason
+            voice._dead[cb_py] = f"GPU busy: {e}"
+        voice.free_comfy_vram((cfg.get("farm") or {}).get("machines"),     # b-roll models still in VRAM would starve it
+                              never=gpu_gate.protected(cfg))
     vdir = ep / "vo"
     vdir.mkdir(exist_ok=True)
     words_all, segs, engines, t = [], [], [], 0.0
@@ -412,7 +418,8 @@ def _engines(board: dict, broll: str | None) -> dict:
 def produce(cfg: dict, board_path: Path, formats: list[str] | None = None, *, use_5090=False, skip_broll=False,
             skip_voice=False, allow_hold=True, clips=False) -> dict:
     """lint -> b-roll -> voice -> music -> sfx -> render. state.json records `engines` {voice: one entry per VO line,
-    music, broll}, the b-roll `shots`, `errors` and `fallback_reasons` as it goes. A board that raises ends as
+    music, broll}, the b-roll `shots`, `errors`, `fallback_reasons`, `gpu_wait_s` (time spent waiting for the
+    5090: cqf.gpu_gate) and `gpu_busy` (the gate's give-up message, if it gave up during this board) as it goes. A board that raises ends as
     status "error" (with the error) and the exception goes on to the caller: `cqf make` carries on with the
     next board. clips=True: every AI b-roll shot becomes a Wan 2.2 i2v clip from its chosen still."""
     import traceback
@@ -428,7 +435,13 @@ def produce(cfg: dict, board_path: Path, formats: list[str] | None = None, *, us
     ep = path(cfg, "out_dir") / "episodes" / board["id"]
     ep.mkdir(parents=True, exist_ok=True)
     _save(ep / "board.json", board)
-    rec = {"engines": {}, "shots": [], "errors": [], "fallback_reasons": {}, "ai_clips": 0}
+    rec = {"engines": {}, "shots": [], "errors": [], "fallback_reasons": {}, "ai_clips": 0, "gpu_wait_s": 0.0, "gpu_busy": None}
+    w0, busy0 = gpu_gate.waited_s(), gpu_gate.gave_up()
+
+    def gate():                       # time this board spent waiting for the GPU (shorts-factory), and a give-up
+        rec["gpu_wait_s"] = round(gpu_gate.waited_s() - w0, 1)
+        if gpu_gate.gave_up() and gpu_gate.gave_up() != busy0:
+            rec["gpu_busy"] = gpu_gate.gave_up()
     _state(ep, status="started", verdict=None, started=now, board_file=str(board_path), files=[], approvals_needed=[],
            broll_skipped=bool(skip_broll), clips_requested=bool(clips), blocked_reason=None, traceback=None, **rec)
     try:
@@ -452,12 +465,14 @@ def produce(cfg: dict, board_path: Path, formats: list[str] | None = None, *, us
         unverified = bool(unverified) or any(x["ok"] and x["unverified"] for x in rec["shots"])   # cached, unchecked
         rec["ai_clips"] = sum(1 for x in rec["shots"] if x["clip"])
         rec["engines"] = _engines(board, broll)
+        gate()
         _state(ep, status="broll", broll_unverified=unverified, **rec)
         _voice(cfg, board, ep, skip_voice)
         _, said = _tee_call(_music, cfg, board, ep)
         rec["fallback_reasons"].update(_reasons(said))
         _sfx(board, ep)
         rec["engines"] = _engines(board, broll)
+        gate()
         _state(ep, status="voice", **rec)
         files = []
         for fmt in formats or board.get("formats") or cfg["render"]["formats"]:
@@ -467,13 +482,29 @@ def produce(cfg: dict, board_path: Path, formats: list[str] | None = None, *, us
         if unverified:
             needs.append("b-roll vision check (plates UNVERIFIED: check by eye)")
             v = "HOLD" if v == "PASS" else v
+        gate()
         _state(ep, status="rendered", verdict=v, files=files, approvals_needed=needs, **rec)
         return {"id": board["id"], "verdict": v, "files": files}
     except Exception as e:
         rec["engines"] = _engines(board, rec["engines"].get("broll"))
         rec["errors"].append(f"{type(e).__name__}: {e}"[:2000])
+        gate()
         _state(ep, status="error", traceback=traceback.format_exc()[-4000:], **rec)
         raise
+
+
+def skip_board(cfg: dict, board_path: Path, reason: str) -> dict:
+    """state.json for a board `cqf make` didn't start (the GPU gate gave up earlier in the run): status skipped."""
+    try:
+        bid = json.loads(Path(board_path).read_text(encoding="utf-8")).get("id") or Path(board_path).stem
+    except (OSError, ValueError):
+        bid = Path(board_path).stem
+    ep = path(cfg, "out_dir") / "episodes" / bid
+    ep.mkdir(parents=True, exist_ok=True)
+    now = dt.datetime.now().isoformat(timespec="seconds")
+    _state(ep, status="skipped", verdict=None, started=now, board_file=str(board_path), files=[], engines={}, shots=[],
+           errors=[], approvals_needed=[], blocked_reason=f"not started: {reason}", gpu_busy=reason, gpu_wait_s=0.0)
+    return {"id": bid, "verdict": "SKIP", "files": []}
 
 
 def outbox(cfg: dict, campaign: str = "chequp_method") -> Path:

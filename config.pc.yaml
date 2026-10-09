@@ -1,7 +1,9 @@
 # chequp-creator runtime config: PC profile, run ON the Windows 5090 PC (C:\Users\white).
 #   .venv\Scripts\python.exe -m cqf --config config.pc.yaml ...
-# The 5090 also runs shorts-factory's daemon: pause it first (empty file data\STOP in
-# shorts-factory) or CheqUp jobs just queue behind its Wan jobs on the same ComfyUI.
+# The 5090 also runs shorts-factory, on its own ComfyUI (port 8188). CheqUp has its OWN ComfyUI v0.39.2 next to
+# it (comfy_cheq below, port 8288; scripts/install_comfy_cheq_pc.ps1), sharing the model files read-only, and
+# gpu_gate waits before every CheqUp GPU job while shorts-factory has work. shorts-factory's ComfyUI, its venv and
+# its files are never modified, restarted or sent anything but GET /queue and GET /system_stats: no pause needed.
 # chequp-creator runtime config. Same shape as shorts-factory's config.yaml where the
 # concepts overlap (farm.machines, models.wan22, qa.*, publish.mode).
 
@@ -35,9 +37,9 @@ farm:
       enabled: false          # CheqUp never uses mama (Dan, 8 Oct: "not mama, mama is getting hot")
     - name: pc-5090
       host: 127.0.0.1
-      first_port: 8188
+      first_port: 8288        # CheqUp's own ComfyUI (comfy_cheq), never 8188 (shorts-factory's: gpu_gate.yield_to)
       gpus: 1
-      role: hero              # the PC's own ComfyUI (C:\Users\white\ComfyUI-Installs), Wan 2.2 already installed
+      role: hero              # models: shorts-factory's models folder, shared read-only via extra_model_paths.yaml
       enabled: true
   probe_timeout_s: 5
   job_timeout_s: 1800         # one still: Qwen 50 steps x4 seeds + SeedVR2 7B
@@ -93,7 +95,7 @@ voice:
 
 music:
   generate: true
-  backend: ace_step           # ACE-Step 1.5 on the 5090's ComfyUI; falls back to the procedural bed
+  backend: ace_step           # ACE-Step 1.5 on CheqUp's ComfyUI (8288); falls back to the procedural bed
   seed: 7                     # beds are cached in out/music by look, length, seed and checkpoint: change for a new take
   gain_db_under_vo: -21
   gain_db_solo: -6
@@ -101,5 +103,20 @@ music:
 publish:
   mode: outbox                # outbox only — nothing is pushed to Meta automatically
 
-shorts_factory:               # shares this PC's ComfyUI + GPU. scripts\pc_run.ps1 checks its pause file
+shorts_factory:               # shares this PC's GPU (its own ComfyUI on 8188). pc_run -PauseFactory is optional now
   dir: C:\Users\white\heatmap\shorts-factory   # paused while <dir>\data\STOP exists; only Dan resumes it
+
+comfy_cheq:                   # CheqUp's own ComfyUI v0.39.2 (scripts/install_comfy_cheq_pc.ps1, comfy_cheq_start.ps1)
+  dir: C:\Users\white\ComfyUI-CheqUp
+  port: 8288
+
+gpu_gate:                     # cqf/gpu_gate.py: wait before each CheqUp GPU job on this PC, so shorts-factory goes first
+  enabled: true
+  yield_to:                   # GET /queue (+ GET /system_stats while VRAM is short) only; never POST, /free or /interrupt
+    - {url: "http://127.0.0.1:8188", name: shorts-factory}
+  need_free_vram_gb: 22       # free VRAM to wait for (nvidia-smi; what CheqUp's own ComfyUI holds counts as free)
+  need_gb: {still: 22, clip: 26, ace: 12, chatterbox: 6}
+  poll_s: 30
+  quiet_s: 60                 # once shorts-factory had work, start only after 60 s without any (not between its jobs)
+  log_every_s: 300
+  max_wait_s: 21600           # 6 h, then GpuBusy: the rest of the run is skipped (pc_run exit 12)

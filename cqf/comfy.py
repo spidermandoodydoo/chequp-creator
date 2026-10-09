@@ -10,6 +10,8 @@ from pathlib import Path
 
 import requests
 
+from . import gpu_gate
+
 GRAPHS = Path(__file__).resolve().parent / "graphs"
 MIN_VERSION = (0, 39, 2)            # SeedVR2 + FrameInterpolate + nested SaveVideo codec keys
 REQUIRED_NODES = ["SeedVR2Conditioning", "SeedVR2TemporalChunk", "FrameInterpolate", "ResizeImageMaskNode", "SaveVideo"]
@@ -61,10 +63,12 @@ def combo_options(spec) -> list[str]:
 class Comfy:
     def __init__(self, url: str, timeout: int = 1800, queue_timeout: float | None = None):
         """timeout bounds one job. queue_timeout (None = no separate bound) is how long a job may wait
-        behind other work on this ComfyUI (e.g. shorts-factory's) before it is taken off the queue;
-        with it set, the job clock starts when ComfyUI picks the job up."""
+        behind other work on this ComfyUI before it is taken off the queue; with it set, the job clock starts
+        when ComfyUI picks the job up. (On the PC CheqUp has its own ComfyUI, so nothing else queues there;
+        cqf.gpu_gate waits for shorts-factory's ComfyUI before a job is submitted.)"""
         self.url, self.timeout, self.client_id = url.rstrip("/"), timeout, uuid.uuid4().hex
         self.queue_timeout = queue_timeout
+        self.yield_check = None     # gpu_gate.yield_check(): run() cancels its own job when shorts-factory starts one
 
     def alive(self, t: float = 5) -> bool:
         try:
@@ -95,16 +99,23 @@ class Comfy:
                 ver = requests.get(f"{self.url}/system_stats", timeout=10).json().get("system", {}).get("comfyui_version", "0")
                 nums = tuple(int(p) for p in str(ver).lstrip("v").split("-")[0].split(".")[:3] if p.isdigit())
                 if nums < tuple(min_version):
-                    problems.append(f"ComfyUI {ver} < {'.'.join(map(str, min_version))} (update ComfyUI)")
+                    problems.append(f"ComfyUI {ver} < {'.'.join(map(str, min_version))} (update CheqUp's ComfyUI: scripts/install_comfy_cheq_pc.ps1)")
             except (requests.RequestException, ValueError) as e:
                 problems.append(f"system_stats: {e}")
         for node in REQUIRED_NODES if nodes is None else nodes:
             try:
                 if node not in requests.get(f"{self.url}/object_info/{node}", timeout=15).json():
-                    problems.append(f"missing node {node} (update ComfyUI)")
+                    problems.append(f"missing node {node} (update CheqUp's ComfyUI: scripts/install_comfy_cheq_pc.ps1)")
             except requests.RequestException as e:
                 problems.append(f"object_info/{node}: {e}")
         return problems
+
+    def _post(self, path: str, **kw):
+        """Every POST this client sends (prompt, upload, cancel) goes through here: never to shorts-factory's
+        ComfyUI (gpu_gate.ALWAYS_PROTECTED, 127.0.0.1:8188), whatever config built this client."""
+        if gpu_gate.is_protected(None, self.url):
+            raise RuntimeError(f"{self.url} is shorts-factory's ComfyUI: CheqUp never sends it anything (no POST {path})")
+        return requests.post(f"{self.url}{path}", **kw)
 
     def _pending(self, pid: str) -> bool:
         q = requests.get(f"{self.url}/queue", timeout=15).json()
@@ -112,13 +123,13 @@ class Comfy:
 
     def upload(self, path: Path) -> str:
         with open(path, "rb") as f:
-            r = requests.post(f"{self.url}/upload/image", files={"image": (path.name, f, "image/png")}, data={"overwrite": "true"}, timeout=60)
+            r = self._post("/upload/image", files={"image": (path.name, f, "image/png")}, data={"overwrite": "true"}, timeout=60)
         r.raise_for_status()
         return r.json()["name"]
 
     def run(self, graph: dict, out_dir: Path, stem: str, timeout: int | None = None) -> list[Path]:
         limit = timeout or self.timeout
-        r = requests.post(f"{self.url}/prompt", json={"prompt": graph, "client_id": self.client_id}, timeout=60)
+        r = self._post("/prompt", json={"prompt": graph, "client_id": self.client_id}, timeout=60)
         if not r.ok:
             raise RuntimeError(f"ComfyUI rejected graph: {r.text[:500]}")
         j = r.json()
@@ -140,6 +151,10 @@ class Comfy:
             elif waiting and time.time() - t0 > self.queue_timeout:
                 self._cancel(pid)                          # taken off the queue; the other job is never interrupted
                 raise TimeoutError(f"{self.url} job {pid} still queued after {self.queue_timeout} s (another job holds this ComfyUI)")
+            why = self.yield_check() if self.yield_check else None
+            if why:                                        # the GPU is shorts-factory's first: stop OUR job, never its
+                self._cancel(pid)
+                raise gpu_gate.Yielded(f"{why}: CheqUp cancelled its own job {pid} on {self.url} to give it the GPU")
             time.sleep(2)
         self._cancel(pid)
         raise TimeoutError(f"{self.url} job {pid} timed out")
@@ -151,9 +166,9 @@ class Comfy:
         try:
             q = requests.get(f"{self.url}/queue", timeout=15).json()
             if any(len(i) > 1 and i[1] == pid for i in q.get("queue_running", [])):
-                requests.post(f"{self.url}/interrupt", json={"prompt_id": pid}, timeout=10)
+                self._post("/interrupt", json={"prompt_id": pid}, timeout=10)
             else:
-                requests.post(f"{self.url}/queue", json={"delete": [pid]}, timeout=10)
+                self._post("/queue", json={"delete": [pid]}, timeout=10)
         except (requests.RequestException, ValueError):
             pass
 

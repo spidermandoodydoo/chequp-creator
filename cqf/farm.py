@@ -6,6 +6,10 @@
 
 Phases run in that order so one GPU isn't reloading 20-50 GB of weights per shot.
 AI plates never contain a recognisable face: every shot carries a people tag.
+
+On the PC every job goes to CheqUp's own ComfyUI (comfy_cheq, port 8288), and cqf.gpu_gate waits before each
+one while shorts-factory's ComfyUI (gpu_gate.yield_to, port 8188) has work or VRAM is short. A yield_to server
+is never sent a job.
 """
 from __future__ import annotations
 
@@ -18,12 +22,13 @@ import zlib
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from . import comfy, compliance
+from . import comfy, compliance, gpu_gate
 from .llm import extract_json, find_claude
 
 PEOPLE_TAGS = {"none", "hands", "hands_pair", "back_view", "distant"}
 DEFAULT_STILL_SIZES = {"9x16": [928, 1664], "16x9": [1664, 928]}
 DEFAULT_CLIP_SIZES = {"9x16": [720, 1280], "16x9": [1280, 720]}
+MAX_YIELDS = 3              # times one job may give way to shorts-factory mid-run before the shot falls back
 
 
 @dataclass
@@ -57,7 +62,8 @@ def _graph(cfg: dict, which: str) -> str:
 
 
 def servers(cfg: dict, use_5090: bool = False, need_clips: bool = False) -> list[comfy.Comfy]:
-    """Live ComfyUI servers that pass the version/node pre-flight and have every model file."""
+    """Live ComfyUI servers that pass the version/node pre-flight and have every model file (never a
+    gpu_gate.yield_to server: that is shorts-factory's)."""
     live, f = [], cfg["farm"]
     need = set(comfy.graph_models(_override(comfy.fill(_graph(cfg, "still"), seed=1, width=16, height=16), cfg)))
     if need_clips:
@@ -69,12 +75,16 @@ def servers(cfg: dict, use_5090: bool = False, need_clips: bool = False) -> list
             continue
         for i in range(mc["gpus"]):
             c = comfy.Comfy(f"http://{mc['host']}:{mc['first_port'] + i}", f.get("job_timeout_s", 1800))
+            if gpu_gate.is_protected(cfg, c.url):      # shorts-factory's ComfyUI: CheqUp never sends it a job
+                print(f"  {c.url}: not used (a gpu_gate.yield_to ComfyUI, shorts-factory's: CheqUp never sends it jobs)")
+                continue
             if not c.alive(f.get("probe_timeout_s", 5)):
                 continue
             problems = c.preflight() + [f"missing model {m}" for m in c.has_models(sorted(need))]
             if problems:
                 print(f"  {c.url}: skipping: {'; '.join(problems[:4])} (see scripts/fetch_models_pc.ps1)")
                 continue
+            c.yield_check = gpu_gate.yield_check(cfg, c.url)     # cancel OUR job if shorts-factory starts one
             live.append(c)
     return live
 
@@ -124,6 +134,26 @@ def _override(graph: dict, cfg: dict) -> dict:
     return graph
 
 
+def _gate(cfg: dict, srv: comfy.Comfy, kind: str, shot: Shot):
+    """Wait for shorts-factory (and enough free VRAM) before each job on this PC's GPU: cqf.gpu_gate. Remote
+    servers are not gated. Raises gpu_gate.GpuBusy when the gate gives up (the shot then falls back)."""
+    gpu_gate.wait_for_gpu(cfg, kind=kind, why=f"b-roll {kind} {shot.key}", url=srv.url)
+
+
+def _run(cfg: dict, srv: comfy.Comfy, kind: str, shot: Shot, g: dict, stem: str, gated: bool = False, **kw) -> list[Path]:
+    """Gate (unless the caller just did), then run. If shorts-factory starts a job meanwhile, srv.run cancels OUR job
+    (gpu_gate.Yielded): free CheqUp's VRAM and try again after the gate, at most MAX_YIELDS times."""
+    for n in range(MAX_YIELDS + 1):
+        if n or not gated:
+            _gate(cfg, srv, kind, shot)
+        try:
+            return srv.run(g, shot.out_dir / "candidates", stem, **kw)
+        except gpu_gate.Yielded as e:
+            print(f"  [{srv.url.rsplit(':', 1)[-1]}] {kind} {shot.key}: {e}; retrying when the GPU is free")
+            gpu_gate.release_own(cfg, srv.url)
+    raise RuntimeError(f"gave way to shorts-factory {MAX_YIELDS + 1} times mid-job; not retried again")
+
+
 def _seed(key: str, i: int) -> int:
     return (zlib.crc32(key.encode()) * 7919 + i * 104729) % (2**31)
 
@@ -144,7 +174,7 @@ def _still_job(cfg: dict, srv: comfy.Comfy, shot: Shot):
             seed = _seed(shot.key, attempt * n + c)
             g = _override(comfy.fill(graph_src, prompt=f"{shot.prompt} {look}", negative=neg, seed=seed, width=w, height=h,
                                      prefix=f"cq_{shot.key}"), cfg)
-            files = srv.run(g, shot.out_dir / "candidates", f"{shot.key}_s{seed}")
+            files = _run(cfg, srv, "still", shot, g, f"{shot.key}_s{seed}")
             master = next((f for f in files if "_n20" in f.name), files[-1])
             ok, score, note, unv = qa(cfg, master, shot)
             shot.log.append({"file": master.name, "seed": seed, "ok": ok, "score": score, "note": note})
@@ -181,11 +211,12 @@ def _clip_job(cfg: dict, srv: comfy.Comfy, shot: Shot):
     b = cfg["_preset"]["broll"]
     w, h = _sizes(cfg, "clip")[shot.aspect]
     frames = cfg.get("models", {}).get("wan22", {}).get("clip", {}).get("frames", 81)
+    _gate(cfg, srv, "clip", shot)                  # before the upload too: nothing goes to the GPU until it's free
     g = comfy.fill(_graph(cfg, "clip"), image=srv.upload(shot.still), prompt=shot.motion,
                    negative=b["negative_wan"] + "，" + b["negative_i2v_extra"], seed=_seed(shot.key, 999),
                    width=w, height=h, frames=frames, prefix=f"cq_{shot.key}")
     g = _override(g, cfg)
-    clip = srv.run(g, shot.out_dir / "candidates", f"{shot.key}_clip", timeout=cfg["farm"].get("clip_timeout_s", 10800))[0]
+    clip = _run(cfg, srv, "clip", shot, g, f"{shot.key}_clip", gated=True, timeout=cfg["farm"].get("clip_timeout_s", 10800))[0]
     ok, note = _frames_ok(cfg, clip, shot)
     shot.log.append({"file": clip.name, "clip_ok": ok, "note": note})
     if not ok:

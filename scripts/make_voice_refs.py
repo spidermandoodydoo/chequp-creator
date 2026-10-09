@@ -147,7 +147,8 @@ def make_bouncy(dst: Path, ref: Path, python: str, cand_dir: Path, timeout: floa
 
 
 def run(brand: Path, chatterbox_python: str | None, lang: str = "b", sr: int = 24000, force: bool = False,
-        cand_dir: Path | None = None, cpu: bool = False) -> int:
+        cand_dir: Path | None = None, cpu: bool = False, cfg: dict | None = None) -> int:
+    """cfg: the full config, for cqf.gpu_gate (config.pc.yaml: Chatterbox waits for shorts-factory first; None = no gate)."""
     todo = [n for n in (*KOKORO_REFS, "announcer_bouncy_ref.wav") if force or not (brand / n).exists()]
     if todo and not cpu:
         ok, why = cuda_here()
@@ -189,6 +190,8 @@ def run(brand: Path, chatterbox_python: str | None, lang: str = "b", sr: int = 2
     else:
         print(f"making {dst.name} with Chatterbox from {ref.name} (exaggeration 1.0, cfg 0.35, temperature 0.9, seeds {SEEDS})")
         try:
+            from cqf import gpu_gate                  # the 5090 is shared with shorts-factory: it goes first
+            gpu_gate.wait_for_gpu(cfg, kind="chatterbox", why=f"Chatterbox for {dst.name}")
             make_bouncy(dst, ref, chatterbox_python, cand_dir or ROOT / "out" / "voice_refs")
             _show("made", dst, " (Chatterbox)")
         except Exception as e:
@@ -205,10 +208,11 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--cpu", action="store_true", help="allow a run without a CUDA GPU (refused otherwise)")
     a = ap.parse_args(argv)
     from cqf import config
-    vcfg = config.load(a.config)["voice"]
+    full = config.load(a.config)
+    vcfg = full["voice"]
     cb = vcfg.get("chatterbox_python")
     cb = str(ROOT / cb) if cb and not Path(cb).is_absolute() else cb
-    return run(BRAND, cb, vcfg.get("lang_code", "b"), int(vcfg.get("sample_rate", 24000)), a.force, cpu=a.cpu)
+    return run(BRAND, cb, vcfg.get("lang_code", "b"), int(vcfg.get("sample_rate", 24000)), a.force, cpu=a.cpu, cfg=full)
 
 
 if __name__ == "__main__":
